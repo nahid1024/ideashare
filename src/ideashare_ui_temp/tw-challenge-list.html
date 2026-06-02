@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IdeaShare — Challenges</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              yellow: '#F5C518', 'yellow-light': '#FFF8DC', 'yellow-mid': '#FFE066', 'yellow-dark': '#C49A00',
+              black: '#111111', 'gray-dark': '#444444', 'gray-mid': '#888888', 'gray-light': '#DDDDDD', 'gray-faint': '#F5F5F2',
+            }
+          },
+          fontFamily: { display: ['Bricolage Grotesque', 'sans-serif'], body: ['DM Sans', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .font-display {
+      font-family: 'Bricolage Grotesque', sans-serif;
+    }
+
+    /* hero pattern */
+    .hero-pattern::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(245, 197, 24, 0.1) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+    }
+
+    /* tab underline */
+    .ctab {
+      border-bottom: 2.5px solid transparent;
+      margin-bottom: -1px;
+    }
+
+    .ctab.active {
+      border-bottom-color: #111;
+      color: #111;
+      font-weight: 600;
+    }
+
+    @media (max-width: 600px) {
+      .challenge-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      #bnav {
+        display: flex !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-brand-gray-faint text-brand-black text-sm">
+
+  <!-- NAVBAR -->
+  <nav
+    class="bg-white border-b border-brand-gray-light h-[54px] flex items-center px-8 gap-3 sticky top-0 z-50 sm:px-4">
+    <a class="flex items-center gap-2 no-underline" href="./ideashare.html">
+      <!-- <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z" fill="#111"/>
+        <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z" fill="#111"/>
+      </svg> -->
+      <img src="logo.svg" alt="logo" class="w-10 h-10">
+      <span class="font-display text-[17px] font-semibold text-black tracking-[-0.4px]">Idea<span
+          class="text-yellow-dark">Share</span></span>
+    </a>
+    <div class="flex-1 max-w-[280px]">
+      <input type="text" placeholder="Search challenges..."
+        class="w-full h-[34px] border border-brand-gray-light rounded-full px-4 text-[13px] bg-brand-gray-faint outline-none focus:border-brand-yellow transition-colors hidden sm:block">
+    </div>
+    <div class="ml-auto flex items-center gap-2.5">
+      <a href="./ideashare-signup.html">
+        <button
+          class="btn-ghost px-3.5 py-1.5 border border-[#DDD] rounded-full bg-transparent text-[13px] font-medium text-[#444] cursor-pointer hover:border-[#111] hover:text-[#111] transition-colors">Sign
+          in</button></a>
+      <a href="./ideashare-post.html">
+        <button
+          class="px-4 py-1.5 border-none rounded-full bg-[#111] text-[13px] font-medium text-white cursor-pointer flex items-center gap-1.5 hover:opacity-85 transition-opacity">
+          <div
+            class="w-[15px] h-[15px] bg-[#F5C518] rounded-full flex items-center justify-center text-[13px] text-[#111] leading-none">
+            +</div>
+          Post idea
+        </button>
+      </a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero-pattern bg-brand-black relative overflow-hidden">
+    <div class="absolute w-[500px] h-[500px] rounded-full pointer-events-none"
+      style="background: radial-gradient(circle, rgba(245,197,24,0.18) 0%, transparent 70%); top: -200px; right: -100px;">
+    </div>
+
+    <div class="max-w-[960px] mx-auto px-8 py-12 relative z-10 sm:px-4 sm:py-8">
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1.5 bg-brand-yellow/15 border border-brand-yellow/30 rounded-full mb-4">
+        <span class="text-brand-yellow text-[11px] font-bold uppercase tracking-widest">⚡ Live now</span>
+        <span class="text-white/40 text-[11px]">3 active challenges</span>
+      </div>
+      <h1 class="font-display text-[38px] font-extrabold text-white leading-tight tracking-tight mb-3 sm:text-[26px]">
+        Idea <span class="text-brand-yellow">Challenges</span>
+      </h1>
+      <p class="text-[15px] text-white/50 max-w-[480px] leading-relaxed mb-8 sm:text-[13.5px]">
+        Real organisations posting real problems. Submit your best idea, win prizes, and make an actual impact.
+      </p>
+
+      <!-- Stats -->
+      <div class="flex items-center gap-8 flex-wrap">
+        <div>
+          <div class="font-display text-[24px] font-bold text-brand-yellow">$2,400</div>
+          <div class="text-[11px] text-white/40 mt-0.5">Total prize pool</div>
+        </div>
+        <div class="w-px h-8 bg-white/10"></div>
+        <div>
+          <div class="font-display text-[24px] font-bold text-white">847</div>
+          <div class="text-[11px] text-white/40 mt-0.5">Ideas submitted</div>
+        </div>
+        <div class="w-px h-8 bg-white/10"></div>
+        <div>
+          <div class="font-display text-[24px] font-bold text-white">6</div>
+          <div class="text-[11px] text-white/40 mt-0.5">Sponsors so far</div>
+        </div>
+
+        <!-- Sponsor CTA -->
+        <div class="ml-auto">
+          <button
+            class="px-5 py-2.5 border border-white/20 rounded-full text-white text-[13px] font-medium cursor-pointer hover:bg-white/10 transition-colors whitespace-nowrap">
+            Run a challenge →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="bg-white border-b border-brand-gray-light sticky top-[54px] z-40">
+    <div class="max-w-[960px] mx-auto px-8 flex sm:px-4 overflow-x-auto">
+      <button onclick="switchTab(this)"
+        class="ctab active px-5 py-3.5 text-[13.5px] font-medium text-brand-gray-mid border-none bg-transparent cursor-pointer whitespace-nowrap">
+        All challenges
+      </button>
+      <button onclick="switchTab(this)"
+        class="ctab px-5 py-3.5 text-[13.5px] font-medium text-brand-gray-mid border-none bg-transparent cursor-pointer whitespace-nowrap hover:text-brand-black transition-colors">
+        🟢 Active
+      </button>
+      <button onclick="switchTab(this)"
+        class="ctab px-5 py-3.5 text-[13.5px] font-medium text-brand-gray-mid border-none bg-transparent cursor-pointer whitespace-nowrap hover:text-brand-black transition-colors">
+        🔜 Upcoming
+      </button>
+      <button onclick="switchTab(this)"
+        class="ctab px-5 py-3.5 text-[13.5px] font-medium text-brand-gray-mid border-none bg-transparent cursor-pointer whitespace-nowrap hover:text-brand-black transition-colors">
+        ✅ Completed
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="max-w-[960px] mx-auto px-8 py-7 pb-20 sm:px-4">
+
+    <!-- ACTIVE CHALLENGES -->
+    <div class="mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-2 h-2 rounded-full bg-[#22C55E] animate-pulse"></div>
+        <div class="text-[11px] font-bold uppercase tracking-widest text-brand-gray-mid">Active — closes soon</div>
+      </div>
+
+      <div class="challenge-grid grid grid-cols-3 gap-4 sm:grid-cols-1">
+
+        <!-- Challenge 1 — FEATURED -->
+        <div
+          class="col-span-2 sm:col-span-1 bg-brand-black rounded-2xl overflow-hidden cursor-pointer hover:opacity-95 transition-opacity relative">
+          <!-- dot grid -->
+          <div class="absolute inset-0 opacity-50"
+            style="background-image: radial-gradient(circle, rgba(245,197,24,0.1) 1px, transparent 1px); background-size: 22px 22px;">
+          </div>
+          <div class="relative z-10 p-6">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center gap-2">
+                <div
+                  class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[12px] font-bold text-brand-black">
+                  DU</div>
+                <div>
+                  <div class="text-[12px] font-medium text-white/70">Dhaka University</div>
+                  <div class="text-[10px] text-white/35">Sponsored challenge</div>
+                </div>
+              </div>
+              <div
+                class="px-2.5 py-1 bg-[#22C55E]/20 border border-[#22C55E]/30 rounded-full text-[11px] font-semibold text-[#4ADE80]">
+                ● 12 days left</div>
+            </div>
+            <h2 class="font-display text-[20px] font-bold text-white leading-snug mb-2">Reimagine University Admissions
+            </h2>
+            <p class="text-[13px] text-white/50 leading-relaxed mb-5">How should universities select students in 2025?
+              Grades, portfolios, blind review — or something entirely new?</p>
+            <div class="flex items-center gap-4 mb-5">
+              <div class="text-center">
+                <div class="font-display text-[18px] font-bold text-brand-yellow">$500</div>
+                <div class="text-[10px] text-white/40">Prize pool</div>
+              </div>
+              <div class="w-px h-8 bg-white/10"></div>
+              <div class="text-center">
+                <div class="font-display text-[18px] font-bold text-white">247</div>
+                <div class="text-[10px] text-white/40">Ideas</div>
+              </div>
+              <div class="w-px h-8 bg-white/10"></div>
+              <div class="text-center">
+                <div class="font-display text-[18px] font-bold text-white">28</div>
+                <div class="text-[10px] text-white/40">Countries</div>
+              </div>
+            </div>
+            <div class="h-1 bg-white/10 rounded-full overflow-hidden mb-4">
+              <div class="h-full bg-brand-yellow rounded-full" style="width:60%"></div>
+            </div>
+            <a href="./tw-challenge-detail.html" class="no-underline">
+              <button
+                class="w-full py-2.5 bg-brand-yellow text-brand-black font-bold text-[13.5px] rounded-full border-none cursor-pointer hover:opacity-90 transition-opacity">
+                View challenge
+              </button> </a>
+          </div>
+        </div>
+
+        <!-- Challenge 2 -->
+        <div
+          class="bg-white border border-brand-gray-light rounded-2xl overflow-hidden cursor-pointer hover:border-brand-yellow hover:shadow-[0_0_0_3px_#FFF8DC] transition-all flex flex-col">
+          <div class="bg-[#111] px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-7 h-7 rounded-lg bg-[#22C55E] flex items-center justify-center text-white text-[11px] font-bold">
+                GF</div>
+              <div class="text-[11px] text-white/60">GreenFuture NGO</div>
+            </div>
+            <div class="text-[10px] font-semibold text-[#4ADE80]">● 8 days left</div>
+          </div>
+          <div class="p-4 flex flex-col flex-1">
+            <h3 class="font-display text-[14px] font-bold text-brand-black leading-snug mb-2">Fix Food Waste in Dhaka's
+              Restaurants</h3>
+            <p class="text-[12px] text-brand-gray-dark leading-relaxed mb-4 flex-1">50% of food prepared in restaurants
+              goes to waste. What's the smartest fix — tech, policy, or behaviour change?</p>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3 text-[12px]">
+                <span class="font-bold text-brand-yellow-dark">$300</span>
+                <span class="text-brand-gray-mid">· 89 ideas</span>
+              </div>
+            </div>
+            <div class="h-1 bg-brand-gray-faint rounded-full overflow-hidden mb-3">
+              <div class="h-full bg-[#22C55E] rounded-full" style="width:73%"></div>
+            </div>
+            <button
+              class="w-full py-2 bg-brand-black text-white font-semibold text-[12.5px] rounded-full border-none cursor-pointer hover:opacity-85 transition-opacity">View
+              challenge</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECOND ROW ACTIVE -->
+    <div class="challenge-grid grid grid-cols-3 gap-4 mb-8 sm:grid-cols-1">
+
+      <!-- Challenge 3 -->
+      <div
+        class="bg-white border border-brand-gray-light rounded-2xl overflow-hidden cursor-pointer hover:border-brand-yellow hover:shadow-[0_0_0_3px_#FFF8DC] transition-all flex flex-col">
+        <div class="bg-[#1E1B4B] px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div
+              class="w-7 h-7 rounded-lg bg-[#6366F1] flex items-center justify-center text-white text-[11px] font-bold">
+              TC</div>
+            <div class="text-[11px] text-white/60">TechCorp BD</div>
+          </div>
+          <div class="text-[10px] font-semibold text-[#A5B4FC]">● 21 days left</div>
+        </div>
+        <div class="p-4 flex flex-col flex-1">
+          <h3 class="font-display text-[14px] font-bold text-brand-black leading-snug mb-2">Better Remote Work for
+            Bangladeshi Freelancers</h3>
+          <p class="text-[12px] text-brand-gray-dark leading-relaxed mb-4 flex-1">Payment delays, unstable internet,
+            timezone barriers. What one idea would most improve the freelancer experience?</p>
+          <div class="flex items-center justify-between mb-3 text-[12px]">
+            <span class="font-bold text-brand-yellow-dark">$800</span>
+            <span class="text-brand-gray-mid">142 ideas · 19 countries</span>
+          </div>
+          <div class="h-1 bg-brand-gray-faint rounded-full overflow-hidden mb-3">
+            <div class="h-full bg-[#6366F1] rounded-full" style="width:30%"></div>
+          </div>
+          <button
+            class="w-full py-2 bg-brand-black text-white font-semibold text-[12.5px] rounded-full border-none cursor-pointer hover:opacity-85 transition-opacity">View
+            challenge</button>
+        </div>
+      </div>
+
+      <!-- UPCOMING -->
+      <div class="bg-white border border-brand-gray-light rounded-2xl overflow-hidden flex flex-col opacity-80">
+        <div class="bg-brand-gray-faint px-4 py-3 flex items-center justify-between border-b border-brand-gray-light">
+          <div class="flex items-center gap-2">
+            <div
+              class="w-7 h-7 rounded-lg bg-brand-gray-light flex items-center justify-center text-brand-gray-mid text-[11px] font-bold">
+              MH</div>
+            <div class="text-[11px] text-brand-gray-mid">Ministry of Health</div>
+          </div>
+          <div class="text-[10px] font-semibold text-brand-gray-mid">🔜 Opens Feb 1</div>
+        </div>
+        <div class="p-4 flex flex-col flex-1">
+          <h3 class="font-display text-[14px] font-bold text-brand-black leading-snug mb-2">Reduce Maternal Mortality in
+            Rural Bangladesh</h3>
+          <p class="text-[12px] text-brand-gray-dark leading-relaxed mb-4 flex-1">What innovation — in transport,
+            training, or technology — could save the most lives?</p>
+          <div class="flex items-center justify-between mb-3 text-[12px]">
+            <span class="font-bold text-brand-gray-mid">$600</span>
+            <span class="text-brand-gray-mid">Not open yet</span>
+          </div>
+          <button
+            class="w-full py-2 border border-brand-gray-light text-brand-gray-mid font-semibold text-[12.5px] rounded-full bg-transparent cursor-pointer hover:border-brand-black hover:text-brand-black transition-all">🔔
+            Notify me</button>
+        </div>
+      </div>
+
+      <!-- UPCOMING 2 -->
+      <div class="bg-white border border-brand-gray-light rounded-2xl overflow-hidden flex flex-col opacity-80">
+        <div class="bg-brand-gray-faint px-4 py-3 flex items-center justify-between border-b border-brand-gray-light">
+          <div class="flex items-center gap-2">
+            <div
+              class="w-7 h-7 rounded-lg bg-brand-gray-light flex items-center justify-center text-brand-gray-mid text-[11px] font-bold">
+              SC</div>
+            <div class="text-[11px] text-brand-gray-mid">StartupBD</div>
+          </div>
+          <div class="text-[10px] font-semibold text-brand-gray-mid">🔜 Opens Feb 15</div>
+        </div>
+        <div class="p-4 flex flex-col flex-1">
+          <h3 class="font-display text-[14px] font-bold text-brand-black leading-snug mb-2">A New Way to Fund
+            Early-Stage Startups in South Asia</h3>
+          <p class="text-[12px] text-brand-gray-dark leading-relaxed mb-4 flex-1">Traditional VC doesn't reach most
+            founders here. What alternative model could work?</p>
+          <div class="flex items-center justify-between mb-3 text-[12px]">
+            <span class="font-bold text-brand-gray-mid">$400</span>
+            <span class="text-brand-gray-mid">Not open yet</span>
+          </div>
+          <button
+            class="w-full py-2 border border-brand-gray-light text-brand-gray-mid font-semibold text-[12.5px] rounded-full bg-transparent cursor-pointer hover:border-brand-black hover:text-brand-black transition-all">🔔
+            Notify me</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPLETED -->
+    <div class="mb-6">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="text-[11px] font-bold uppercase tracking-widest text-brand-gray-mid">✅ Completed challenges</div>
+      </div>
+
+      <div class="flex flex-col gap-3">
+
+        <!-- Completed 1 -->
+        <div
+          class="bg-white border border-brand-gray-light rounded-2xl px-5 py-4 flex items-center gap-4 cursor-pointer hover:border-brand-gray-dark transition-colors flex-wrap">
+          <div
+            class="w-10 h-10 rounded-xl bg-brand-yellow/15 border border-brand-yellow/30 flex items-center justify-center text-[18px] flex-shrink-0">
+            🏙️</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-display text-[14px] font-semibold text-brand-black mb-0.5">Better Public Transport in Dhaka
+            </div>
+            <div class="text-[12px] text-brand-gray-mid">Dhaka BRTA · 312 ideas · 34 countries · Ended Dec 2024</div>
+          </div>
+          <div class="flex items-center gap-3 flex-shrink-0">
+            <div class="text-right">
+              <div class="font-display text-[15px] font-bold text-brand-yellow-dark">$500</div>
+              <div class="text-[10px] text-brand-gray-mid">Awarded</div>
+            </div>
+            <div
+              class="px-2.5 py-1 bg-[#ECFDF5] border border-[#A7F3D0] rounded-full text-[11px] font-semibold text-[#065F46]">
+              Winner announced</div>
+          </div>
+        </div>
+
+        <!-- Completed 2 -->
+        <div
+          class="bg-white border border-brand-gray-light rounded-2xl px-5 py-4 flex items-center gap-4 cursor-pointer hover:border-brand-gray-dark transition-colors flex-wrap">
+          <div
+            class="w-10 h-10 rounded-xl bg-[#EEF2FF] border border-[#C7D2FE] flex items-center justify-center text-[18px] flex-shrink-0">
+            💊</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-display text-[14px] font-semibold text-brand-black mb-0.5">Making Medicine Affordable for
+              Rural Communities</div>
+            <div class="text-[12px] text-brand-gray-mid">BRAC · 198 ideas · 22 countries · Ended Nov 2024</div>
+          </div>
+          <div class="flex items-center gap-3 flex-shrink-0">
+            <div class="text-right">
+              <div class="font-display text-[15px] font-bold text-brand-yellow-dark">$300</div>
+              <div class="text-[10px] text-brand-gray-mid">Awarded</div>
+            </div>
+            <div
+              class="px-2.5 py-1 bg-[#ECFDF5] border border-[#A7F3D0] rounded-full text-[11px] font-semibold text-[#065F46]">
+              Winner announced</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RUN A CHALLENGE CTA -->
+    <div class="bg-brand-black rounded-2xl px-8 py-8 flex items-center gap-8 flex-wrap sm:px-5 sm:py-6 sm:gap-5">
+      <div class="flex-1 min-w-0">
+        <div class="text-[11px] font-bold uppercase tracking-widest text-brand-yellow mb-2">For organisations</div>
+        <h2 class="font-display text-[22px] font-bold text-white leading-snug mb-2 sm:text-[18px]">Run an idea challenge
+          with IdeaShare</h2>
+        <p class="text-[13.5px] text-white/50 leading-relaxed max-w-[440px]">Get crowdsourced innovation from hundreds
+          of people for a fraction of what a consultant costs. Universities, NGOs, and startups welcome.</p>
+      </div>
+      <div class="flex flex-col gap-2.5 flex-shrink-0">
+        <button
+          class="px-6 py-3 bg-brand-yellow text-brand-black font-bold text-[14px] rounded-full border-none cursor-pointer hover:opacity-90 transition-opacity whitespace-nowrap">
+          Get in touch →
+        </button>
+        <div class="text-center text-[12px] text-white/35">Starting from $500</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <div id="bnav" class="hidden fixed bottom-0 left-0 right-0 bg-white border-t border-brand-gray-light h-[58px] z-50">
+    <div class="flex h-full">
+      <button
+        class="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] text-brand-gray-mid border-none bg-transparent cursor-pointer"><svg
+          class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+        </svg>Feed</button>
+      <button
+        class="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] text-brand-yellow-dark font-semibold border-none bg-transparent cursor-pointer"><svg
+          class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon
+            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </svg>Challenges</button>
+      <div class="flex items-center justify-center self-center flex-shrink-0">
+        <button
+          class="w-[42px] h-[42px] rounded-full bg-brand-black border-none flex items-center justify-center -mt-3.5 cursor-pointer shadow-lg">
+          <div
+            class="w-[17px] h-[17px] bg-brand-yellow rounded-full flex items-center justify-center text-sm text-brand-black leading-none">
+            +</div>
+        </button>
+      </div>
+      <button
+        class="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] text-brand-gray-mid border-none bg-transparent cursor-pointer"><svg
+          class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+        </svg>Alerts</button>
+      <button
+        class="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] text-brand-gray-mid border-none bg-transparent cursor-pointer"><svg
+          class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>Profile</button>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(el) {
+      document.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+    function s() { document.getElementById('bnav').style.display = window.innerWidth <= 600 ? 'block' : 'none'; }
+    s(); window.addEventListener('resize', s);
+  </script>
+</body>
+
+</html>

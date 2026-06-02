@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IdeaShare — Join the conversation</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          yellow:      { DEFAULT: '#F5C518', light: '#FFF8DC', mid: '#FFE066', dark: '#C49A00' },
+          ink:         { DEFAULT: '#111111', soft: '#1C1C1C' },
+          'gray-dark':  '#444',
+          'gray-mid':   '#888',
+          'gray-light': '#DDD',
+          'gray-faint': '#F5F5F2',
+        },
+        fontFamily: {
+          display: ['Bricolage Grotesque', 'sans-serif'],
+          body:    ['DM Sans', 'sans-serif'],
+        },
+      }
+    }
+  }
+</script>
+<style>
+  /* ── Pseudo-elements (::before / ::after) ── */
+
+  /* Dot-grid overlay on left panel */
+  .left::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(245,197,24,0.12) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+
+  /* Yellow glow blob */
+  .left::after {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,197,24,0.18) 0%, transparent 70%);
+    top: -100px; left: -100px;
+    pointer-events: none;
+    animation: pulse 6s ease-in-out infinite;
+  }
+
+  /* Underline accent on headline <em> */
+  .headline-em::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 3px; background: #F5C518;
+    border-radius: 2px; opacity: 0.4;
+  }
+
+  /* Divider lines */
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px; background: #DDD;
+  }
+
+  /* ── Keyframe animations ── */
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%       { transform: scale(1.1); opacity: 0.7; }
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(340px); opacity: 0; }
+    8%   { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { transform: translateY(-120px); opacity: 0; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes confettiFall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(600px) rotate(720deg); opacity: 0; }
+  }
+
+  /* ── Animated elements ── */
+  .idea-float {
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+  .idea-float:nth-child(1) { left: 0;   animation-duration: 14s; animation-delay: 0s;   }
+  .idea-float:nth-child(2) { left: 50px; animation-duration: 18s; animation-delay: -6s;  }
+  .idea-float:nth-child(3) { left: 20px; animation-duration: 16s; animation-delay: -11s; }
+  .idea-float:nth-child(4) { left: 60px; animation-duration: 20s; animation-delay: -3s;  }
+  .idea-float:nth-child(5) { left: 10px; animation-duration: 15s; animation-delay: -9s;  }
+
+  .success-bulb { animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .conf-piece   { animation: confettiFall linear forwards; opacity: 0; }
+
+  /* ── JS-toggled states (class names referenced by script) ── */
+
+  /* Screen visibility */
+  .screen { display: none; }
+  .screen.visible { display: block; animation: fadeIn 0.3s ease; }
+
+  /* Progress step bar states */
+  .step.done   { background: #F5C518; }
+  .step.active { background: #111111; }
+
+  /* Topic tile selected state */
+  .topic-tile:hover    { border-color: #C49A00; }
+  .topic-tile.selected { border-color: #F5C518; background: #FFF8DC; }
+  .topic-tile.selected .topic-check { opacity: 1; }
+
+  /* Type tile selected state */
+  .type-tile:hover               { border-color: #444; }
+  .type-tile.selected            { border-color: #111; background: #111; }
+  .type-tile.selected .type-name { color: #fff; }
+  .type-tile.selected .type-desc { color: rgba(255,255,255,0.5); }
+  .type-tile.selected .type-icon-wrap { background: #F5C518; }
+
+  /* Password strength bar states */
+  .pwd-bar.weak   { background: #EF4444; }
+  .pwd-bar.fair   { background: #F5C518; }
+  .pwd-bar.strong { background: #22C55E; }
+
+  /* ── Input focus & placeholder ── */
+  .field-input:focus {
+    outline: none;
+    border-color: #F5C518;
+    background: #fff;
+    box-shadow: 0 0 0 3px #FFF8DC;
+  }
+  .field-input::placeholder { color: #BBBBBB; }
+
+  /* ── Hover / active states ── */
+  .social-btn:hover  { border-color: #444; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .btn-next:hover    { opacity: 0.88; }
+  .btn-next:active   { transform: scale(0.99); }
+  .already-have a:hover { text-decoration: underline; }
+
+  /* ── Responsive ── */
+  @media (max-width: 860px) {
+    .left  { width: 44%; padding: 28px 24px; }
+    .right { width: 56%; padding: 36px; }
+    .left-headline h2 { font-size: 28px; }
+  }
+
+  @media (max-width: 640px) {
+    html, body { overflow: auto; height: auto; }
+    body { flex-direction: column; background: #fff; }
+    .left  { display: none; }
+    .right { width: 100%; min-height: 100vh; padding: 28px 20px 40px; justify-content: flex-start; }
+    .mobile-top { display: flex !important; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+    .mobile-logo      { display: flex; align-items: center; gap: 8px; }
+    .mobile-logo-text { font-family: 'Bricolage Grotesque', sans-serif; font-size: 17px; font-weight: 700; color: #111; letter-spacing: -0.3px; }
+    .mobile-logo-text span { color: #C49A00; }
+    .mobile-signin    { font-size: 13px; color: #111; font-weight: 500; cursor: pointer; text-decoration: underline; }
+    .steps            { margin-bottom: 24px; }
+    .screen-title     { font-size: 22px; }
+    .screen-sub       { font-size: 13px; margin-bottom: 20px; }
+    .social-btns      { gap: 8px; margin-bottom: 14px; }
+    .social-btn       { height: 44px; font-size: 13px; }
+    .field-row        { grid-template-columns: 1fr; gap: 0; }
+    .field-input      { height: 44px; font-size: 14px; }
+    .topic-grid       { grid-template-columns: 1fr 1fr; gap: 7px; }
+    .topic-tile       { padding: 10px 12px; }
+    .topic-emoji      { font-size: 17px; }
+    .topic-name       { font-size: 12px; }
+    .topic-count      { font-size: 10px; }
+    .type-list        { gap: 7px; }
+    .type-tile        { padding: 12px 14px; }
+    .type-icon-wrap   { width: 32px; height: 32px; font-size: 16px; }
+    .type-name        { font-size: 13px; }
+    .type-desc        { font-size: 11.5px; }
+    .btn-next         { height: 48px; font-size: 14px; }
+    .success-bulb     { width: 60px; height: 60px; font-size: 30px; border-radius: 16px; }
+  }
+</style>
+</head>
+<body class="font-body flex bg-ink h-screen overflow-hidden">
+
+<!-- LEFT PANEL -->
+<div class="left w-[52%] bg-ink relative overflow-hidden flex flex-col p-9 px-10">
+
+  <!-- Logo -->
+  <div class="flex items-center gap-[9px] relative z-[2] mb-12">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="30" height="30">
+      <path d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z" fill="#F5C518"/>
+      <ellipse cx="38" cy="26" rx="7" ry="10" fill="#FFF8DC" opacity="0.7" transform="rotate(-20 38 26)"/>
+      <rect x="39" y="83" width="22" height="5" rx="2.5" fill="#C49A00"/>
+      <rect x="40.5" y="90" width="19" height="5" rx="2.5" fill="#C49A00" opacity="0.7"/>
+      <path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="#111111"/>
+    </svg>
+    <span class="font-display text-lg font-bold text-white tracking-[-0.3px]">Idea<span class="text-yellow">Share</span></span>
+  </div>
+
+  <!-- Headline -->
+  <div class="left-headline relative z-[2] mb-10">
+    <h2 class="font-display text-[36px] font-extrabold text-white leading-[1.2] tracking-[-0.8px]">
+      Where good ideas<br>find <em class="headline-em not-italic text-yellow relative">their people</em>
+    </h2>
+    <p class="text-sm text-white/50 mt-3 leading-[1.65] max-w-[340px]">
+      A place to drop the thought before it disappears. Share it, refine it, build it — together.
+    </p>
+  </div>
+
+  <!-- Floating idea cards -->
+  <div class="relative z-[2] flex-1 overflow-hidden">
+
+    <div class="idea-float absolute bg-ink-soft border border-white/[0.08] rounded-[14px] p-[14px_16px] w-[300px]">
+      <div class="text-[10px] font-semibold px-2 py-[2px] rounded-full bg-yellow/15 text-yellow inline-block mb-2">#education</div>
+      <div class="font-display text-[13px] font-semibold text-white leading-[1.45] mb-[10px]">A universal exam that certifies your skills — no university required</div>
+      <div class="flex items-center gap-2">
+        <div class="w-5 h-5 rounded-full text-[9px] font-bold flex items-center justify-center" style="background:#F5C518;color:#111">RK</div>
+        <div class="text-[11px] text-white/40">Rafiq K.</div>
+        <div class="ml-auto text-[11px] text-yellow font-semibold">⚡ 847</div>
+      </div>
+    </div>
+
+    <div class="idea-float absolute bg-ink-soft border border-white/[0.08] rounded-[14px] p-[14px_16px] w-[300px]">
+      <div class="text-[10px] font-semibold px-2 py-[2px] rounded-full bg-yellow/15 text-yellow inline-block mb-2">#health</div>
+      <div class="font-display text-[13px] font-semibold text-white leading-[1.45] mb-[10px]">Let patients own their medical records — shared with any doctor, anywhere</div>
+      <div class="flex items-center gap-2">
+        <div class="w-5 h-5 rounded-full text-[9px] font-bold flex items-center justify-center" style="background:#22C55E;color:#fff">TA</div>
+        <div class="text-[11px] text-white/40">Tolu A.</div>
+        <div class="ml-auto text-[11px] text-yellow font-semibold">⚡ 512</div>
+      </div>
+    </div>
+
+    <div class="idea-float absolute bg-ink-soft border border-white/[0.08] rounded-[14px] p-[14px_16px] w-[300px]">
+      <div class="text-[10px] font-semibold px-2 py-[2px] rounded-full bg-yellow/15 text-yellow inline-block mb-2">#cities</div>
+      <div class="font-display text-[13px] font-semibold text-white leading-[1.45] mb-[10px]">Neighbourhoods vote on which small businesses get rent subsidies each quarter</div>
+      <div class="flex items-center gap-2">
+        <div class="w-5 h-5 rounded-full text-[9px] font-bold flex items-center justify-center" style="background:#6366F1;color:#fff">LM</div>
+        <div class="text-[11px] text-white/40">Lena M.</div>
+        <div class="ml-auto text-[11px] text-yellow font-semibold">⚡ 389</div>
+      </div>
+    </div>
+
+    <div class="idea-float absolute bg-ink-soft border border-white/[0.08] rounded-[14px] p-[14px_16px] w-[300px]">
+      <div class="text-[10px] font-semibold px-2 py-[2px] rounded-full bg-yellow/15 text-yellow inline-block mb-2">#economy</div>
+      <div class="font-display text-[13px] font-semibold text-white leading-[1.45] mb-[10px]">A global skills passport replacing the traditional CV once and for all</div>
+      <div class="flex items-center gap-2">
+        <div class="w-5 h-5 rounded-full text-[9px] font-bold flex items-center justify-center" style="background:#F97316;color:#fff">NI</div>
+        <div class="text-[11px] text-white/40">Nadia I.</div>
+        <div class="ml-auto text-[11px] text-yellow font-semibold">⚡ 271</div>
+      </div>
+    </div>
+
+    <div class="idea-float absolute bg-ink-soft border border-white/[0.08] rounded-[14px] p-[14px_16px] w-[300px]">
+      <div class="text-[10px] font-semibold px-2 py-[2px] rounded-full bg-yellow/15 text-yellow inline-block mb-2">#technology</div>
+      <div class="font-display text-[13px] font-semibold text-white leading-[1.45] mb-[10px]">Open-source AI trained only on public domain works — no copyright risk</div>
+      <div class="flex items-center gap-2">
+        <div class="w-5 h-5 rounded-full text-[9px] font-bold flex items-center justify-center" style="background:#EC4899;color:#fff">PO</div>
+        <div class="text-[11px] text-white/40">Paulo O.</div>
+        <div class="ml-auto text-[11px] text-yellow font-semibold">⚡ 634</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom stats -->
+  <div class="relative z-[2] flex gap-7 mt-6 pt-5 border-t border-white/[0.07]">
+    <div>
+      <div class="font-display text-[22px] font-extrabold text-yellow tracking-[-0.5px]">24k+</div>
+      <div class="text-[11px] text-white/40 mt-[2px]">Ideas shared</div>
+    </div>
+    <div>
+      <div class="font-display text-[22px] font-extrabold text-yellow tracking-[-0.5px]">8.3k</div>
+      <div class="text-[11px] text-white/40 mt-[2px]">Being built</div>
+    </div>
+    <div>
+      <div class="font-display text-[22px] font-extrabold text-yellow tracking-[-0.5px]">142</div>
+      <div class="text-[11px] text-white/40 mt-[2px]">Countries</div>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right w-[48%] bg-white flex flex-col justify-center px-[52px] py-12 relative overflow-y-auto" id="right-panel">
+
+  <!-- Progress steps -->
+  <div class="steps flex gap-[6px] mb-9">
+    <div class="step flex-1 h-[3px] rounded-sm bg-gray-light transition-colors duration-300 active" id="s1"></div>
+    <div class="step flex-1 h-[3px] rounded-sm bg-gray-light transition-colors duration-300" id="s2"></div>
+    <div class="step flex-1 h-[3px] rounded-sm bg-gray-light transition-colors duration-300" id="s3"></div>
+  </div>
+
+  <!-- SCREEN 1: Create account -->
+  <div class="screen visible" id="screen1">
+    <div class="screen-eyebrow text-[11px] font-semibold uppercase tracking-[0.08em] text-yellow-dark bg-yellow-light border border-yellow-mid inline-block py-[3px] px-[10px] rounded-full mb-3">Step 1 of 3</div>
+    <h1 class="screen-title font-display text-[28px] font-extrabold text-ink leading-[1.2] tracking-[-0.5px] mb-[6px]">Create your account</h1>
+    <p class="screen-sub text-[13.5px] text-gray-mid leading-[1.6] mb-7">Your ideas deserve a home. Takes 30 seconds.</p>
+
+    <div class="social-btns flex flex-col gap-[10px] mb-5">
+      <button class="social-btn w-full h-[46px] border-[1.5px] border-gray-light rounded-[10px] bg-white flex items-center justify-center gap-[10px] font-body text-[13.5px] font-medium text-ink cursor-pointer transition-[border-color,box-shadow] duration-150" onclick="goTo(2)">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Continue with Google
+      </button>
+      <button class="social-btn w-full h-[46px] border-[1.5px] border-gray-light rounded-[10px] bg-white flex items-center justify-center gap-[10px] font-body text-[13.5px] font-medium text-ink cursor-pointer transition-[border-color,box-shadow] duration-150" onclick="goTo(2)">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Continue with Facebook
+      </button>
+    </div>
+
+    <div class="divider flex items-center gap-3 my-[18px] text-xs text-gray-mid">or sign up with email</div>
+
+    <div class="field-row grid grid-cols-2 gap-3">
+      <div class="field mb-4">
+        <label class="field-label text-xs font-semibold text-ink mb-[6px] block">First name</label>
+        <input type="text" class="field-input w-full h-[46px] border-[1.5px] border-gray-light rounded-[10px] px-[14px] font-body text-sm text-ink bg-gray-faint transition-[border-color,background] duration-150" placeholder="Rafiq">
+      </div>
+      <div class="field mb-4">
+        <label class="field-label text-xs font-semibold text-ink mb-[6px] block">Last name</label>
+        <input type="text" class="field-input w-full h-[46px] border-[1.5px] border-gray-light rounded-[10px] px-[14px] font-body text-sm text-ink bg-gray-faint transition-[border-color,background] duration-150" placeholder="Karim">
+      </div>
+    </div>
+
+    <div class="field mb-4">
+      <label class="field-label text-xs font-semibold text-ink mb-[6px] block">Email address</label>
+      <input type="email" class="field-input w-full h-[46px] border-[1.5px] border-gray-light rounded-[10px] px-[14px] font-body text-sm text-ink bg-gray-faint transition-[border-color,background] duration-150" placeholder="you@example.com">
+    </div>
+
+    <div class="field mb-4">
+      <label class="field-label text-xs font-semibold text-ink mb-[6px] block">Password</label>
+      <input type="password" class="field-input w-full h-[46px] border-[1.5px] border-gray-light rounded-[10px] px-[14px] font-body text-sm text-ink bg-gray-faint transition-[border-color,background] duration-150" placeholder="Min. 8 characters" id="pwd-input" oninput="checkPwd(this.value)">
+      <div class="pwd-strength flex gap-1 mt-[6px]">
+        <div class="pwd-bar flex-1 h-[3px] rounded-sm bg-gray-light transition-colors duration-300" id="pb1"></div>
+        <div class="pwd-bar flex-1 h-[3px] rounded-sm bg-gray-light transition-colors duration-300" id="pb2"></div>
+        <div class="pwd-bar flex-1 h-[3px] rounded-sm bg-gray-light transition-colors duration-300" id="pb3"></div>
+      </div>
+      <div class="pwd-hint text-[11px] text-gray-mid mt-1" id="pwd-hint">Use a mix of letters, numbers, and symbols</div>
+    </div>
+
+    <button class="btn-next w-full h-12 border-none rounded-full bg-ink text-white font-body text-sm font-semibold cursor-pointer flex items-center justify-center gap-2 transition-[opacity,transform] duration-150 mb-[14px]" onclick="goTo(2)">
+      <div class="w-5 h-5 rounded-full bg-yellow text-ink text-[11px] flex items-center justify-center">⚡</div>
+      Create account
+    </button>
+
+    <div class="already-have mt-6 text-center text-[13px] text-gray-mid">Already have an account? <a class="text-ink font-semibold cursor-pointer no-underline">Sign in</a></div>
+  </div>
+
+  <!-- SCREEN 2: Pick interests -->
+  <div class="screen" id="screen2">
+    <div class="screen-eyebrow text-[11px] font-semibold uppercase tracking-[0.08em] text-yellow-dark bg-yellow-light border border-yellow-mid inline-block py-[3px] px-[10px] rounded-full mb-3">Step 2 of 3</div>
+    <h1 class="screen-title font-display text-[28px] font-extrabold text-ink leading-[1.2] tracking-[-0.5px] mb-[6px]">What sparks your interest?</h1>
+    <p class="screen-sub text-[13.5px] text-gray-mid leading-[1.6] mb-7">We'll show you ideas in the topics you care about. Pick as many as you like.</p>
+
+    <div class="topic-grid grid grid-cols-2 gap-2 mb-6">
+
+      <div class="topic-tile selected p-[14px_16px] border-[1.5px] border-gray-light rounded-xl bg-white cursor-pointer transition-all duration-150 flex items-center gap-[10px]" onclick="toggleTile(this)">
+        <div class="topic-emoji text-[20px]">📚</div>
+        <div>
+          <div class="topic-name text-[13px] font-medium text-ink">Education</div>
+          <div class="topic-count text-[11px] text-gray-mid mt-[1px]">1.2k ideas</div>
+        </div>
+        <div class="topic-check ml-auto w-[18px] h-[18px] rounded-full bg-yellow flex items-center justify-center text-[10px] opacity-0 transition-opacity duration-150 shrink-0">✓</div>
+      </div>
+
+      <div class="topic-tile selected p-[14px_16px] border-[1.5px] border-gray-light rounded-xl bg-white cursor-pointer transition-all duration-150 flex items-center gap-[10px]" onclick="toggleTile(this)">
+        <div class="topic-emoji text-[20px]">❤️</div>
+        <div>
+          <div class="topic-name text-[13px] font-medium text-ink">Health</div>
+          <div class="topic-count text-[11px] text-gray-mid mt-[1px]">874 ideas</div>
+        </div>
+        <div class="topic-check ml-auto w-[18px] h-[18px] rounded-full bg-yellow flex items-center justify-center text-[10px] opacity-0 transition-opacity duration-150 shrink-0">✓</div>
+      </div>
+
+      <div class="topic-tile p-[14px_16px] border-[1.5px] border-gray-light rounded-xl bg-white cursor-pointer transition-all duration-150 flex items-center gap-[10px]" onclick="toggleTile(this)">
+        <div class="topic-emoji text-[20px]">💻</div>
+        <div>
+          <div class="topic-name text-[13px] font-medium text-ink">Technology</div>
+          <div class="topic-count text-[11px] text-gray-mid mt-[1px]">590 ideas</div>
+        </div>
+        <div class="topic-check ml-auto w-[18px] h-[18px] rounded-full bg-yellow flex items-center justify-center text-[10px] opacity-0 transition-opacity duration-150 shrink-0">✓</div>
+      </div>
+
+      <div class="topic-tile selected p-[14px_16px] border-[1.5px] border-gray-light rounded-xl bg-white cursor-pointer transition-all duration-150 flex items-center gap-[10px]" onclick="toggleTile(this)">
+        <div class="topic-emoji text-[20px]">🏙️</div>
+        <div>
+          <div class="topic-name text-[13px] font-medium text-ink">Cities</div>
+          <div class="topic-count text-[11px] text-gray-mid mt-[1px]">631 ideas</div>
+        </div>
+        <div class="topic-check ml-auto w-[18px] h-[18px] rounded-full bg-yellow flex items-center justify-center text-[10px] opacity-0 transition-opacity duration-150 shrink-0">✓</div>
+      </div>
+
+      <div class="topic-tile p-[14px_16px] border-[1.5px] border-gray-light rounded-xl bg-white cursor-pointer transition-all duration-150 flex items-center gap-[10px]" onclick="toggleTile(this)">
+        <div class="topic-emoji text-[20px]">💰</div>
+        <div>
+          <div class="topic-name text-[13px] font-medium text-ink">Economy</div>
+          <div class="topic-count text-[11px] text-gray-mid mt-[1px]">412 ideas</div>
+        </div>
+        <div class="topic-check ml-auto w-[18px] h-[18px] rounded-full bg-yellow flex items-center justify-center text-[10px] opacity-0 transition-opacity duration-150 shrink-0">✓</div>
+      </div>
+
+      <div class="topic-tile p-[14px_16px] border-[1.5px] border-gray-light rounded-xl bg-white cursor-pointer transition-all duration-150 flex items-center gap-[10px]" onclick="toggleTile(this)">
+        <div class="topic-emoji text-[20px]">🌱</div>
+        <div>
+          <div class="topic-name text-[13px] font-medium text-ink">Environment</div>
+          <div class="topic-count text-[11px] text-gray-mid mt-[1px]">328 ideas</div>
+        </div>
+        <div class="topic-check ml-auto w-[18px] h-[18px] rounded-full bg-yellow flex items-center justify-center text-[10px] opacity-0 transition-opacity duration-150 shrink-0">✓</div>
+      </div>
+
+      <div class="topic-tile p-[14px_16px] border-[1.5px] border-gray-light rounded-xl bg-white cursor-pointer transition-all duration-150 flex items-center gap-[10px]" onclick="toggleTile(this)">
+        <div class="topic-emoji text-[20px]">🏛️</div>
+        <div>
+          <div class="topic-name text-[13px] font-medium text-ink">Governance</div>
+          <div class="topic-count text-[11px] text-gray-mid mt-[1px]">219 ideas</div>
+        </div>
+        <div class="topic-check ml-auto w-[18px] h-[18px] rounded-full bg-yellow flex items-center justify-center text-[10px] opacity-0 transition-opacity duration-150 shrink-0">✓</div>
+      </div>
+
+      <div class="topic-tile p-[14px_16px] border-[1.5px] border-gray-light rounded-xl bg-white cursor-pointer transition-all duration-150 flex items-center gap-[10px]" onclick="toggleTile(this)">
+        <div class="topic-emoji text-[20px]">🎨</div>
+        <div>
+          <div class="topic-name text-[13px] font-medium text-ink">Arts & Culture</div>
+          <div class="topic-count text-[11px] text-gray-mid mt-[1px]">187 ideas</div>
+        </div>
+        <div class="topic-check ml-auto w-[18px] h-[18px] rounded-full bg-yellow flex items-center justify-center text-[10px] opacity-0 transition-opacity duration-150 shrink-0">✓</div>
+      </div>
+
+    </div>
+
+    <button class="btn-next w-full h-12 border-none rounded-full bg-ink text-white font-body text-sm font-semibold cursor-pointer flex items-center justify-center gap-2 transition-[opacity,transform] duration-150 mb-[14px]" onclick="goTo(3)">
+      <div class="w-5 h-5 rounded-full bg-yellow text-ink text-[11px] flex items-center justify-center">→</div>
+      Continue
+    </button>
+    <div class="text-center text-[12.5px] text-gray-mid cursor-pointer"><a onclick="goTo(3)" class="text-ink font-medium cursor-pointer">Skip for now</a></div>
+  </div>
+
+  <!-- SCREEN 3: How do you want to participate -->
+  <div class="screen" id="screen3">
+    <div class="screen-eyebrow text-[11px] font-semibold uppercase tracking-[0.08em] text-yellow-dark bg-yellow-light border border-yellow-mid inline-block py-[3px] px-[10px] rounded-full mb-3">Step 3 of 3</div>
+    <h1 class="screen-title font-display text-[28px] font-extrabold text-ink leading-[1.2] tracking-[-0.5px] mb-[6px]">How do you see yourself here?</h1>
+    <p class="screen-sub text-[13.5px] text-gray-mid leading-[1.6] mb-7">Helps us show you the right ideas. You can always change this later.</p>
+
+    <div class="type-list flex flex-col gap-2 mb-6">
+
+      <div class="type-tile selected p-[14px_16px] border-[1.5px] border-gray-light rounded-xl bg-white cursor-pointer transition-all duration-150 flex items-center gap-3" onclick="selectType(this)">
+        <div class="type-icon-wrap w-9 h-9 rounded-[10px] bg-gray-faint flex items-center justify-center text-[18px] shrink-0 transition-colors duration-150">💡</div>
+        <div>
+          <div class="type-name text-[13.5px] font-semibold text-ink transition-colors duration-150">Idea sharer</div>
+          <div class="type-desc text-xs text-gray-mid mt-[2px] transition-colors duration-150">I have thoughts I want the world to hear</div>
+        </div>
+      </div>
+
+      <div class="type-tile p-[14px_16px] border-[1.5px] border-gray-light rounded-xl bg-white cursor-pointer transition-all duration-150 flex items-center gap-3" onclick="selectType(this)">
+        <div class="type-icon-wrap w-9 h-9 rounded-[10px] bg-gray-faint flex items-center justify-center text-[18px] shrink-0 transition-colors duration-150">🔧</div>
+        <div>
+          <div class="type-name text-[13.5px] font-semibold text-ink transition-colors duration-150">Builder</div>
+          <div class="type-desc text-xs text-gray-mid mt-[2px] transition-colors duration-150">I want to help turn good ideas into real things</div>
+        </div>
+      </div>
+
+      <div class="type-tile p-[14px_16px] border-[1.5px] border-gray-light rounded-xl bg-white cursor-pointer transition-all duration-150 flex items-center gap-3" onclick="selectType(this)">
+        <div class="type-icon-wrap w-9 h-9 rounded-[10px] bg-gray-faint flex items-center justify-center text-[18px] shrink-0 transition-colors duration-150">🔍</div>
+        <div>
+          <div class="type-name text-[13.5px] font-semibold text-ink transition-colors duration-150">Refiner</div>
+          <div class="type-desc text-xs text-gray-mid mt-[2px] transition-colors duration-150">I love poking holes in ideas and making them better</div>
+        </div>
+      </div>
+
+      <div class="type-tile p-[14px_16px] border-[1.5px] border-gray-light rounded-xl bg-white cursor-pointer transition-all duration-150 flex items-center gap-3" onclick="selectType(this)">
+        <div class="type-icon-wrap w-9 h-9 rounded-[10px] bg-gray-faint flex items-center justify-center text-[18px] shrink-0 transition-colors duration-150">👀</div>
+        <div>
+          <div class="type-name text-[13.5px] font-semibold text-ink transition-colors duration-150">Explorer</div>
+          <div class="type-desc text-xs text-gray-mid mt-[2px] transition-colors duration-150">Just here to see what people are thinking</div>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="btn-next w-full h-12 border-none rounded-full bg-ink text-white font-body text-sm font-semibold cursor-pointer flex items-center justify-center gap-2 transition-[opacity,transform] duration-150 mb-[14px]" onclick="goTo(4)">
+      <div class="w-5 h-5 rounded-full bg-yellow text-ink text-[11px] flex items-center justify-center">⚡</div>
+      Go to IdeaShare
+    </button>
+  </div>
+
+  <!-- SCREEN 4: Success -->
+  <div class="screen" id="screen4">
+    <div class="confetti absolute pointer-events-none inset-0 overflow-hidden" id="confetti"></div>
+    <div class="success-bulb w-[72px] h-[72px] bg-yellow rounded-[20px] flex items-center justify-center text-[36px] mb-5 shadow-[0_8px_32px_rgba(245,197,24,0.35)]">💡</div>
+    <h1 class="screen-title font-display text-[28px] font-extrabold text-ink leading-[1.2] tracking-[-0.5px] mb-[6px]">You're in!</h1>
+    <p class="screen-sub text-[13.5px] text-gray-mid leading-[1.6] mb-6">Welcome to IdeaShare. Your first idea is waiting to be shared — what are you thinking about today?</p>
+
+    <button class="btn-next w-full h-12 border-none rounded-full bg-ink text-white font-body text-sm font-semibold cursor-pointer flex items-center justify-center gap-2 transition-[opacity,transform] duration-150 mb-[10px]" onclick="window.location.href='#'">
+      <div class="w-5 h-5 rounded-full bg-yellow text-ink text-[11px] flex items-center justify-center">⚡</div>
+      Post my first idea
+    </button>
+    <button class="btn-next w-full h-12 border-none rounded-full font-body text-sm font-semibold cursor-pointer flex items-center justify-center gap-2 transition-[opacity,transform] duration-150 bg-gray-faint text-ink" onclick="window.location.href='#'">
+      Explore the feed
+    </button>
+  </div>
+
+</div>
+
+<script>
+  function goTo(step) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
+    document.getElementById('screen' + step).classList.add('visible');
+
+    const lines = [document.getElementById('s1'), document.getElementById('s2'), document.getElementById('s3')];
+    lines.forEach((l, i) => {
+      l.className = 'step flex-1 h-[3px] rounded-sm bg-gray-light transition-colors duration-300';
+      if (i + 1 < step) l.classList.add('done');
+      else if (i + 1 === step) l.classList.add('active');
+    });
+
+    if (step === 4) spawnConfetti();
+  }
+
+  function toggleTile(el) { el.classList.toggle('selected'); }
+
+  function selectType(el) {
+    document.querySelectorAll('.type-tile').forEach(t => t.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function checkPwd(val) {
+    const bars = [document.getElementById('pb1'), document.getElementById('pb2'), document.getElementById('pb3')];
+    const hint = document.getElementById('pwd-hint');
+    bars.forEach(b => b.className = 'pwd-bar flex-1 h-[3px] rounded-sm bg-gray-light transition-colors duration-300');
+    if (val.length === 0) { hint.textContent = 'Use a mix of letters, numbers, and symbols'; return; }
+    if (val.length < 6) {
+      bars[0].classList.add('weak');
+      hint.textContent = 'Too short';
+    } else if (val.length < 10 || !/[0-9]/.test(val)) {
+      bars[0].classList.add('fair'); bars[1].classList.add('fair');
+      hint.textContent = 'Getting there — add numbers or symbols';
+    } else {
+      bars.forEach(b => b.classList.add('strong'));
+      hint.textContent = '✓ Strong password';
+    }
+  }
+
+  function spawnConfetti() {
+    const container = document.getElementById('confetti');
+    container.innerHTML = '';
+    const colors = ['#F5C518', '#111111', '#FFE066', '#C49A00', '#FFFFFF'];
+    for (let i = 0; i < 40; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'conf-piece absolute rounded-[2px]';
+      piece.style.left = Math.random() * 100 + '%';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+      piece.style.animationDelay = (Math.random() * 1) + 's';
+      piece.style.width = piece.style.height = (6 + Math.random() * 6) + 'px';
+      container.appendChild(piece);
+    }
+  }
+</script>
+
+<!-- Mobile top bar (shown only on mobile) -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.innerWidth <= 640) {
+    const rp = document.getElementById('right-panel');
+    const topBar = document.createElement('div');
+    topBar.className = 'mobile-top';
+    topBar.style.display = 'none';
+    topBar.innerHTML = `
+      <div class="mobile-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="28" height="28">
+          <path d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z" fill="#F5C518"/>
+          <ellipse cx="38" cy="26" rx="7" ry="10" fill="#FFF8DC" opacity="0.7" transform="rotate(-20 38 26)"/>
+          <rect x="39" y="83" width="22" height="5" rx="2.5" fill="#C49A00"/>
+          <path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="#111111"/>
+        </svg>
+        <span class="mobile-logo-text">Idea<span>Share</span></span>
+      </div>
+      <span class="mobile-signin">Sign in</span>
+    `;
+    rp.insertBefore(topBar, rp.firstChild);
+    topBar.style.display = 'flex';
+  }
+});
+</script>
+</body>
+</html>

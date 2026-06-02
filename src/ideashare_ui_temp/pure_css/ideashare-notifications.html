@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IdeaShare — Notifications</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #F5C518;
+    --yellow-light: #FFF8DC;
+    --yellow-mid: #FFE066;
+    --yellow-dark: #C49A00;
+    --black: #111111;
+    --gray-dark: #444;
+    --gray-mid: #888;
+    --gray-light: #DDD;
+    --gray-faint: #F5F5F2;
+    --white: #FFFFFF;
+    --font-display: 'Bricolage Grotesque', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-pill: 999px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--gray-faint); color: var(--black); font-size: 14px; }
+
+  /* ── NAVBAR ── */
+  .navbar {
+    background: var(--white); border-bottom: 1px solid var(--gray-light);
+    height: 54px; display: flex; align-items: center;
+    padding: 0 32px; gap: 14px; position: sticky; top: 0; z-index: 100;
+  }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+  .logo-text { font-family: var(--font-display); font-size: 16px; font-weight: 600; color: var(--black); letter-spacing: -0.3px; }
+  .logo-text span { color: var(--yellow-dark); }
+  .nav-search { flex: 1; max-width: 300px; }
+  .nav-search input { width: 100%; height: 34px; border: 1px solid var(--gray-light); border-radius: var(--radius-pill); padding: 0 14px; font-family: var(--font-body); font-size: 13px; background: var(--gray-faint); outline: none; transition: border-color 0.15s; }
+  .nav-search input:focus { border-color: var(--yellow); background: var(--white); }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .btn-ghost { padding: 6px 14px; border: 1px solid var(--gray-light); border-radius: var(--radius-pill); background: transparent; font-family: var(--font-body); font-size: 13px; font-weight: 500; color: var(--gray-dark); cursor: pointer; }
+  .btn-primary { padding: 6px 16px; border: none; border-radius: var(--radius-pill); background: var(--black); font-family: var(--font-body); font-size: 13px; font-weight: 500; color: var(--white); cursor: pointer; display: flex; align-items: center; gap: 6px; }
+  .plus-dot { width: 15px; height: 15px; background: var(--yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--black); line-height: 1; }
+
+  /* ── PAGE LAYOUT ── */
+  .page {
+    max-width: 780px; margin: 0 auto;
+    padding: 28px 24px 80px;
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 220px;
+    gap: 22px;
+    align-items: start;
+  }
+
+  /* ── MAIN COLUMN ── */
+  .main { display: flex; flex-direction: column; gap: 0; }
+
+  .page-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .page-title {
+    font-family: var(--font-display);
+    font-size: 20px; font-weight: 800;
+    color: var(--black); letter-spacing: -0.3px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .unread-badge {
+    font-size: 12px; font-weight: 700;
+    background: var(--black); color: var(--white);
+    padding: 2px 8px; border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+  }
+  .mark-all {
+    font-size: 12.5px; font-weight: 500; color: var(--gray-mid);
+    cursor: pointer; border: none; background: transparent;
+    font-family: var(--font-body); transition: color 0.15s;
+  }
+  .mark-all:hover { color: var(--black); }
+
+  /* filter tabs */
+  .filter-tabs {
+    display: flex; gap: 4px;
+    background: var(--white); border: 1px solid var(--gray-light);
+    border-radius: var(--radius-pill); padding: 3px;
+    margin-bottom: 16px; width: fit-content;
+  }
+  .ftab {
+    padding: 5px 14px; border-radius: var(--radius-pill);
+    font-size: 12.5px; font-weight: 500; color: var(--gray-mid);
+    cursor: pointer; border: none; background: transparent;
+    font-family: var(--font-body); transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .ftab.active { background: var(--black); color: var(--white); }
+  .ftab:hover:not(.active) { color: var(--black); }
+
+  /* ── NOTIFICATION LIST ── */
+  .notif-list { display: flex; flex-direction: column; gap: 0; }
+
+  /* day group label */
+  .day-label {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.07em; color: var(--gray-mid);
+    padding: 12px 0 8px;
+  }
+  .day-label:first-child { padding-top: 0; }
+
+  /* notification card */
+  .notif {
+    background: var(--white);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: flex; gap: 12px; align-items: flex-start;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    position: relative;
+    animation: slideIn 0.3s ease both;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .notif:hover { border-color: var(--gray-dark); }
+
+  .notif.unread {
+    background: var(--yellow-light);
+    border-color: var(--yellow-mid);
+  }
+  .notif.unread:hover { border-color: var(--yellow-dark); box-shadow: 0 0 0 3px rgba(245,197,24,0.15); }
+
+  /* unread dot */
+  .unread-dot {
+    position: absolute; top: 16px; right: 16px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--yellow-dark);
+  }
+
+  /* avatar stack */
+  .notif-avatars { flex-shrink: 0; position: relative; width: 40px; height: 40px; }
+  .nav-av {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; border: 2px solid var(--white);
+  }
+  .nav-av-sm {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 700;
+    position: absolute; bottom: -2px; right: -2px;
+    border: 2px solid var(--white);
+  }
+  .av-a { background: var(--yellow); color: var(--black); }
+  .av-b { background: var(--black); color: var(--white); }
+  .av-c { background: #EEF2FF; color: #3730A3; }
+  .av-d { background: #ECFDF5; color: #065F46; }
+  .av-e { background: #FEF3C7; color: #92400E; }
+  .av-f { background: #FCE7F3; color: #9D174D; }
+
+  /* type icon (replaces avatar for system notifs) */
+  .notif-icon {
+    width: 40px; height: 40px; border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .ni-spark { background: var(--yellow-light); }
+  .ni-build { background: #ECFDF5; }
+  .ni-fork { background: #EEF2FF; }
+  .ni-refine { background: #FEF3C7; }
+  .ni-follow { background: var(--gray-faint); }
+  .ni-milestone { background: var(--black); }
+  .ni-digest { background: var(--yellow); }
+
+  /* content */
+  .notif-content { flex: 1; min-width: 0; }
+  .notif-text {
+    font-size: 13.5px; color: var(--black); line-height: 1.55;
+    margin-bottom: 5px;
+  }
+  .notif-text strong { font-weight: 600; }
+  .notif-text .idea-ref {
+    color: var(--black); font-weight: 500;
+    font-style: italic;
+  }
+
+  .notif-time { font-size: 11.5px; color: var(--gray-mid); }
+
+  /* idea preview snippet */
+  .notif-snippet {
+    margin-top: 8px; padding: 8px 12px;
+    background: var(--gray-faint); border-radius: var(--radius-md);
+    border-left: 3px solid var(--yellow);
+    font-size: 12.5px; color: var(--gray-dark); line-height: 1.5;
+  }
+  .notif.unread .notif-snippet { background: rgba(255,255,255,0.6); }
+
+  /* action buttons on notif */
+  .notif-actions { display: flex; gap: 6px; margin-top: 10px; }
+  .na-btn {
+    padding: 5px 12px; border-radius: var(--radius-pill);
+    font-family: var(--font-body); font-size: 12px; font-weight: 500;
+    cursor: pointer; transition: all 0.15s; border: 1px solid var(--gray-light);
+    background: var(--white); color: var(--gray-dark);
+  }
+  .na-btn:hover { border-color: var(--black); color: var(--black); }
+  .na-btn.primary { background: var(--black); color: var(--white); border-color: var(--black); }
+  .na-btn.primary:hover { opacity: 0.85; }
+  .na-btn.yellow { background: var(--yellow); color: var(--black); border-color: var(--yellow-dark); }
+
+  /* multi-avatar row for group notifs */
+  .multi-av { display: flex; }
+  .multi-av .nav-av {
+    width: 30px; height: 30px; font-size: 10px;
+    margin-left: -8px; border: 2px solid var(--white);
+  }
+  .multi-av .nav-av:first-child { margin-left: 0; }
+
+  /* milestone notif — special full-width style */
+  .notif.milestone {
+    background: var(--black);
+    border-color: var(--black);
+  }
+  .notif.milestone .notif-text { color: var(--white); }
+  .notif.milestone .notif-time { color: rgba(255,255,255,0.4); }
+  .notif.milestone .notif-snippet {
+    background: rgba(255,255,255,0.08);
+    border-left-color: var(--yellow);
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* empty state */
+  .empty {
+    text-align: center; padding: 60px 20px;
+    display: none; flex-direction: column; align-items: center; gap: 12px;
+  }
+  .empty-icon { font-size: 40px; }
+  .empty-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--black); }
+  .empty-sub { font-size: 13px; color: var(--gray-mid); max-width: 260px; line-height: 1.6; }
+
+  /* ── RIGHT SIDEBAR ── */
+  .sidebar { display: flex; flex-direction: column; gap: 14px; }
+
+  .widget { background: var(--white); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 16px; }
+  .widget-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-mid); margin-bottom: 14px; }
+
+  /* activity summary */
+  .activity-ring {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 8px 0 14px;
+  }
+  .ring-wrap { position: relative; width: 80px; height: 80px; margin-bottom: 12px; }
+  .ring-svg { width: 80px; height: 80px; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--gray-faint); stroke-width: 8; }
+  .ring-fill { fill: none; stroke: var(--yellow); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 201; stroke-dashoffset: 50; transition: stroke-dashoffset 1s ease; }
+  .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .ring-num { font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--black); line-height: 1; }
+  .ring-lbl { font-size: 9px; color: var(--gray-mid); text-transform: uppercase; letter-spacing: 0.05em; }
+  .activity-sub { font-size: 12px; color: var(--gray-mid); text-align: center; line-height: 1.5; }
+  .activity-sub strong { color: var(--black); }
+
+  .stat-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--gray-faint); font-size: 13px; }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-lbl { color: var(--gray-mid); }
+  .stat-val { font-weight: 600; color: var(--black); }
+  .stat-val.y { color: var(--yellow-dark); }
+
+  /* pref toggles */
+  .pref-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--gray-faint); }
+  .pref-row:last-child { border-bottom: none; }
+  .pref-label { font-size: 13px; color: var(--black); }
+  .pref-sub { font-size: 11px; color: var(--gray-mid); margin-top: 1px; }
+  .tog { position: relative; width: 36px; height: 20px; cursor: pointer; flex-shrink: 0; }
+  .tog input { opacity: 0; width: 0; height: 0; position: absolute; }
+  .tog-track { position: absolute; inset: 0; background: var(--gray-light); border-radius: 999px; transition: background 0.2s; }
+  .tog input:checked + .tog-track { background: var(--yellow); }
+  .tog-thumb { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--white); box-shadow: 0 1px 3px rgba(0,0,0,0.2); transition: left 0.2s; }
+  .tog input:checked ~ .tog-thumb { left: 18px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 720px) {
+    .page { grid-template-columns: 1fr; padding: 16px 14px 80px; gap: 14px; }
+    .sidebar { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .navbar { padding: 0 14px; height: 50px; }
+    .nav-search { display: none; }
+    .btn-ghost { display: none; }
+    .logo-text { font-size: 14px; }
+    .page { padding: 14px 12px 80px; }
+    .page-title { font-size: 17px; }
+    .filter-tabs { width: 100%; }
+    .ftab { flex: 1; text-align: center; padding: 5px 8px; font-size: 12px; }
+    .notif { padding: 12px 14px; gap: 10px; }
+    .notif-text { font-size: 13px; }
+    .notif-snippet { font-size: 12px; }
+    .notif-actions { flex-wrap: wrap; }
+
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--white); border-top: 1px solid var(--gray-light);
+      display: flex; height: 58px; z-index: 200;
+    }
+    .bnav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 10px; color: var(--gray-mid); border: none; background: transparent; font-family: var(--font-body); cursor: pointer; }
+    .bnav-item.active { color: var(--black); font-weight: 600; }
+    .bnav-item svg { width: 20px; height: 20px; }
+    .bnav-post { width: 42px; height: 42px; border-radius: 50%; background: var(--black); border: none; display: flex; align-items: center; justify-content: center; margin-top: -14px; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.2); flex-shrink: 0; align-self: center; }
+    .bnav-post-dot { width: 17px; height: 17px; background: var(--yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--black); line-height: 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="logo" href="#">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="28" height="28">
+      <path d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z" fill="#F5C518"/>
+      <ellipse cx="38" cy="26" rx="7" ry="10" fill="#FFF8DC" opacity="0.7" transform="rotate(-20 38 26)"/>
+      <rect x="39" y="83" width="22" height="5" rx="2.5" fill="#C49A00"/>
+      <rect x="40.5" y="90" width="19" height="5" rx="2.5" fill="#C49A00" opacity="0.7"/>
+      <path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="#111111"/>
+    </svg>
+    <span class="logo-text">Idea<span>Share</span></span>
+  </a>
+  <div class="nav-search"><input type="text" placeholder="Search ideas..."></div>
+  <div class="nav-right">
+    <button class="btn-ghost">Sign in</button>
+    <button class="btn-primary"><div class="plus-dot">+</div> Post idea</button>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <div class="page-header">
+      <div class="page-title">
+        Notifications
+        <span class="unread-badge" id="unread-count">5 new</span>
+      </div>
+      <button class="mark-all" onclick="markAllRead()">Mark all as read</button>
+    </div>
+
+    <div class="filter-tabs">
+      <button class="ftab active" onclick="filterTab(this, 'all')">All</button>
+      <button class="ftab" onclick="filterTab(this, 'sparks')">Sparks</button>
+      <button class="ftab" onclick="filterTab(this, 'builds')">Builds</button>
+      <button class="ftab" onclick="filterTab(this, 'refinements')">Refinements</button>
+      <button class="ftab" onclick="filterTab(this, 'following')">Following</button>
+    </div>
+
+    <div class="notif-list" id="notif-list">
+
+      <!-- TODAY -->
+      <div class="day-label">Today</div>
+
+      <!-- Milestone — special -->
+      <div class="notif milestone unread" style="animation-delay:0s">
+        <div class="notif-icon ni-milestone">🎉</div>
+        <div class="notif-content">
+          <div class="notif-text" style="color:#fff;">Your idea just crossed <strong style="color:#F5C518;">500 sparks!</strong> It's now in the top 1% of ideas posted this month.</div>
+          <div class="notif-snippet">A universal exam system independent of any university...</div>
+          <div class="notif-time" style="color:rgba(255,255,255,0.4); margin-top:6px;">2 minutes ago</div>
+        </div>
+        <div class="unread-dot" style="background:#F5C518;"></div>
+      </div>
+
+      <!-- Builder joined -->
+      <div class="notif unread" style="animation-delay:0.05s" data-type="builds">
+        <div class="notif-avatars">
+          <div class="nav-av av-d">TK</div>
+          <div class="nav-av-sm" style="background:#ECFDF5; color:#065F46; font-size:8px;">🔧</div>
+        </div>
+        <div class="notif-content">
+          <div class="notif-text"><strong>Tariq Khan</strong> wants to build your idea — and he's a full-stack developer.</div>
+          <div class="notif-snippet">A universal exam system independent of any university...</div>
+          <div class="notif-actions">
+            <button class="na-btn primary">View profile</button>
+            <button class="na-btn">See all builders</button>
+          </div>
+          <div class="notif-time" style="margin-top:8px;">18 minutes ago</div>
+        </div>
+        <div class="unread-dot"></div>
+      </div>
+
+      <!-- Fork -->
+      <div class="notif unread" style="animation-delay:0.1s" data-type="refinements">
+        <div class="notif-avatars">
+          <div class="nav-av av-c">SM</div>
+          <div class="nav-av-sm" style="background:#EEF2FF; color:#3730A3; font-size:8px;">⑂</div>
+        </div>
+        <div class="notif-content">
+          <div class="notif-text"><strong>Sara Müller</strong> forked your idea with a new angle.</div>
+          <div class="notif-snippet">"What if it was employer-run instead of government-run? Companies set the exam standards for their own industries."</div>
+          <div class="notif-actions">
+            <button class="na-btn yellow">View fork</button>
+            <button class="na-btn">Spark it</button>
+          </div>
+          <div class="notif-time" style="margin-top:8px;">1 hour ago</div>
+        </div>
+        <div class="unread-dot"></div>
+      </div>
+
+      <!-- Multiple sparks -->
+      <div class="notif unread" style="animation-delay:0.15s" data-type="sparks">
+        <div class="notif-avatars" style="width:52px;">
+          <div class="multi-av">
+            <div class="nav-av av-a" style="width:30px;height:30px;font-size:10px;">NI</div>
+            <div class="nav-av av-e" style="width:30px;height:30px;font-size:10px;">PO</div>
+            <div class="nav-av av-f" style="width:30px;height:30px;font-size:10px;">LM</div>
+          </div>
+        </div>
+        <div class="notif-content">
+          <div class="notif-text"><strong>Nadia Islam, Paulo Oliveira</strong> and <strong>14 others</strong> sparked your idea in the last hour.</div>
+          <div class="notif-snippet">A universal exam system independent of any university...</div>
+          <div class="notif-time" style="margin-top:6px;">1 hour ago</div>
+        </div>
+        <div class="unread-dot"></div>
+      </div>
+
+      <!-- Refinement -->
+      <div class="notif unread" style="animation-delay:0.2s" data-type="refinements">
+        <div class="notif-avatars">
+          <div class="nav-av av-b">TA</div>
+          <div class="nav-av-sm" style="background:#FEF3C7; color:#92400E; font-size:8px;">💬</div>
+        </div>
+        <div class="notif-content">
+          <div class="notif-text"><strong>Tolu Adeyemi</strong> added a refinement that got <strong>61 helpful votes.</strong></div>
+          <div class="notif-snippet">"This already partially exists — CompTIA, AWS certs, CFA all work this way. The gap is they're siloed..."</div>
+          <div class="notif-actions">
+            <button class="na-btn primary">Read refinement</button>
+          </div>
+          <div class="notif-time" style="margin-top:8px;">3 hours ago</div>
+        </div>
+        <div class="unread-dot"></div>
+      </div>
+
+      <!-- YESTERDAY -->
+      <div class="day-label">Yesterday</div>
+
+      <!-- New follower -->
+      <div class="notif" style="animation-delay:0.25s" data-type="following">
+        <div class="notif-avatars">
+          <div class="nav-av av-e">AJ</div>
+        </div>
+        <div class="notif-content">
+          <div class="notif-text"><strong>Aisha Jallow</strong> started following you. She's a backend developer from Gambia.</div>
+          <div class="notif-actions">
+            <button class="na-btn">Follow back</button>
+            <button class="na-btn">View profile</button>
+          </div>
+          <div class="notif-time" style="margin-top:8px;">Yesterday, 6:42 PM</div>
+        </div>
+      </div>
+
+      <!-- Someone you follow posted -->
+      <div class="notif" style="animation-delay:0.3s" data-type="following">
+        <div class="notif-avatars">
+          <div class="nav-av av-c">LM</div>
+          <div class="nav-av-sm" style="background:#FFF8DC; color:#C49A00; font-size:8px;">💡</div>
+        </div>
+        <div class="notif-content">
+          <div class="notif-text"><strong>Lena Moser</strong> posted a new idea you might like.</div>
+          <div class="notif-snippet">"Neighbourhood app where locals vote on which small businesses get rent subsidies each quarter"</div>
+          <div class="notif-actions">
+            <button class="na-btn yellow">View idea</button>
+          </div>
+          <div class="notif-time" style="margin-top:8px;">Yesterday, 2:15 PM</div>
+        </div>
+      </div>
+
+      <!-- Spark on another idea -->
+      <div class="notif" style="animation-delay:0.35s" data-type="sparks">
+        <div class="notif-avatars" style="width:52px;">
+          <div class="multi-av">
+            <div class="nav-av av-d" style="width:30px;height:30px;font-size:10px;">RK</div>
+            <div class="nav-av av-a" style="width:30px;height:30px;font-size:10px;">BK</div>
+          </div>
+        </div>
+        <div class="notif-content">
+          <div class="notif-text"><strong>Ravi Kumar</strong> and <strong>6 others</strong> sparked your idea <span class="idea-ref">"Peer-to-peer tutoring marketplace where students teach what they know"</span></div>
+          <div class="notif-time" style="margin-top:6px;">Yesterday, 11:30 AM</div>
+        </div>
+      </div>
+
+      <!-- Digest -->
+      <div class="notif" style="animation-delay:0.4s">
+        <div class="notif-icon ni-digest">📬</div>
+        <div class="notif-content">
+          <div class="notif-text">Your <strong>weekly digest</strong> is ready — 3 of your ideas are trending this week.</div>
+          <div class="notif-actions">
+            <button class="na-btn primary">View digest</button>
+          </div>
+          <div class="notif-time" style="margin-top:8px;">Yesterday, 9:00 AM</div>
+        </div>
+      </div>
+
+      <!-- THIS WEEK -->
+      <div class="day-label">This week</div>
+
+      <div class="notif" style="animation-delay:0.45s" data-type="builds">
+        <div class="notif-avatars">
+          <div class="nav-av av-f">PO</div>
+          <div class="nav-av-sm" style="background:#ECFDF5; color:#065F46; font-size:8px;">🔧</div>
+        </div>
+        <div class="notif-content">
+          <div class="notif-text"><strong>Paulo Oliveira</strong> updated the build status of your idea to <strong style="color:#065F46;">Someone's building it.</strong></div>
+          <div class="notif-snippet">Peer-to-peer tutoring marketplace where students teach what they know...</div>
+          <div class="notif-time" style="margin-top:6px;">Monday, 4:20 PM</div>
+        </div>
+      </div>
+
+      <div class="notif" style="animation-delay:0.5s" data-type="sparks">
+        <div class="notif-avatars">
+          <div class="nav-av av-a">YS</div>
+        </div>
+        <div class="notif-content">
+          <div class="notif-text"><strong>Yuki Sato</strong> sparked your idea from Japan 🇯🇵 — your ideas have now been sparked in <strong>23 countries.</strong></div>
+          <div class="notif-time" style="margin-top:6px;">Monday, 1:08 PM</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Empty state (hidden by default) -->
+    <div class="empty" id="empty-state">
+      <div class="empty-icon">🔔</div>
+      <div class="empty-title">All caught up!</div>
+      <div class="empty-sub">No notifications in this category yet. Keep sharing ideas to get the conversation going.</div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- This week summary -->
+    <div class="widget">
+      <div class="widget-title">This week</div>
+      <div class="activity-ring">
+        <div class="ring-wrap">
+          <svg class="ring-svg" viewBox="0 0 80 80">
+            <circle class="ring-bg" cx="40" cy="40" r="32"/>
+            <circle class="ring-fill" cx="40" cy="40" r="32"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-num">847</div>
+            <div class="ring-lbl">sparks</div>
+          </div>
+        </div>
+        <div class="activity-sub">Up <strong>+34%</strong> from last week</div>
+      </div>
+      <div class="stat-row"><span class="stat-lbl">New sparks</span><span class="stat-val y">+312 ⚡</span></div>
+      <div class="stat-row"><span class="stat-lbl">Refinements received</span><span class="stat-val">+8</span></div>
+      <div class="stat-row"><span class="stat-lbl">New followers</span><span class="stat-val">+24</span></div>
+      <div class="stat-row"><span class="stat-lbl">Builder requests</span><span class="stat-val">+2</span></div>
+      <div class="stat-row"><span class="stat-lbl">Countries reached</span><span class="stat-val">23</span></div>
+    </div>
+
+    <!-- Notification preferences -->
+    <div class="widget">
+      <div class="widget-title">Preferences</div>
+      <div class="pref-row">
+        <div><div class="pref-label">Sparks</div><div class="pref-sub">When someone sparks your idea</div></div>
+        <label class="tog"><input type="checkbox" checked><div class="tog-track"></div><div class="tog-thumb"></div></label>
+      </div>
+      <div class="pref-row">
+        <div><div class="pref-label">Builders</div><div class="pref-sub">When someone wants to build</div></div>
+        <label class="tog"><input type="checkbox" checked><div class="tog-track"></div><div class="tog-thumb"></div></label>
+      </div>
+      <div class="pref-row">
+        <div><div class="pref-label">Refinements</div><div class="pref-sub">Comments on your ideas</div></div>
+        <label class="tog"><input type="checkbox" checked><div class="tog-track"></div><div class="tog-thumb"></div></label>
+      </div>
+      <div class="pref-row">
+        <div><div class="pref-label">Forks</div><div class="pref-sub">When your idea is forked</div></div>
+        <label class="tog"><input type="checkbox" checked><div class="tog-track"></div><div class="tog-thumb"></div></label>
+      </div>
+      <div class="pref-row">
+        <div><div class="pref-label">New followers</div><div class="pref-sub">When someone follows you</div></div>
+        <label class="tog"><input type="checkbox"><div class="tog-track"></div><div class="tog-thumb"></div></label>
+      </div>
+      <div class="pref-row">
+        <div><div class="pref-label">Weekly digest</div><div class="pref-sub">Sunday morning summary</div></div>
+        <label class="tog"><input type="checkbox" checked><div class="tog-track"></div><div class="tog-thumb"></div></label>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- BOTTOM NAV (mobile) -->
+<div id="bnav" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #DDD; height:58px; z-index:200; flex-direction:row;">
+  <button class="bnav-item" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:#888;border:none;background:transparent;font-family:inherit;cursor:pointer;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Feed
+  </button>
+  <button class="bnav-item" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:#888;border:none;background:transparent;font-family:inherit;cursor:pointer;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Explore
+  </button>
+  <button class="bnav-post" style="width:42px;height:42px;border-radius:50%;background:#111;border:none;display:flex;align-items:center;justify-content:center;margin-top:-14px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.2);flex-shrink:0;align-self:center;">
+    <div class="bnav-post-dot" style="width:17px;height:17px;background:#F5C518;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:#111;line-height:1;">+</div>
+  </button>
+  <button class="bnav-item active" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:#111;font-weight:600;border:none;background:transparent;font-family:inherit;cursor:pointer;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Alerts
+  </button>
+  <button class="bnav-item" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:#888;border:none;background:transparent;font-family:inherit;cursor:pointer;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
+  </button>
+</div>
+
+<script>
+  function markAllRead() {
+    document.querySelectorAll('.notif.unread').forEach(n => n.classList.remove('unread'));
+    document.querySelectorAll('.unread-dot').forEach(d => d.remove());
+    document.getElementById('unread-count').textContent = '0 new';
+    document.getElementById('unread-count').style.background = '#888';
+  }
+
+  function filterTab(el, type) {
+    document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    const all = document.querySelectorAll('.notif, .day-label');
+    if (type === 'all') {
+      all.forEach(n => n.style.display = '');
+      document.getElementById('empty-state').style.display = 'none';
+      return;
+    }
+    let found = 0;
+    document.querySelectorAll('.notif').forEach(n => {
+      const match = n.dataset.type === type;
+      n.style.display = match ? '' : 'none';
+      if (match) found++;
+    });
+    document.querySelectorAll('.day-label').forEach(d => d.style.display = 'none');
+    document.getElementById('empty-state').style.display = found === 0 ? 'flex' : 'none';
+  }
+
+  function syncNav() {
+    document.getElementById('bnav').style.display = window.innerWidth <= 600 ? 'flex' : 'none';
+  }
+  syncNav();
+  window.addEventListener('resize', syncNav);
+</script>
+</body>
+</html>

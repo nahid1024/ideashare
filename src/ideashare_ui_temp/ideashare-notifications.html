@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IdeaShare — Notifications</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{yellow:{DEFAULT:'#F5C518',light:'#FFF8DC',mid:'#FFE066',dark:'#C49A00'},black:{DEFAULT:'#111111'},gray:{dark:'#444',mid:'#888',light:'#DDD',faint:'#F5F5F2'}},fontFamily:{display:["'Bricolage Grotesque'","sans-serif"],body:["'DM Sans'","sans-serif"]}}}}</script>
+<style>
+  body{font-family:'DM Sans',sans-serif;}
+  @keyframes slideIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .notif{animation:slideIn 0.3s ease both;}
+  @media(max-width:720px){.notif-sidebar{display:none!important;}.notif-page{grid-template-columns:1fr!important;padding:16px 14px 80px!important;}}
+  @media(max-width:600px){.nav-search-wrap,.btn-ghost-n{display:none!important;}}
+</style>
+</head>
+<body class="bg-[#F5F5F2] text-[#111] text-sm">
+
+<!-- NAVBAR -->
+<nav class="bg-white border-b border-[#DDD] h-[54px] flex items-center px-8 gap-[14px] sticky top-0 z-[100]">
+  <a class="flex items-center gap-2 no-underline" href="#">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="28" height="28">
+      <path d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z" fill="#F5C518"/>
+      <ellipse cx="38" cy="26" rx="7" ry="10" fill="#FFF8DC" opacity="0.7" transform="rotate(-20 38 26)"/>
+      <rect x="39" y="83" width="22" height="5" rx="2.5" fill="#C49A00"/>
+      <rect x="40.5" y="90" width="19" height="5" rx="2.5" fill="#C49A00" opacity="0.7"/>
+      <path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="#111111"/>
+    </svg>
+    <span style="font-family:'Bricolage Grotesque',sans-serif" class="text-base font-semibold text-[#111] tracking-[-0.3px]">Idea<span class="text-[#C49A00]">Share</span></span>
+  </a>
+  <div class="nav-search-wrap flex-1 max-w-[300px]">
+    <input type="text" placeholder="Search ideas..." class="w-full h-[34px] border border-[#DDD] rounded-full px-[14px] font-[inherit] text-[13px] bg-[#F5F5F2] outline-none transition-colors focus:border-[#F5C518] focus:bg-white">
+  </div>
+  <div class="ml-auto flex items-center gap-[10px]">
+    <button class="btn-ghost-n py-[6px] px-[14px] border border-[#DDD] rounded-full bg-transparent font-[inherit] text-[13px] font-medium text-[#444] cursor-pointer">Sign in</button>
+    <button class="py-[6px] px-4 border-none rounded-full bg-[#111] font-[inherit] text-[13px] font-medium text-white cursor-pointer flex items-center gap-[6px]">
+      <div class="w-[15px] h-[15px] bg-[#F5C518] rounded-full flex items-center justify-center text-[13px] text-[#111] leading-none">+</div>Post idea
+    </button>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="notif-page max-w-[780px] mx-auto py-7 px-6 pb-20 grid gap-[22px] items-start" style="grid-template-columns:minmax(0,1fr) 220px">
+
+  <!-- MAIN -->
+  <div class="flex flex-col gap-0">
+
+    <div class="flex items-center justify-between mb-4">
+      <div style="font-family:'Bricolage Grotesque',sans-serif" class="text-xl font-extrabold text-[#111] tracking-[-0.3px] flex items-center gap-[10px]">
+        Notifications
+        <span id="unread-count" class="text-[12px] font-bold bg-[#111] text-white py-[2px] px-2 rounded-full font-body">5 new</span>
+      </div>
+      <button onclick="markAllRead()" class="text-[12.5px] font-medium text-[#888] cursor-pointer border-none bg-transparent font-[inherit] transition-colors hover:text-[#111]">Mark all as read</button>
+    </div>
+
+    <div class="flex gap-1 bg-white border border-[#DDD] rounded-full p-[3px] mb-4 w-fit">
+      <button class="ftab py-[5px] px-[14px] rounded-full text-[12.5px] font-medium bg-[#111] text-white cursor-pointer border-none font-[inherit]" onclick="filterTab(this,'all')">All</button>
+      <button class="ftab py-[5px] px-[14px] rounded-full text-[12.5px] font-medium text-[#888] bg-transparent cursor-pointer border-none font-[inherit] hover:text-[#111]" onclick="filterTab(this,'sparks')">Sparks</button>
+      <button class="ftab py-[5px] px-[14px] rounded-full text-[12.5px] font-medium text-[#888] bg-transparent cursor-pointer border-none font-[inherit] hover:text-[#111]" onclick="filterTab(this,'builds')">Builds</button>
+      <button class="ftab py-[5px] px-[14px] rounded-full text-[12.5px] font-medium text-[#888] bg-transparent cursor-pointer border-none font-[inherit] hover:text-[#111] whitespace-nowrap" onclick="filterTab(this,'refinements')">Refinements</button>
+      <button class="ftab py-[5px] px-[14px] rounded-full text-[12.5px] font-medium text-[#888] bg-transparent cursor-pointer border-none font-[inherit] hover:text-[#111]" onclick="filterTab(this,'following')">Following</button>
+    </div>
+
+    <div id="notif-list" class="flex flex-col gap-0">
+
+      <div class="text-[11px] font-semibold uppercase tracking-[0.07em] text-[#888] pt-3 pb-2 first:pt-0">Today</div>
+
+      <!-- Milestone -->
+      <div class="notif bg-[#111] border border-[#111] rounded-2xl p-[14px_16px] mb-2 flex gap-3 items-start cursor-pointer relative" style="animation-delay:0s">
+        <div class="w-10 h-10 rounded-[10px] bg-[#111] flex items-center justify-center text-lg flex-shrink-0 border border-white/20">🎉</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-[13.5px] text-white leading-[1.55] mb-[5px]">Your idea just crossed <strong class="text-[#F5C518]">500 sparks!</strong> It's now in the top 1% of ideas posted this month.</div>
+          <div class="mt-2 p-[8px_12px] bg-white/[0.08] rounded-[10px] border-l-[3px] border-[#F5C518] text-[12.5px] text-white/70 leading-[1.5]">A universal exam system independent of any university...</div>
+          <div class="text-[11.5px] text-white/40 mt-[6px]">2 minutes ago</div>
+        </div>
+        <div class="absolute top-4 right-4 w-[7px] h-[7px] rounded-full bg-[#F5C518]"></div>
+      </div>
+
+      <!-- Builder joined -->
+      <div class="notif unread bg-[#FFF8DC] border border-[#FFE066] rounded-2xl p-[14px_16px] mb-2 flex gap-3 items-start cursor-pointer relative transition-all hover:border-[#C49A00] hover:shadow-[0_0_0_3px_rgba(245,197,24,0.15)]" style="animation-delay:0.05s" data-type="builds">
+        <div class="relative w-10 h-10 flex-shrink-0">
+          <div class="w-9 h-9 rounded-full bg-[#ECFDF5] text-[#065F46] flex items-center justify-center text-[12px] font-bold border-2 border-white">TK</div>
+          <div class="absolute -bottom-[2px] -right-[2px] w-[22px] h-[22px] rounded-full bg-[#ECFDF5] text-[#065F46] text-[8px] font-bold flex items-center justify-center border-2 border-white">🔧</div>
+        </div>
+        <div class="flex-1">
+          <div class="text-[13.5px] text-[#111] leading-[1.55] mb-[5px]"><strong>Tariq Khan</strong> wants to build your idea — and he's a full-stack developer.</div>
+          <div class="p-[8px_12px] bg-[#F5F5F2] rounded-[10px] border-l-[3px] border-[#F5C518] text-[12.5px] text-[#444] leading-[1.5]">A universal exam system independent of any university...</div>
+          <div class="flex gap-[6px] mt-[10px] flex-wrap">
+            <button class="py-[5px] px-3 rounded-full font-[inherit] text-[12px] font-medium bg-[#111] text-white border border-[#111] cursor-pointer">View profile</button>
+            <button class="py-[5px] px-3 rounded-full font-[inherit] text-[12px] font-medium bg-white text-[#444] border border-[#DDD] cursor-pointer hover:border-[#111] hover:text-[#111]">See all builders</button>
+          </div>
+          <div class="text-[11.5px] text-[#888] mt-2">18 minutes ago</div>
+        </div>
+        <div class="absolute top-4 right-4 w-[7px] h-[7px] rounded-full bg-[#C49A00]"></div>
+      </div>
+
+      <!-- Fork -->
+      <div class="notif unread bg-[#FFF8DC] border border-[#FFE066] rounded-2xl p-[14px_16px] mb-2 flex gap-3 items-start cursor-pointer relative transition-all hover:border-[#C49A00]" style="animation-delay:0.1s" data-type="refinements">
+        <div class="relative w-10 h-10 flex-shrink-0">
+          <div class="w-9 h-9 rounded-full bg-[#EEF2FF] text-[#3730A3] flex items-center justify-center text-[12px] font-bold border-2 border-white">SM</div>
+          <div class="absolute -bottom-[2px] -right-[2px] w-[22px] h-[22px] rounded-full bg-[#EEF2FF] text-[#3730A3] text-[8px] font-bold flex items-center justify-center border-2 border-white">⑂</div>
+        </div>
+        <div class="flex-1">
+          <div class="text-[13.5px] text-[#111] leading-[1.55] mb-[5px]"><strong>Sara Müller</strong> forked your idea with a new angle.</div>
+          <div class="p-[8px_12px] bg-white/60 rounded-[10px] border-l-[3px] border-[#F5C518] text-[12.5px] text-[#444] leading-[1.5]">"What if it was employer-run instead of government-run? Companies set the exam standards for their own industries."</div>
+          <div class="flex gap-[6px] mt-[10px]">
+            <button class="py-[5px] px-3 rounded-full font-[inherit] text-[12px] font-medium bg-[#F5C518] text-[#111] border border-[#C49A00] cursor-pointer">View fork</button>
+            <button class="py-[5px] px-3 rounded-full font-[inherit] text-[12px] font-medium bg-white text-[#444] border border-[#DDD] cursor-pointer hover:border-[#111]">Spark it</button>
+          </div>
+          <div class="text-[11.5px] text-[#888] mt-2">1 hour ago</div>
+        </div>
+        <div class="absolute top-4 right-4 w-[7px] h-[7px] rounded-full bg-[#C49A00]"></div>
+      </div>
+
+      <!-- Multiple sparks -->
+      <div class="notif unread bg-[#FFF8DC] border border-[#FFE066] rounded-2xl p-[14px_16px] mb-2 flex gap-3 items-start cursor-pointer relative" style="animation-delay:0.15s" data-type="sparks">
+        <div class="flex flex-shrink-0" style="width:52px">
+          <div class="w-[30px] h-[30px] rounded-full bg-[#F5C518] text-[#111] flex items-center justify-center text-[10px] font-bold border-2 border-white">NI</div>
+          <div class="w-[30px] h-[30px] rounded-full bg-[#FEF3C7] text-[#92400E] flex items-center justify-center text-[10px] font-bold border-2 border-white -ml-2">PO</div>
+          <div class="w-[30px] h-[30px] rounded-full bg-[#FCE7F3] text-[#9D174D] flex items-center justify-center text-[10px] font-bold border-2 border-white -ml-2">LM</div>
+        </div>
+        <div class="flex-1">
+          <div class="text-[13.5px] text-[#111] leading-[1.55] mb-[5px]"><strong>Nadia Islam, Paulo Oliveira</strong> and <strong>14 others</strong> sparked your idea in the last hour.</div>
+          <div class="p-[8px_12px] bg-white/60 rounded-[10px] border-l-[3px] border-[#F5C518] text-[12.5px] text-[#444] leading-[1.5]">A universal exam system independent of any university...</div>
+          <div class="text-[11.5px] text-[#888] mt-[6px]">1 hour ago</div>
+        </div>
+        <div class="absolute top-4 right-4 w-[7px] h-[7px] rounded-full bg-[#C49A00]"></div>
+      </div>
+
+      <!-- Refinement -->
+      <div class="notif unread bg-[#FFF8DC] border border-[#FFE066] rounded-2xl p-[14px_16px] mb-2 flex gap-3 items-start cursor-pointer relative" style="animation-delay:0.2s" data-type="refinements">
+        <div class="relative w-10 h-10 flex-shrink-0">
+          <div class="w-9 h-9 rounded-full bg-[#111] text-white flex items-center justify-center text-[12px] font-bold border-2 border-white">TA</div>
+          <div class="absolute -bottom-[2px] -right-[2px] w-[22px] h-[22px] rounded-full bg-[#FEF3C7] text-[#92400E] text-[8px] font-bold flex items-center justify-center border-2 border-white">💬</div>
+        </div>
+        <div class="flex-1">
+          <div class="text-[13.5px] text-[#111] leading-[1.55] mb-[5px]"><strong>Tolu Adeyemi</strong> added a refinement that got <strong>61 helpful votes.</strong></div>
+          <div class="p-[8px_12px] bg-white/60 rounded-[10px] border-l-[3px] border-[#F5C518] text-[12.5px] text-[#444] leading-[1.5]">"This already partially exists — CompTIA, AWS certs, CFA all work this way. The gap is they're siloed..."</div>
+          <div class="flex gap-[6px] mt-[10px]">
+            <button class="py-[5px] px-3 rounded-full font-[inherit] text-[12px] font-medium bg-[#111] text-white border border-[#111] cursor-pointer">Read refinement</button>
+          </div>
+          <div class="text-[11.5px] text-[#888] mt-2">3 hours ago</div>
+        </div>
+        <div class="absolute top-4 right-4 w-[7px] h-[7px] rounded-full bg-[#C49A00]"></div>
+      </div>
+
+      <div class="text-[11px] font-semibold uppercase tracking-[0.07em] text-[#888] pt-3 pb-2">Yesterday</div>
+
+      <!-- New follower -->
+      <div class="notif bg-white border border-[#DDD] rounded-2xl p-[14px_16px] mb-2 flex gap-3 items-start cursor-pointer relative transition-colors hover:border-[#888]" style="animation-delay:0.25s" data-type="following">
+        <div class="w-9 h-9 rounded-full bg-[#FEF3C7] text-[#92400E] flex items-center justify-center text-[12px] font-bold border-2 border-white flex-shrink-0">AJ</div>
+        <div class="flex-1">
+          <div class="text-[13.5px] text-[#111] leading-[1.55] mb-[5px]"><strong>Aisha Jallow</strong> started following you. She's a backend developer from Gambia.</div>
+          <div class="flex gap-[6px] mt-[10px]">
+            <button class="py-[5px] px-3 rounded-full font-[inherit] text-[12px] font-medium bg-white text-[#444] border border-[#DDD] cursor-pointer hover:border-[#111] hover:text-[#111]">Follow back</button>
+            <button class="py-[5px] px-3 rounded-full font-[inherit] text-[12px] font-medium bg-white text-[#444] border border-[#DDD] cursor-pointer hover:border-[#111] hover:text-[#111]">View profile</button>
+          </div>
+          <div class="text-[11.5px] text-[#888] mt-2">Yesterday, 6:42 PM</div>
+        </div>
+      </div>
+
+      <!-- Someone posted -->
+      <div class="notif bg-white border border-[#DDD] rounded-2xl p-[14px_16px] mb-2 flex gap-3 items-start cursor-pointer relative transition-colors hover:border-[#888]" style="animation-delay:0.3s" data-type="following">
+        <div class="relative w-10 h-10 flex-shrink-0">
+          <div class="w-9 h-9 rounded-full bg-[#EEF2FF] text-[#3730A3] flex items-center justify-center text-[12px] font-bold border-2 border-white">LM</div>
+          <div class="absolute -bottom-[2px] -right-[2px] w-[22px] h-[22px] rounded-full bg-[#FFF8DC] text-[#C49A00] text-[8px] font-bold flex items-center justify-center border-2 border-white">💡</div>
+        </div>
+        <div class="flex-1">
+          <div class="text-[13.5px] text-[#111] leading-[1.55] mb-[5px]"><strong>Lena Moser</strong> posted a new idea you might like.</div>
+          <div class="p-[8px_12px] bg-[#F5F5F2] rounded-[10px] border-l-[3px] border-[#F5C518] text-[12.5px] text-[#444] leading-[1.5]">"Neighbourhood app where locals vote on which small businesses get rent subsidies each quarter"</div>
+          <div class="flex gap-[6px] mt-[10px]">
+            <button class="py-[5px] px-3 rounded-full font-[inherit] text-[12px] font-medium bg-[#F5C518] text-[#111] border border-[#C49A00] cursor-pointer">View idea</button>
+          </div>
+          <div class="text-[11.5px] text-[#888] mt-2">Yesterday, 2:15 PM</div>
+        </div>
+      </div>
+
+      <!-- Weekly digest -->
+      <div class="notif bg-white border border-[#DDD] rounded-2xl p-[14px_16px] mb-2 flex gap-3 items-start cursor-pointer relative transition-colors hover:border-[#888]" style="animation-delay:0.4s">
+        <div class="w-10 h-10 rounded-[10px] bg-[#F5C518] flex items-center justify-center text-lg flex-shrink-0">📬</div>
+        <div class="flex-1">
+          <div class="text-[13.5px] text-[#111] leading-[1.55] mb-[5px]">Your <strong>weekly digest</strong> is ready — 3 of your ideas are trending this week.</div>
+          <div class="flex gap-[6px] mt-[10px]">
+            <button class="py-[5px] px-3 rounded-full font-[inherit] text-[12px] font-medium bg-[#111] text-white border border-[#111] cursor-pointer">View digest</button>
+          </div>
+          <div class="text-[11.5px] text-[#888] mt-2">Yesterday, 9:00 AM</div>
+        </div>
+      </div>
+
+      <div class="text-[11px] font-semibold uppercase tracking-[0.07em] text-[#888] pt-3 pb-2">This week</div>
+
+      <div class="notif bg-white border border-[#DDD] rounded-2xl p-[14px_16px] mb-2 flex gap-3 items-start cursor-pointer relative transition-colors hover:border-[#888]" style="animation-delay:0.45s" data-type="builds">
+        <div class="relative w-10 h-10 flex-shrink-0">
+          <div class="w-9 h-9 rounded-full bg-[#FCE7F3] text-[#9D174D] flex items-center justify-center text-[12px] font-bold border-2 border-white">PO</div>
+          <div class="absolute -bottom-[2px] -right-[2px] w-[22px] h-[22px] rounded-full bg-[#ECFDF5] text-[#065F46] text-[8px] font-bold flex items-center justify-center border-2 border-white">🔧</div>
+        </div>
+        <div class="flex-1">
+          <div class="text-[13.5px] text-[#111] leading-[1.55] mb-[5px]"><strong>Paulo Oliveira</strong> updated the build status of your idea to <strong class="text-[#065F46]">Someone's building it.</strong></div>
+          <div class="p-[8px_12px] bg-[#F5F5F2] rounded-[10px] border-l-[3px] border-[#F5C518] text-[12.5px] text-[#444] leading-[1.5]">Peer-to-peer tutoring marketplace where students teach what they know...</div>
+          <div class="text-[11.5px] text-[#888] mt-[6px]">Monday, 4:20 PM</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Empty state -->
+    <div id="empty-state" class="hidden text-center py-[60px] px-5 flex-col items-center gap-3">
+      <div class="text-4xl">🔔</div>
+      <div style="font-family:'Bricolage Grotesque',sans-serif" class="text-lg font-bold text-[#111]">All caught up!</div>
+      <div class="text-[13px] text-[#888] max-w-[260px] leading-[1.6]">No notifications in this category yet. Keep sharing ideas to get the conversation going.</div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="notif-sidebar flex flex-col gap-[14px]">
+
+    <div class="bg-white border border-[#DDD] rounded-2xl p-4">
+      <div class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#888] mb-[14px]">This week</div>
+      <div class="flex flex-col items-center py-2 pb-[14px]">
+        <div class="relative w-20 h-20 mb-3">
+          <svg class="w-20 h-20" style="transform:rotate(-90deg)" viewBox="0 0 80 80">
+            <circle class="fill-none stroke-[#F5F5F2]" cx="40" cy="40" r="32" stroke-width="8"/>
+            <circle class="fill-none stroke-[#F5C518]" cx="40" cy="40" r="32" stroke-width="8" stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="50"/>
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center">
+            <div style="font-family:'Bricolage Grotesque',sans-serif" class="text-lg font-extrabold text-[#111] leading-none">847</div>
+            <div class="text-[9px] text-[#888] uppercase tracking-[0.05em]">sparks</div>
+          </div>
+        </div>
+        <div class="text-[12px] text-[#888] text-center leading-[1.5]">Up <strong class="text-[#111]">+34%</strong> from last week</div>
+      </div>
+      <div class="flex items-center justify-between py-[6px] border-b border-[#F5F5F2] text-[13px]"><span class="text-[#888]">New sparks</span><span class="font-semibold text-[#C49A00]">+312 ⚡</span></div>
+      <div class="flex items-center justify-between py-[6px] border-b border-[#F5F5F2] text-[13px]"><span class="text-[#888]">Refinements received</span><span class="font-semibold text-[#111]">+8</span></div>
+      <div class="flex items-center justify-between py-[6px] border-b border-[#F5F5F2] text-[13px]"><span class="text-[#888]">New followers</span><span class="font-semibold text-[#111]">+24</span></div>
+      <div class="flex items-center justify-between py-[6px] border-b border-[#F5F5F2] text-[13px]"><span class="text-[#888]">Builder requests</span><span class="font-semibold text-[#111]">+2</span></div>
+      <div class="flex items-center justify-between py-[6px] text-[13px]"><span class="text-[#888]">Countries reached</span><span class="font-semibold text-[#111]">23</span></div>
+    </div>
+
+    <div class="bg-white border border-[#DDD] rounded-2xl p-4">
+      <div class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#888] mb-[14px]">Preferences</div>
+      <div class="pref-row flex items-center justify-between py-[7px] border-b border-[#F5F5F2]">
+        <div><div class="text-[13px] text-[#111]">Sparks</div><div class="text-[11px] text-[#888] mt-[1px]">When someone sparks your idea</div></div>
+        <label class="relative w-9 h-5 cursor-pointer flex-shrink-0">
+          <input type="checkbox" checked class="peer opacity-0 absolute w-0 h-0">
+          <div class="absolute inset-0 bg-[#DDD] rounded-full transition-colors peer-checked:bg-[#F5C518]"></div>
+          <div class="absolute top-[2px] left-[2px] w-4 h-4 rounded-full bg-white shadow-sm transition-all peer-checked:left-[18px]"></div>
+        </label>
+      </div>
+      <div class="pref-row flex items-center justify-between py-[7px] border-b border-[#F5F5F2]">
+        <div><div class="text-[13px] text-[#111]">Builders</div><div class="text-[11px] text-[#888] mt-[1px]">When someone wants to build</div></div>
+        <label class="relative w-9 h-5 cursor-pointer flex-shrink-0">
+          <input type="checkbox" checked class="peer opacity-0 absolute w-0 h-0">
+          <div class="absolute inset-0 bg-[#DDD] rounded-full transition-colors peer-checked:bg-[#F5C518]"></div>
+          <div class="absolute top-[2px] left-[2px] w-4 h-4 rounded-full bg-white shadow-sm transition-all peer-checked:left-[18px]"></div>
+        </label>
+      </div>
+      <div class="pref-row flex items-center justify-between py-[7px] border-b border-[#F5F5F2]">
+        <div><div class="text-[13px] text-[#111]">Refinements</div><div class="text-[11px] text-[#888] mt-[1px]">Comments on your ideas</div></div>
+        <label class="relative w-9 h-5 cursor-pointer flex-shrink-0">
+          <input type="checkbox" checked class="peer opacity-0 absolute w-0 h-0">
+          <div class="absolute inset-0 bg-[#DDD] rounded-full transition-colors peer-checked:bg-[#F5C518]"></div>
+          <div class="absolute top-[2px] left-[2px] w-4 h-4 rounded-full bg-white shadow-sm transition-all peer-checked:left-[18px]"></div>
+        </label>
+      </div>
+      <div class="pref-row flex items-center justify-between py-[7px] border-b border-[#F5F5F2]">
+        <div><div class="text-[13px] text-[#111]">Forks</div><div class="text-[11px] text-[#888] mt-[1px]">When your idea is forked</div></div>
+        <label class="relative w-9 h-5 cursor-pointer flex-shrink-0">
+          <input type="checkbox" checked class="peer opacity-0 absolute w-0 h-0">
+          <div class="absolute inset-0 bg-[#DDD] rounded-full transition-colors peer-checked:bg-[#F5C518]"></div>
+          <div class="absolute top-[2px] left-[2px] w-4 h-4 rounded-full bg-white shadow-sm transition-all peer-checked:left-[18px]"></div>
+        </label>
+      </div>
+      <div class="pref-row flex items-center justify-between py-[7px] border-b border-[#F5F5F2]">
+        <div><div class="text-[13px] text-[#111]">New followers</div><div class="text-[11px] text-[#888] mt-[1px]">When someone follows you</div></div>
+        <label class="relative w-9 h-5 cursor-pointer flex-shrink-0">
+          <input type="checkbox" class="peer opacity-0 absolute w-0 h-0">
+          <div class="absolute inset-0 bg-[#DDD] rounded-full transition-colors peer-checked:bg-[#F5C518]"></div>
+          <div class="absolute top-[2px] left-[2px] w-4 h-4 rounded-full bg-white shadow-sm transition-all peer-checked:left-[18px]"></div>
+        </label>
+      </div>
+      <div class="pref-row flex items-center justify-between py-[7px]">
+        <div><div class="text-[13px] text-[#111]">Weekly digest</div><div class="text-[11px] text-[#888] mt-[1px]">Sunday morning summary</div></div>
+        <label class="relative w-9 h-5 cursor-pointer flex-shrink-0">
+          <input type="checkbox" checked class="peer opacity-0 absolute w-0 h-0">
+          <div class="absolute inset-0 bg-[#DDD] rounded-full transition-colors peer-checked:bg-[#F5C518]"></div>
+          <div class="absolute top-[2px] left-[2px] w-4 h-4 rounded-full bg-white shadow-sm transition-all peer-checked:left-[18px]"></div>
+        </label>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- BOTTOM NAV -->
+<div id="bnav" style="display:none;" class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#DDD] flex h-[58px] z-[200]">
+  <button class="flex-1 flex flex-col items-center justify-center gap-[3px] text-[10px] text-[#888] border-none bg-transparent font-[inherit] cursor-pointer">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Feed
+  </button>
+  <button class="flex-1 flex flex-col items-center justify-center gap-[3px] text-[10px] text-[#888] border-none bg-transparent font-[inherit] cursor-pointer">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Explore
+  </button>
+  <button class="self-center flex-shrink-0 w-[42px] h-[42px] rounded-full bg-[#111] border-none flex items-center justify-center -mt-[14px] cursor-pointer shadow-[0_4px_14px_rgba(0,0,0,0.2)]">
+    <div class="w-[17px] h-[17px] bg-[#F5C518] rounded-full flex items-center justify-center text-sm text-[#111] leading-none">+</div>
+  </button>
+  <button class="flex-1 flex flex-col items-center justify-center gap-[3px] text-[10px] text-[#111] font-semibold border-none bg-transparent font-[inherit] cursor-pointer">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Alerts
+  </button>
+  <button class="flex-1 flex flex-col items-center justify-center gap-[3px] text-[10px] text-[#888] border-none bg-transparent font-[inherit] cursor-pointer">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
+  </button>
+</div>
+
+<script>
+  function markAllRead(){
+    document.querySelectorAll('.notif.unread').forEach(n=>n.classList.remove('unread','bg-[#FFF8DC]','border-[#FFE066]'));
+    document.querySelectorAll('[class*="absolute top-4 right-4"]').forEach(d=>d.remove());
+    const badge=document.getElementById('unread-count');
+    badge.textContent='0 new'; badge.style.background='#888';
+  }
+  function filterTab(el,type){
+    document.querySelectorAll('.ftab').forEach(t=>{t.classList.remove('bg-[#111]','text-white');t.classList.add('text-[#888]','bg-transparent');});
+    el.classList.add('bg-[#111]','text-white'); el.classList.remove('text-[#888]','bg-transparent');
+    if(type==='all'){document.querySelectorAll('.notif,.day-label,[class*="day-label"]').forEach(n=>n.style.display='');document.getElementById('empty-state').style.display='none';return;}
+    let found=0;
+    document.querySelectorAll('.notif').forEach(n=>{const match=n.dataset.type===type;n.style.display=match?'':'none';if(match)found++;});
+    document.getElementById('empty-state').style.display=found===0?'flex':'none';
+  }
+  function syncNav(){document.getElementById('bnav').style.display=window.innerWidth<=600?'flex':'none';}
+  syncNav(); window.addEventListener('resize',syncNav);
+</script>
+</body>
+</html>

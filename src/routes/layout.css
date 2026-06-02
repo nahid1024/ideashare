@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap');
+@import 'tailwindcss';
+:root {
+	--yellow: #f5c518;
+	--yellow-light: #fff8dc;
+	--yellow-mid: #ffe066;
+	--yellow-dark: #c49a00;
+	--black: #111111;
+	--black-soft: #1c1c1c;
+	--gray-dark: #444;
+	--gray-mid: #888;
+	--gray-light: #ddd;
+	--gray-faint: #f5f5f2;
+	--white: #ffffff;
+	--font-display: 'Bricolage Grotesque', sans-serif;
+	--font-body: 'DM Sans', sans-serif;
+}
+
+@theme {
+	/* Colors */
+	--color-yellow: #f5c518;
+	--color-yellow-light: #fff8dc;
+	--color-yellow-mid: #ffe066;
+	--color-yellow-dark: #c49a00;
+
+	--color-ink: #111111;
+	--color-ink-soft: #1c1c1c;
+
+	--color-gray-dark: #444444;
+	--color-gray-mid: #888888;
+	--color-gray-light: #dddddd;
+	--color-gray-faint: #f5f5f2;
+
+	/* Font Families */
+	--font-display: 'Bricolage Grotesque', sans-serif;
+	--font-body: 'DM Sans', sans-serif;
+
+	/* Border Radii */
+	--radius-sm: 6px;
+	--radius-md: 10px;
+	--radius-lg: 16px;
+	--radius-pill: 999px;
+
+	/* Box Shadows */
+	--shadow-yellow-ring: 0 0 0 3px #fff8dc;
+}
