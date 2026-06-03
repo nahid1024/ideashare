@@ -1,9 +1,30 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { enhance } from '$app/forms';
-	// 1. Create a reactive state for the password input
+	import { signupSchema } from '$lib/validation_schema';
+	import z from 'zod';
+
+	let first_name = $state('');
+	let last_name = $state('');
+	let email = $state('');
 	let password = $state('');
+	let confirm_password = $state('');
 	let loading = $state(false);
+
+	let touched = $state({
+		first_name: false,
+		last_name: false,
+		email: false,
+		confirm_password: false
+	});
+
+	let formValidation = $derived(
+		signupSchema.safeParse({ first_name, last_name, email, password, confirm_password })
+	);
+	let isFormInvalid = $derived(!formValidation.success);
+	let errors = $derived(
+		!formValidation.success ? z.flattenError(formValidation.error).fieldErrors : {}
+	);
 
 	// 2. Use a derived snippet/function to calculate the strength based on the password
 	function getStrength(val: string) {
@@ -281,16 +302,21 @@
 				</div>
 				<div class="field-row grid grid-cols-2 gap-3">
 					<div class="field mb-4">
-						<label for="name" class="field-label mb-1.5 block text-xs font-semibold text-ink"
+						<label for="first_name" class="field-label mb-1.5 block text-xs font-semibold text-ink"
 							>First name</label
 						>
 						<input
 							type="text"
+							bind:value={first_name}
 							class="field-input h-11.5 w-full rounded-md border-[1.5px] border-gray-light bg-gray-faint px-3.5 font-body text-sm text-ink transition-[border-color,background] duration-150"
 							placeholder="Rafiq"
-							id="name"
+							id="first_name"
 							name="name"
+							onblur={() => (touched.first_name = true)}
 						/>
+						{#if touched.first_name && errors.first_name}
+							<div class="pwd-hint mt-1 text-[11px] text-red-400">{errors.first_name[0]}</div>
+						{/if}
 					</div>
 					<div class="field mb-4">
 						<label for="lastName" class="field-label mb-1.5 block text-xs font-semibold text-ink"
@@ -298,10 +324,15 @@
 						>
 						<input
 							type="text"
+							bind:value={last_name}
 							class="field-input h-11.5 w-full rounded-md border-[1.5px] border-gray-light bg-gray-faint px-3.5 font-body text-sm text-ink transition-[border-color,background] duration-150"
 							placeholder="Karim"
 							id="lastName"
+							onblur={() => (touched.last_name = true)}
 						/>
+						{#if touched.last_name && errors.last_name}
+							<div class="pwd-hint mt-1 text-[11px] text-red-400">{errors.last_name[0]}</div>
+						{/if}
 					</div>
 				</div>
 				<div class="field mb-4">
@@ -310,11 +341,16 @@
 					>
 					<input
 						type="email"
+						bind:value={email}
 						class="field-input h-11.5 w-full rounded-md border-[1.5px] border-gray-light bg-gray-faint px-3.5 font-body text-sm text-ink transition-[border-color,background] duration-150"
 						placeholder="you@example.com"
 						id="email"
 						name="email"
+						onblur={() => (touched.email = true)}
 					/>
+					{#if touched.email && errors.email}
+						<div class="pwd-hint mt-1 text-[11px] text-red-400">{errors.email[0]}</div>
+					{/if}
 				</div>
 				<div class="field mb-4">
 					<label for="password" class="field-label mb-1.5 block text-xs font-semibold text-ink"
@@ -337,14 +373,32 @@
 						{strength.hint}
 					</div>
 				</div>
+
+				<div class="field mb-4">
+					<label
+						for="confirm_password"
+						class="field-label mb-1.5 block text-xs font-semibold text-ink">Confirm Password</label
+					>
+					<input
+						type="password"
+						class="field-input h-11.5 w-full rounded-md border-[1.5px] border-gray-light bg-gray-faint px-3.5 font-body text-sm text-ink transition-[border-color,background] duration-150"
+						placeholder="Min. 8 characters"
+						bind:value={confirm_password}
+						id="confirm_password"
+						name="confirm_password"
+						onblur={() => (touched.confirm_password = true)}
+					/>
+					{#if touched.confirm_password && errors.confirm_password}
+						<div class="pwd-hint mt-1 text-[11px] text-red-400">{errors.confirm_password}</div>
+					{/if}
+				</div>
 				<button
-					disabled={loading}
-					class="btn-next mb-3.5 flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full border-none bg-ink font-body text-sm font-semibold text-white transition-[opacity,transform] duration-150"
+					disabled={loading || isFormInvalid}
+					class="btn-next mb-3.5 flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full border-none bg-ink font-body text-sm font-semibold text-white transition-[opacity,transform] duration-150 disabled:bg-gray-300 disabled:text-gray-500"
 				>
 					Create account
 				</button>
 			</form>
-
 			<div class="already-have mt-6 text-center text-[13px] text-gray-mid">
 				Already have an account? <a
 					href={resolve('/auth/login')}
