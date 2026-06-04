@@ -1,46 +1,121 @@
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap');
 @import 'tailwindcss';
-:root {
-	--yellow: #f5c518;
-	--yellow-light: #fff8dc;
-	--yellow-mid: #ffe066;
-	--yellow-dark: #c49a00;
-	--black: #111111;
-	--black-soft: #1c1c1c;
-	--gray-dark: #444;
-	--gray-mid: #888;
-	--gray-light: #ddd;
-	--gray-faint: #f5f5f2;
-	--white: #ffffff;
+
+@theme {
+	/* ── 1. Raw Palette (Yellow) ────────────────────── */
+	--color-yellow-50: #fffef5;
+	--color-yellow-100: #fff8dc;
+	--color-yellow-200: #ffe066;
+	--color-yellow-300: #f5c518;
+	--color-yellow-400: #e0b010;
+	--color-yellow-500: #c49a00;
+	--color-yellow-600: #a07d00;
+	--color-yellow-700: #7a5f00;
+	--color-yellow-800: #553f00;
+	--color-yellow-900: #2e2200;
+
+	/* ── 2. Semantic Background Tokens ───────────────── */
+	--color-background: #ffffff;
+	--color-background-secondary: #f9fafb;
+	--color-background-muted: #f3f4f6;
+	--color-background-card: #ffffff;
+	--color-background-popover: #ffffff;
+
+	/* ── 3. Semantic Text Tokens ────────────────────── */
+	--color-foreground: #111111;
+	--color-foreground-secondary: #475569;
+	--color-foreground-muted: #64748b;
+	--color-foreground-disabled: #94a3b8;
+	--color-foreground-inverted: #ffffff;
+
+	/* ── 4. Brand ───────────────────────────────────── */
+	--color-brand: #3b82f6;
+	--color-brand-hover: #1d4ed8;
+	--color-brand-light: #eff6ff;
+	--color-brand-mid: #60a5fa;
+	--color-brand-dark: #1e3a8a;
+	--color-brand-foreground: #ffffff;
+
+	/* ── 5. Primary / Secondary / Accent / Muted ────── */
+	--color-primary: #1c1c1c;
+	--color-primary-hover: #1e293b;
+	--color-primary-foreground: #ffffff;
+
+	--color-secondary: #f1f5f9;
+	--color-secondary-hover: #e2e8f0;
+	--color-secondary-foreground: #0f172a;
+
+	--color-accent: #f5c518;
+	--color-accent-hover: #e0b010;
+	--color-accent-foreground: #2e2200;
+
+	--color-muted: #f1f5f9;
+	--color-muted-foreground: #64748b;
+
+	/* ── 6. Borders & Rings ─────────────────────────── */
+	--color-border: #e2e8f0;
+	--color-border-muted: #f1f5f9;
+	--color-border-strong: #cbd5e1;
+	--color-border-brand: #3b82f6;
+	--color-border-input: #cbd5e1;
+	--color-ring: #3b82f6;
+
+	/* ── 7. Status ──────────────────────────────────── */
+	--color-success: #10b981;
+	--color-success-background: #ecfdf5;
+	--color-success-border: #a7f3d0;
+	--color-success-foreground: #065f46;
+
+	--color-warning: #f59e0b;
+	--color-warning-background: #fffbeb;
+	--color-warning-border: #fde68a;
+	--color-warning-foreground: #92400e;
+
+	--color-destructive: #ef4444;
+	--color-destructive-background: #fef2f2;
+	--color-destructive-border: #fca5a5;
+	--color-destructive-foreground: #991b1b;
+
+	--color-info: #3b82f6;
+	--color-info-background: #eff6ff;
+	--color-info-border: #bfdbfe;
+	--color-info-foreground: #1e40af;
+
+	/* ── 8. Border Radius ────────────────────────────── */
+	--radius-xs: 4px;
+	--radius-sm: 6px;
+	--radius-md: 10px;
+	--radius-lg: 16px;
+	--radius-xl: 20px;
+	--radius-2xl: 24px;
+	--radius-full: 999px;
+
+	/* ── 9. Font Families ────────────────────────────── */
 	--font-display: 'Bricolage Grotesque', sans-serif;
 	--font-body: 'DM Sans', sans-serif;
 }
 
-@theme {
-	/* Colors */
-	--color-yellow: #f5c518;
-	--color-yellow-light: #fff8dc;
-	--color-yellow-mid: #ffe066;
-	--color-yellow-dark: #c49a00;
+/* ── Global Base Styles & Dark Mode Overrides ────── */
+@layer base {
+	body {
+		background-color: var(--color-background-muted);
+		color: var(--color-foreground);
+	}
 
-	--color-ink: #111111;
-	--color-ink-soft: #1c1c1c;
+	.dark {
+		--color-background: #0f172a;
+		--color-background-secondary: #1e293b;
+		--color-background-muted: #334155;
+		--color-background-card: #1e293b;
+		--color-background-popover: #1e293b;
 
-	--color-gray-dark: #444444;
-	--color-gray-mid: #888888;
-	--color-gray-light: #dddddd;
-	--color-gray-faint: #f5f5f2;
+		--color-foreground: #f8fafc;
+		--color-foreground-secondary: #cbd5e1;
+		--color-foreground-muted: #94a3b8;
+		--color-foreground-disabled: #64748b;
+		--color-foreground-inverted: #0f172a;
 
-	/* Font Families */
-	--font-display: 'Bricolage Grotesque', sans-serif;
-	--font-body: 'DM Sans', sans-serif;
-
-	/* Border Radii */
-	--radius-sm: 6px;
-	--radius-md: 10px;
-	--radius-lg: 16px;
-	--radius-pill: 999px;
-
-	/* Box Shadows */
-	--shadow-yellow-ring: 0 0 0 3px #fff8dc;
+		--color-border: #334155;
+		--color-border-muted: #1e293b;
+	}
 }

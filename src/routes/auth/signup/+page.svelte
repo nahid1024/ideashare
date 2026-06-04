@@ -41,44 +41,44 @@
 </script>
 
 <div
-	class="fixed inset-0 flex h-screen w-screen overflow-hidden bg-ink font-body text-white select-none"
+	class="fixed inset-0 flex h-screen w-screen overflow-hidden font-body text-foreground-inverted select-none"
 >
 	<!-- LEFT PANEL -->
-	<div class="left relative flex w-[52%] flex-col overflow-hidden bg-ink p-9 px-10">
+	<div class="left bg-primary relative flex w-[52%] flex-col overflow-hidden p-9 px-10">
 		<!-- Logo -->
 		<div class="relative z-2 mb-12 flex items-center gap-2.25">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="30" height="30">
 				<path
 					d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z"
-					fill="#F5C518"
+					fill="var(--color-accent)"
 				/>
 				<ellipse
 					cx="38"
 					cy="26"
 					rx="7"
 					ry="10"
-					fill="#FFF8DC"
+					fill="var(--color-yellow-100)"
 					opacity="0.7"
 					transform="rotate(-20 38 26)"
 				/>
-				<rect x="39" y="83" width="22" height="5" rx="2.5" fill="#C49A00" />
-				<rect x="40.5" y="90" width="19" height="5" rx="2.5" fill="#C49A00" opacity="0.7" />
-				<path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="#111111" />
+				<rect x="39" y="83" width="22" height="5" rx="2.5" fill="var(--color-yellow-500)" />
+				<rect x="40.5" y="90" width="19" height="5" rx="2.5" fill="var(--color-yellow-500)" opacity="0.7" />
+				<path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="var(--color-primary)" />
 			</svg>
-			<span class="font-display text-lg font-bold tracking-[-0.3px] text-white"
-				>Idea<span class="text-yellow">Share</span></span
+			<span class="font-display text-lg font-bold tracking-[-0.3px] text-foreground-inverted"
+				>Idea<span class="text-accent">Share</span></span
 			>
 		</div>
 
 		<!-- Headline -->
 		<div class="left-headline relative z-2 mb-10">
 			<h2
-				class="font-display text-[36px] leading-[1.2] font-extrabold tracking-[-0.8px] text-white"
+				class="font-display text-[36px] leading-[1.2] font-extrabold tracking-[-0.8px] text-foreground-inverted"
 			>
 				Where good ideas<br />find
-				<em class="headline-em relative text-yellow not-italic">their people</em>
+				<em class="headline-em relative text-accent not-italic">their people</em>
 			</h2>
-			<p class="mt-3 max-w-85 text-sm leading-[1.65] text-white/50">
+			<p class="mt-3 max-w-85 text-sm leading-[1.65] text-foreground-inverted/50">
 				A place to drop the thought before it disappears. Share it, refine it, build it — together.
 			</p>
 		</div>
@@ -86,160 +86,155 @@
 		<!-- Floating idea cards -->
 		<div class="relative z-2 flex-1 overflow-hidden">
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-white/8 bg-ink-soft p-[14px_16px]"
+				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
 			>
 				<div
-					class="mb-2 inline-block rounded-full bg-yellow/15 px-2 py-0.5 text-[10px] font-semibold text-yellow"
+					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
 				>
 					#education
 				</div>
-				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-white">
+				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted">
 					A universal exam that certifies your skills — no university required
 				</div>
 				<div class="flex items-center gap-2">
 					<div
-						class="flex h-5 w-5 items-center justify-center rounded-full text-[9px] font-bold"
-						style="background:#F5C518;color:#111"
+						class="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[9px] font-bold text-accent-foreground"
 					>
 						RK
 					</div>
-					<div class="text-[11px] text-white/40">Rafiq K.</div>
-					<div class="ml-auto text-[11px] font-semibold text-yellow">⚡ 847</div>
+					<div class="text-[11px] text-foreground-inverted/40">Rafiq K.</div>
+					<div class="ml-auto text-[11px] font-semibold text-accent">⚡ 847</div>
 				</div>
 			</div>
 
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-white/8 bg-ink-soft p-[14px_16px]"
+				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
 			>
 				<div
-					class="mb-2 inline-block rounded-full bg-yellow/15 px-2 py-0.5 text-[10px] font-semibold text-yellow"
+					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
 				>
 					#health
 				</div>
-				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-white">
+				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted">
 					Let patients own their medical records — shared with any doctor, anywhere
 				</div>
 				<div class="flex items-center gap-2">
 					<div
-						class="flex h-5 w-5 items-center justify-center rounded-full text-[9px] font-bold"
-						style="background:#22C55E;color:#fff"
+						class="flex h-5 w-5 items-center justify-center rounded-full bg-success text-[9px] font-bold text-success-foreground"
 					>
 						TA
 					</div>
-					<div class="text-[11px] text-white/40">Tolu A.</div>
-					<div class="ml-auto text-[11px] font-semibold text-yellow">⚡ 512</div>
+					<div class="text-[11px] text-foreground-inverted/40">Tolu A.</div>
+					<div class="ml-auto text-[11px] font-semibold text-accent">⚡ 512</div>
 				</div>
 			</div>
 
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-white/8 bg-ink-soft p-[14px_16px]"
+				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
 			>
 				<div
-					class="mb-2 inline-block rounded-full bg-yellow/15 px-2 py-0.5 text-[10px] font-semibold text-yellow"
+					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
 				>
 					#cities
 				</div>
-				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-white">
+				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted">
 					Neighbourhoods vote on which small businesses get rent subsidies each quarter
 				</div>
 				<div class="flex items-center gap-2">
 					<div
-						class="flex h-5 w-5 items-center justify-center rounded-full text-[9px] font-bold"
-						style="background:#6366F1;color:#fff"
+						class="flex h-5 w-5 items-center justify-center rounded-full bg-brand text-[9px] font-bold text-brand-foreground"
 					>
 						LM
 					</div>
-					<div class="text-[11px] text-white/40">Lena M.</div>
-					<div class="ml-auto text-[11px] font-semibold text-yellow">⚡ 389</div>
+					<div class="text-[11px] text-foreground-inverted/40">Lena M.</div>
+					<div class="ml-auto text-[11px] font-semibold text-accent">⚡ 389</div>
 				</div>
 			</div>
 
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-white/8 bg-ink-soft p-[14px_16px]"
+				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
 			>
 				<div
-					class="mb-2 inline-block rounded-full bg-yellow/15 px-2 py-0.5 text-[10px] font-semibold text-yellow"
+					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
 				>
 					#economy
 				</div>
-				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-white">
+				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted">
 					A global skills passport replacing the traditional CV once and for all
 				</div>
 				<div class="flex items-center gap-2">
 					<div
-						class="flex h-5 w-5 items-center justify-center rounded-full text-[9px] font-bold"
-						style="background:#F97316;color:#fff"
+						class="flex h-5 w-5 items-center justify-center rounded-full bg-warning text-[9px] font-bold text-warning-foreground"
 					>
 						NI
 					</div>
-					<div class="text-[11px] text-white/40">Nadia I.</div>
-					<div class="ml-auto text-[11px] font-semibold text-yellow">⚡ 271</div>
+					<div class="text-[11px] text-foreground-inverted/40">Nadia I.</div>
+					<div class="ml-auto text-[11px] font-semibold text-accent">⚡ 271</div>
 				</div>
 			</div>
 
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-white/8 bg-ink-soft p-[14px_16px]"
+				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
 			>
 				<div
-					class="mb-2 inline-block rounded-full bg-yellow/15 px-2 py-0.5 text-[10px] font-semibold text-yellow"
+					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
 				>
 					#technology
 				</div>
-				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-white">
+				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted">
 					Open-source AI trained only on public domain works — no copyright risk
 				</div>
 				<div class="flex items-center gap-2">
 					<div
-						class="flex h-5 w-5 items-center justify-center rounded-full text-[9px] font-bold"
-						style="background:#EC4899;color:#fff"
+						class="flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-[9px] font-bold text-destructive-foreground"
 					>
 						PO
 					</div>
-					<div class="text-[11px] text-white/40">Paulo O.</div>
-					<div class="ml-auto text-[11px] font-semibold text-yellow">⚡ 634</div>
+					<div class="text-[11px] text-foreground-inverted/40">Paulo O.</div>
+					<div class="ml-auto text-[11px] font-semibold text-accent">⚡ 634</div>
 				</div>
 			</div>
 		</div>
 
 		<!-- Bottom stats -->
-		<div class="relative z-2 mt-6 flex gap-7 border-t border-white/[0.07] pt-5">
+		<div class="relative z-2 mt-6 flex gap-7 border-t border-foreground-inverted/10 pt-5">
 			<div>
-				<div class="font-display text-[22px] font-extrabold tracking-[-0.5px] text-yellow">
+				<div class="font-display text-[22px] font-extrabold tracking-[-0.5px] text-accent">
 					24k+
 				</div>
-				<div class="mt-0.5 text-[11px] text-white/40">Ideas shared</div>
+				<div class="mt-0.5 text-[11px] text-foreground-inverted/40">Ideas shared</div>
 			</div>
 			<div>
-				<div class="font-display text-[22px] font-extrabold tracking-[-0.5px] text-yellow">
+				<div class="font-display text-[22px] font-extrabold tracking-[-0.5px] text-accent">
 					8.3k
 				</div>
-				<div class="mt-0.5 text-[11px] text-white/40">Being built</div>
+				<div class="mt-0.5 text-[11px] text-foreground-inverted/40">Being built</div>
 			</div>
 			<div>
-				<div class="font-display text-[22px] font-extrabold tracking-[-0.5px] text-yellow">142</div>
-				<div class="mt-0.5 text-[11px] text-white/40">Countries</div>
+				<div class="font-display text-[22px] font-extrabold tracking-[-0.5px] text-accent">142</div>
+				<div class="mt-0.5 text-[11px] text-foreground-inverted/40">Countries</div>
 			</div>
 		</div>
 	</div>
 
 	<!-- RIGHT PANEL -->
 	<div
-		class="right relative flex w-[48%] flex-col justify-center overflow-y-auto bg-white px-13 py-12"
+		class="right relative flex w-[48%] flex-col justify-center overflow-y-auto bg-background px-13 py-12"
 		id="right-panel"
 	>
 		<div class="screen visible" id="screen1">
 			<h1
-				class="screen-title mb-1.5 font-display text-[28px] leading-[1.2] font-extrabold tracking-[-0.5px] text-ink"
+				class="screen-title mb-1.5 font-display text-[28px] leading-[1.2] font-extrabold tracking-[-0.5px] text-foreground"
 			>
 				Create your account
 			</h1>
-			<p class="screen-sub mb-7 text-[13.5px] leading-[1.6] text-gray-mid">
+			<p class="screen-sub mb-7 text-[13.5px] leading-[1.6] text-foreground-muted">
 				Your ideas deserve a home. Takes 30 seconds.
 			</p>
 
 			<div class="social-btns mb-5 flex flex-col gap-2.5">
 				<button
-					class="social-btn flex h-11.5 w-full cursor-pointer items-center justify-center gap-2.5 rounded-md border-[1.5px] border-gray-light bg-white font-body text-[13.5px] font-medium text-ink transition-[border-color,box-shadow] duration-150"
+					class="social-btn flex h-11.5 w-full cursor-pointer items-center justify-center gap-2.5 rounded-md border-[1.5px] border-border bg-background font-body text-[13.5px] font-medium text-foreground transition-all duration-150 hover:border-border-strong hover:shadow-sm"
 				>
 					<svg class="h-4.5 w-4.5" viewBox="0 0 24 24"
 						><path
@@ -262,7 +257,7 @@
 					<input type="hidden" name="provider" value="github" />
 					<input type="hidden" name="callbackURL" value="/auth" />
 					<button
-						class="social-btn flex h-11.5 w-full cursor-pointer items-center justify-center gap-2.5 rounded-md border-[1.5px] border-gray-light bg-white font-body text-[13.5px] font-medium text-ink transition-[border-color,box-shadow] duration-150"
+						class="social-btn flex h-11.5 w-full cursor-pointer items-center justify-center gap-2.5 rounded-md border-[1.5px] border-border bg-background font-body text-[13.5px] font-medium text-foreground transition-all duration-150 hover:border-border-strong hover:shadow-sm"
 					>
 						<svg
 							class="h-4.5 w-4.5"
@@ -297,18 +292,20 @@
 					};
 				}}
 			>
-				<div class="divider my-4.5 flex items-center gap-3 text-xs text-gray-mid">
+				<div
+					class="divider my-4.5 flex items-center gap-3 text-xs text-foreground-muted before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border"
+				>
 					or sign up with email
 				</div>
 				<div class="field-row grid grid-cols-2 gap-3">
 					<div class="field mb-4">
-						<label for="first_name" class="field-label mb-1.5 block text-xs font-semibold text-ink"
+						<label for="first_name" class="field-label mb-1.5 block text-xs font-semibold text-foreground"
 							>First name</label
 						>
 						<input
 							type="text"
 							bind:value={first_name}
-							class="field-input h-11.5 w-full rounded-md border-[1.5px] border-gray-light bg-gray-faint px-3.5 font-body text-sm text-ink transition-[border-color,background] duration-150"
+							class="field-input h-11.5 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
 							placeholder="Rafiq"
 							id="first_name"
 							name="name"
@@ -319,13 +316,13 @@
 						{/if}
 					</div>
 					<div class="field mb-4">
-						<label for="lastName" class="field-label mb-1.5 block text-xs font-semibold text-ink"
+						<label for="lastName" class="field-label mb-1.5 block text-xs font-semibold text-foreground"
 							>Last name</label
 						>
 						<input
 							type="text"
 							bind:value={last_name}
-							class="field-input h-11.5 w-full rounded-md border-[1.5px] border-gray-light bg-gray-faint px-3.5 font-body text-sm text-ink transition-[border-color,background] duration-150"
+							class="field-input h-11.5 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
 							placeholder="Karim"
 							id="lastName"
 							onblur={() => (touched.last_name = true)}
@@ -336,13 +333,13 @@
 					</div>
 				</div>
 				<div class="field mb-4">
-					<label for="email" class="field-label mb-1.5 block text-xs font-semibold text-ink"
+					<label for="email" class="field-label mb-1.5 block text-xs font-semibold text-foreground"
 						>Email address</label
 					>
 					<input
 						type="email"
 						bind:value={email}
-						class="field-input h-11.5 w-full rounded-md border-[1.5px] border-gray-light bg-gray-faint px-3.5 font-body text-sm text-ink transition-[border-color,background] duration-150"
+						class="field-input h-11.5 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
 						placeholder="you@example.com"
 						id="email"
 						name="email"
@@ -353,12 +350,12 @@
 					{/if}
 				</div>
 				<div class="field mb-4">
-					<label for="password" class="field-label mb-1.5 block text-xs font-semibold text-ink"
+					<label for="password" class="field-label mb-1.5 block text-xs font-semibold text-foreground"
 						>Password</label
 					>
 					<input
 						type="password"
-						class="field-input h-11.5 w-full rounded-md border-[1.5px] border-gray-light bg-gray-faint px-3.5 font-body text-sm text-ink transition-[border-color,background] duration-150"
+						class="field-input h-11.5 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
 						placeholder="Min. 8 characters"
 						bind:value={password}
 						id="password"
@@ -369,7 +366,7 @@
 						<div class="pwd-bar {strength.score >= 2 ? strength.class : ''}"></div>
 						<div class="pwd-bar {strength.score >= 3 ? strength.class : ''}"></div>
 					</div>
-					<div class="pwd-hint mt-1 text-[11px] text-gray-mid">
+					<div class="pwd-hint mt-1 text-[11px] text-foreground-muted">
 						{strength.hint}
 					</div>
 				</div>
@@ -377,11 +374,11 @@
 				<div class="field mb-4">
 					<label
 						for="confirm_password"
-						class="field-label mb-1.5 block text-xs font-semibold text-ink">Confirm Password</label
+						class="field-label mb-1.5 block text-xs font-semibold text-foreground">Confirm Password</label
 					>
 					<input
 						type="password"
-						class="field-input h-11.5 w-full rounded-md border-[1.5px] border-gray-light bg-gray-faint px-3.5 font-body text-sm text-ink transition-[border-color,background] duration-150"
+						class="field-input h-11.5 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
 						placeholder="Min. 8 characters"
 						bind:value={confirm_password}
 						id="confirm_password"
@@ -394,15 +391,15 @@
 				</div>
 				<button
 					disabled={loading || isFormInvalid}
-					class="btn-next mb-3.5 flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full border-none bg-ink font-body text-sm font-semibold text-white transition-[opacity,transform] duration-150 disabled:bg-gray-300 disabled:text-gray-500"
+					class="btn-next mb-3.5 flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full border-none bg-primary font-body text-sm font-semibold text-foreground-inverted transition-all duration-150 hover:opacity-85 active:scale-99 disabled:bg-border-strong disabled:text-foreground-disabled"
 				>
 					Create account
 				</button>
 			</form>
-			<div class="already-have mt-6 text-center text-[13px] text-gray-mid">
+			<div class="already-have mt-6 text-center text-[13px] text-foreground-muted">
 				Already have an account? <a
 					href={resolve('/auth/login')}
-					class="cursor-pointer font-semibold text-ink no-underline">Sign in</a
+					class="cursor-pointer font-semibold text-foreground no-underline hover:underline">Sign in</a
 				>
 			</div>
 		</div>
@@ -444,36 +441,28 @@
 		left: 0;
 		right: 0;
 		height: 3px;
-		background: #f5c518;
+		background: var(--color-accent);
 		border-radius: 2px;
 		opacity: 0.4;
 	}
 
-	/* Divider lines */
-	.divider::before,
-	.divider::after {
-		content: '';
-		flex: 1;
-		height: 1px;
-		background: #ddd;
-	}
 	.pwd-bar {
 		height: 3px;
 		flex: 1;
 		border-radius: 0.125rem; /* rounded-sm */
-		background-color: #e5e7eb; /* bg-gray-light (fallback color) */
+		background-color: var(--color-border);
 		transition: background-color 300ms;
 	}
 
 	/* Svelte safely compiles these classes now because they are explicitly in the template */
 	.weak {
-		background-color: #ef4444;
+		background-color: var(--color-destructive);
 	} /* Red */
 	.fair {
-		background-color: #f59e0b;
+		background-color: var(--color-warning);
 	} /* Orange/Yellow */
 	.strong {
-		background-color: #10b981;
+		background-color: var(--color-success);
 	} /* Green */
 
 	/* ── Keyframe animations ── */
@@ -591,44 +580,33 @@
 
 	/* Progress step bar states */
 	.step.done {
-		background: #f5c518;
+		background: var(--color-accent);
 	}
 	.step.active {
-		background: #111111;
+		background: var(--color-primary);
 	}
 
 	/* Topic tile selected state */
 	.topic-tile:hover {
-		border-color: #c49a00;
+		border-color: var(--color-yellow-500);
 	}
 	.topic-tile.selected {
-		border-color: #f5c518;
-		background: #fff8dc;
+		border-color: var(--color-accent);
+		background: var(--color-yellow-100);
 	}
 
 	/* Type tile selected state */
 	.type-tile:hover {
-		border-color: #444;
+		border-color: var(--color-foreground-secondary);
 	}
 	.type-tile.selected {
-		border-color: #111;
-		background: #111;
-	}
-
-	/* ── Input focus & placeholder ── */
-	.field-input:focus {
-		outline: none;
-		border-color: #f5c518;
-		background: #fff;
-		box-shadow: 0 0 0 3px #fff8dc;
-	}
-	.field-input::placeholder {
-		color: #bbbbbb;
+		border-color: var(--color-primary);
+		background: var(--color-primary);
 	}
 
 	/* ── Hover / active states ── */
 	.social-btn:hover {
-		border-color: #444;
+		border-color: var(--color-border-strong);
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 	}
 	.btn-next:hover {
@@ -678,15 +656,15 @@
 			gap: 8px;
 		}
 		.mobile-logo-text {
-			font-family: 'Bricolage Grotesque', sans-serif;
+			font-family: var(--font-display);
 			font-size: 17px;
 			font-weight: 700;
-			color: #111;
+			color: var(--color-foreground);
 			letter-spacing: -0.3px;
 		}
 		.mobile-signin {
 			font-size: 13px;
-			color: #111;
+			color: var(--color-foreground);
 			font-weight: 500;
 			cursor: pointer;
 			text-decoration: underline;
