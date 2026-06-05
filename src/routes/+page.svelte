@@ -1,9 +1,9 @@
 <script>
-	import { resolve } from '$app/paths';
+	//import { resolve } from '$app/paths';
 	import Navbar from '$lib/components/Navbar.svelte';
 </script>
 
-<Navbar />
+<Navbar hasBackButton={false} />
 
 <div
 	class="layout mx-auto grid max-w-270 grid-cols-1 gap-6 px-3 py-7 max-[600px]:pb-[80px] min-[601px]:grid-cols-[160px_minmax(0,1fr)] min-[601px]:px-6 min-[861px]:grid-cols-[200px_minmax(0,1fr)_220px]"

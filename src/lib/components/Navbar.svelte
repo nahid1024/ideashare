@@ -2,53 +2,63 @@
 	import { userData } from '$lib/remotes/session.remote';
 	import { resolve } from '$app/paths';
 	import AvatarDropdown from './AvatarDropdown.svelte';
+	import PlusIcon from 'phosphor-svelte/lib/PlusIcon'
+	let {hasBackButton} = $props()
 	const data = await userData();
 </script>
 
 <nav
-	class="sticky top-0 z-100 flex h-14.5 items-center gap-5 border-b border-border-strong bg-white px-8"
+	class="sticky top-0 z-100 flex h-14.5 items-center gap-5 border-b border-border-strong bg-background px-8"
 >
-	<a class="flex items-center gap-2 no-underline" href="#">
-		<!-- <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z" fill="#111"/>
-        <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z" fill="#111"/>
-      </svg> -->
+	<a class="flex items-center gap-2 no-underline" href={resolve('/')}>
 		<img src="/logo.svg" alt="logo" class="h-6 w-6" />
-		<span class="font-display text-[17px] font-semibold tracking-[-0.4px] text-black"
-			>Idea<span class="text-yellow-dark">Share</span></span
+		<span class="font-display text-[17px] font-semibold tracking-[-0.4px] text-foreground"
+			>Idea<span class="text-yellow-500">Share</span></span
 		>
 	</a>
 
+	{#if hasBackButton}
+	<button
+		class="nav-back-post flex items-center gap-[5px] text-[13px] text-foreground-muted cursor-pointer border-none bg-transparent font-[inherit] transition-colors hover:text-foreground">
+		<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<polyline points="15 18 9 12 15 6" />
+		</svg>
+		<a href={resolve('/')} class="max-[600px]:text-[12px]">Back to feed</a>
+	</button>
+
+	{:else}
 	<div class="nav-search ml-2 hidden max-w-[320px] flex-1 md:flex">
 		<input
 			type="text"
 			placeholder="Search ideas..."
-			class="placeholder:text-gray-mid h-9 w-full rounded-full border border-border-input bg-background-muted px-4 text-[13px] text-black transition-colors outline-none focus:border-accent focus:bg-white"
+			class="placeholder:text-foreground-muted h-9 w-full rounded-full border border-border-input bg-background-muted px-4 text-[13px] text-foreground transition-colors outline-none focus:border-accent focus:bg-background"
 		/>
 	</div>
 
+	{/if}
 	<div class="ml-auto flex items-center gap-[10px]">
 		{#if data}
-			<AvatarDropdown name={data.name} email={data.email} avatar={data.image} />
+			<AvatarDropdown avatar={data.image} />
 		{:else}
 			<a href={resolve('/auth/login')}>
 				<button
-					class="btn-ghost hidden cursor-pointer rounded-full border border-[#DDD] bg-transparent px-3.5 py-1.5 text-[13px] font-medium text-[#444] transition-colors hover:border-[#111] hover:text-[#111] md:block"
+					class="btn-ghost hidden cursor-pointer rounded-full border border-border bg-transparent px-3.5 py-1.5 text-[13px] font-medium text-foreground-secondary transition-colors hover:border-foreground hover:text-foreground md:block"
 					>Sign in</button
 				></a
 			>
 		{/if}
+		<a href={resolve('/post/create')}>
 
-		<a href="./ideashare-post.html">
 			<button
-				class="flex cursor-pointer items-center gap-1.5 rounded-full border-none bg-black px-4 py-1.5 text-[13px] font-medium text-white transition-opacity hover:opacity-85"
+				class="flex cursor-pointer items-center gap-1.5 rounded-full border-none bg-primary px-4 py-1.5 text-[13px] font-medium text-primary-foreground transition-opacity hover:opacity-85"
 			>
 				<div
-					class="flex h-[15px] w-[15px] items-center justify-center rounded-full bg-[#F5C518] text-[13px] leading-none text-[#111]"
+					class="flex h-[15px] w-[15px] items-center justify-center rounded-full bg-accent text-[13px] leading-none text-foreground"
 				>
-					+
+					<PlusIcon size='.7em' weight='bold'/>
 				</div>
 				Post idea
+				
 			</button>
 		</a>
 	</div>
@@ -56,10 +66,10 @@
 
 <div
 	id="bottom-nav"
-	class="border-gray-light fixed right-0 bottom-0 left-0 z-[200] flex h-[60px] border-t bg-white sm:hidden"
+	class="fixed right-0 bottom-0 left-0 z-200 flex h-[60px] border-t border-border bg-background sm:hidden"
 >
 	<button
-		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px] text-black"
+		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px] text-foreground"
 	>
 		<svg
 			width="20"
@@ -74,7 +84,7 @@
 		Feed
 	</button>
 	<button
-		class="text-gray-mid flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px]"
+		class="text-foreground-muted flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px]"
 	>
 		<svg
 			width="20"
@@ -89,19 +99,19 @@
 		</svg>
 		Explore
 	</button>
-	<button class="flex flex-shrink-0 flex-col items-center justify-center self-center">
+	<button class="flex shrink-0 flex-col items-center justify-center self-center">
 		<div
-			class="-mt-4 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border-none bg-black shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
+			class="-mt-4 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border-none bg-primary shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
 		>
 			<div
-				class="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-accent text-sm leading-none text-black"
+				class="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-accent text-sm leading-none text-foreground"
 			>
 				+
 			</div>
 		</div>
 	</button>
 	<button
-		class="text-gray-mid flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px]"
+		class="text-foreground-muted flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px]"
 	>
 		<svg
 			width="20"
@@ -117,7 +127,7 @@
 		Alerts
 	</button>
 	<button
-		class="text-gray-mid flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px]"
+		class="text-foreground-muted flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px]"
 	>
 		<svg
 			width="20"
