@@ -68,7 +68,7 @@
 			<div
 				class="inline-flex items-center gap-[6px] text-[11px] font-semibold uppercase tracking-[0.08em] text-yellow-500 bg-yellow-100 border border-yellow-200 py-[3px] px-[10px] rounded-full mb-[10px]">
 				💡 Step 2 of 3 — The idea</div>
-			<h1 class="font-display text-[26px] font-bold text-foreground tracking-[-0.4px] leading-[1.25] mb-[6px]">What's the idea?</h1>
+			<h1 class="font-display text-[26px] font-bold text-foreground tracking-[-0.4px] leading-tight mb-[6px]">What's the idea?</h1>
 			<p class="text-[13.5px] text-foreground-muted leading-[1.6]">Write it like you'd explain it to a friend. No need to be
 				formal — just be clear.</p>
 		</div>
@@ -125,7 +125,7 @@
 					<div class="w-[5px] h-[5px] rounded-full bg-yellow-500 inline-block"></div>
 					Who would benefit?
 					<span
-						class="text-[10px] font-medium text-foreground-disabled normal-case tracking-normal bg-background-muted py-[1px] px-[6px] rounded-full">Pick
+						class="text-[10px] font-medium text-foreground-disabled normal-case tracking-normal bg-background-muted py-px px-[6px] rounded-full">Pick
 						all that apply</span>
 				</div>
 				<div class="flex flex-wrap gap-[7px] mb-[10px]">
@@ -149,7 +149,7 @@
 					class="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground-muted mb-2 flex items-center gap-[6px]">
 					Topic
 					<span
-						class="text-[10px] font-medium text-foreground-disabled normal-case tracking-normal bg-background-muted py-[1px] px-[6px] rounded-full">Pick
+						class="text-[10px] font-medium text-foreground-disabled normal-case tracking-normal bg-background-muted py-px px-[6px] rounded-full">Pick
 						up to 2</span>
 				</div>
 				<div class="flex flex-wrap gap-[7px]">
@@ -172,10 +172,10 @@
 					class="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground-muted mb-2 flex items-center gap-[6px]">
 					Post anonymously
 					<span
-						class="text-[10px] font-medium text-foreground-disabled normal-case tracking-normal bg-background-muted py-[1px] px-[6px] rounded-full">optional</span>
+						class="text-[10px] font-medium text-foreground-disabled normal-case tracking-normal bg-background-muted py-px px-[6px] rounded-full">optional</span>
 				</div>
 				<div class="flex items-center gap-3">
-					<label class="relative w-10 h-[22px] cursor-pointer flex-shrink-0">
+					<label class="relative w-10 h-[22px] cursor-pointer shrink-0">
 						<input type="checkbox" id="anon-toggle" class="peer opacity-0 absolute w-0 h-0" bind:checked={anonymous}>
 						<div class="absolute inset-0 bg-border-strong rounded-full transition-colors peer-checked:bg-accent"></div>
 						<div
@@ -195,16 +195,16 @@
 		<!-- Dupe warning -->
 		{#if showDupeWarning}
 		<div id="dupe-warning"
-			class="bg-yellow-100 border border-yellow-200 rounded-[10px] p-[12px_16px] flex gap-3 items-start mt-[14px]">
+			class="bg-yellow-100 border border-yellow-200 rounded-md p-[12px_16px] flex gap-3 items-start mt-[14px]">
 			<div
-				class="w-6 h-6 rounded-full bg-accent flex items-center justify-center flex-shrink-0 mt-[1px] text-[12px]">
+				class="w-6 h-6 rounded-full bg-accent flex items-center justify-center shrink-0 mt-px text-[12px]">
 				💡</div>
 			<div class="text-[13px] text-foreground leading-[1.55]">
 				<strong>3 similar ideas already exist.</strong> Want to refine one instead of posting a new one?
 				<br><span class="font-semibold cursor-pointer underline">View similar ideas →</span>
 			</div>
 			<button onclick={() => showDupeWarning = false}
-				class="ml-auto text-[12px] text-foreground-muted cursor-pointer border-none bg-transparent font-[inherit] flex-shrink-0 py-[2px] px-1">✕</button>
+				class="ml-auto text-[12px] text-foreground-muted cursor-pointer border-none bg-transparent font-[inherit] shrink-0 py-[2px] px-1">✕</button>
 		</div>
 		{/if}
 
@@ -257,7 +257,7 @@
 			</div>
 			<div class="flex gap-[10px] mb-[10px] items-start">
 				<div
-					class="w-[18px] h-[18px] rounded-full bg-accent text-foreground text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-[1px]">
+					class="w-[18px] h-[18px] rounded-full bg-accent text-foreground text-[10px] font-bold flex items-center justify-center shrink-0 mt-px">
 					1</div>
 				<div class="text-[12px] text-foreground-disabled leading-[1.55]"><strong class="text-white">Lead with the
 						problem,</strong> not the solution. "Millions can't afford university" is more compelling than "free
@@ -265,14 +265,14 @@
 			</div>
 			<div class="flex gap-[10px] mb-[10px] items-start">
 				<div
-					class="w-[18px] h-[18px] rounded-full bg-accent text-foreground text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-[1px]">
+					class="w-[18px] h-[18px] rounded-full bg-accent text-foreground text-[10px] font-bold flex items-center justify-center shrink-0 mt-px">
 					2</div>
 				<div class="text-[12px] text-foreground-disabled leading-[1.55]"><strong class="text-white">Be specific</strong> about
 					who benefits. "Students in rural areas" gets more traction than "everyone".</div>
 			</div>
 			<div class="flex gap-[10px] items-start">
 				<div
-					class="w-[18px] h-[18px] rounded-full bg-accent text-foreground text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-[1px]">
+					class="w-[18px] h-[18px] rounded-full bg-accent text-foreground text-[10px] font-bold flex items-center justify-center shrink-0 mt-px">
 					3</div>
 				<div class="text-[12px] text-foreground-disabled leading-[1.55]"><strong class="text-white">Raw ideas are
 						welcome.</strong> You don't need to have it all figured out — the community will help refine it.</div>

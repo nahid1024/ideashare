@@ -294,7 +294,7 @@
 					<div class="mb-1.5 flex items-center justify-between">
 						<label class="text-[12px] font-semibold text-foreground" for="password">Password</label>
 						<a
-							href="#"
+							href={resolve("/")}
 							class="text-[12px] font-medium text-warning-foreground no-underline hover:underline"
 							>Forgot password?</a
 						>
@@ -338,9 +338,9 @@
 
 			<div class="mt-6 text-center text-[11px] leading-relaxed text-foreground-muted">
 				By signing in you agree to our
-				<a href="#" class="text-foreground no-underline hover:underline">Terms of Service</a>
+				<a href={resolve("/")} class="text-foreground no-underline hover:underline">Terms of Service</a>
 				and
-				<a href="#" class="text-foreground no-underline hover:underline">Privacy Policy</a>
+				<a href={resolve("/")} class="text-foreground no-underline hover:underline">Privacy Policy</a>
 			</div>
 		</div>
 	</div>

@@ -215,7 +215,7 @@
 					<span
 						class="py-[3px] px-[10px] rounded-full text-[11px] font-semibold bg-primary text-accent tracking-[0.03em]">⚡
 						{idea.status}</span>
-					{#each idea.tags as tag}
+					{#each idea.tags as tag (tag)}
 						<span
 							class="py-[3px] px-[10px] rounded-full text-[11px] font-medium bg-foreground/10 text-foreground">#{tag}</span>
 					{/each}
@@ -226,12 +226,12 @@
 				<p class="text-[14.5px] text-foreground-secondary leading-[1.75] mb-5">{idea.description}</p>
 
 				<div class="flex flex-col gap-3 mb-5">
-					<div class="bg-background-muted rounded-[10px] p-[12px_16px]">
+					<div class="bg-background-muted rounded-md p-[12px_16px]">
 						<div class="text-[11px] font-semibold uppercase tracking-[0.07em] text-foreground-muted mb-[5px]">Problem it solves
 						</div>
 						<div class="text-[13.5px] text-foreground leading-[1.6]">{idea.problem}</div>
 					</div>
-					<div class="bg-background-muted rounded-[10px] p-[12px_16px]">
+					<div class="bg-background-muted rounded-md p-[12px_16px]">
 						<div class="text-[11px] font-semibold uppercase tracking-[0.07em] text-foreground-muted mb-[5px]">Who would benefit
 						</div>
 						<div class="text-[13.5px] text-foreground leading-[1.6]">{idea.whoBenefits}</div>
@@ -316,7 +316,7 @@
 		<!-- Fork card -->
 		<div class="bg-info-background border border-info-border rounded-2xl p-[16px_18px]">
 			<div
-				class="text-[11px] font-semibold text-info-foreground tracking-[0.05em] uppercase mb-2 flex items-center gap-[6px]">
+				class="text-[11px] font-semibold text-info-foreground tracking-wider uppercase mb-2 flex items-center gap-[6px]">
 				<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
 					<path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
 					<polyline points="15 3 21 3 21 9" />
@@ -336,7 +336,7 @@
 			<div class="bg-background border border-border rounded-2xl p-[16px_18px] transition-colors hover:border-accent">
 				<div class="flex items-center gap-[10px] mb-[10px]">
 					<div
-						class="w-[30px] h-[30px] rounded-full flex items-center justify-center text-[11px] font-semibold flex-shrink-0
+						class="w-[30px] h-[30px] rounded-full flex items-center justify-center text-[11px] font-semibold shrink-0
 						{r.author.initials === 'SM' ? 'bg-info-background text-info-foreground' : 
 						r.author.initials === 'TA' ? 'bg-success-background text-success-foreground' : 
 						r.author.initials === 'NI' ? 'bg-yellow-100 text-yellow-500' : 
@@ -375,7 +375,7 @@
 			<div class="font-display text-base font-semibold text-foreground mb-3">Add
 				your refinement</div>
 			<div class="flex gap-[6px] mb-3 flex-wrap">
-				{#each refinementTypes as t}
+				{#each refinementTypes as t (t.id)}
 					<button
 						onclick={() => selectedRefinementType = t.id}
 						class="py-[5px] px-3 rounded-full border text-[12px] font-medium cursor-pointer transition-all {selectedRefinementType === t.id ? 'border-yellow-500 bg-accent text-foreground' : 'border-border bg-transparent text-foreground-secondary hover:border-foreground'}">
@@ -385,7 +385,7 @@
 			</div>
 			<textarea
 				bind:value={newRefinementText}
-				class="w-full min-h-[80px] border border-border rounded-[10px] p-[12px_14px] font-[inherit] text-[13.5px] text-foreground bg-background-muted resize-y outline-none transition-colors focus:border-accent focus:bg-background placeholder:text-foreground-muted mb-[10px]"
+				class="w-full min-h-[80px] border border-border rounded-md p-[12px_14px] font-[inherit] text-[13.5px] text-foreground bg-background-muted resize-y outline-none transition-colors focus:border-accent focus:bg-background placeholder:text-foreground-muted mb-[10px]"
 				placeholder="Share how this idea could be improved, a challenge you see, or a real-world example..."></textarea>
 			<button
 				onclick={postRefinement}
@@ -396,7 +396,7 @@
 	</div>
 
 	<!-- SIDEBAR -->
-	<aside class="detail-sidebar flex flex-col gap-4 hidden min-[761px]:flex">
+	<aside class="detail-sidebar flex-col gap-4 hidden min-[761px]:flex">
 
 		<div class="bg-background border border-border rounded-2xl p-4">
 			<div class="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground-muted mb-3">Idea stats</div>
@@ -416,10 +416,10 @@
 
 		<div class="bg-background border border-border rounded-2xl p-4">
 			<div class="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground-muted mb-3">Want to build this</div>
-			{#each builders as b}
+			{#each builders as b (b.name)}
 				<div class="flex items-center gap-[10px] py-[7px] border-b border-border-muted last:border-b-0">
 					<div
-						class="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-semibold flex-shrink-0 {b.bgClass}">
+						class="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-semibold shrink-0 {b.bgClass}">
 						{b.initials}
 					</div>
 					<div class="flex-1 min-w-0">
@@ -438,7 +438,7 @@
 			<div class="mt-3">
 				<button
 					onclick={toggleJoinBuilder}
-					class="w-full py-2 border-[1.5px] border-dashed border-border rounded-[10px] bg-transparent font-[inherit] text-[13px] text-foreground-muted hover:text-foreground hover:border-foreground-muted transition-colors cursor-pointer"
+					class="w-full py-2 border-[1.5px] border-dashed border-border rounded-md bg-transparent font-[inherit] text-[13px] text-foreground-muted hover:text-foreground hover:border-foreground-muted transition-colors cursor-pointer"
 				>
 					{joinedAsBuilder ? '✓ Joined as builder' : '+ Join as builder'}
 				</button>
@@ -447,8 +447,8 @@
 
 		<div class="bg-primary rounded-2xl p-4">
 			<div class="text-[11px] font-semibold uppercase tracking-[0.07em] text-accent mb-3">Similar ideas</div>
-			{#each similarIdeas as sim}
-				<div class="py-2 border-b border-white/[0.08] last:border-b-0 cursor-pointer group">
+			{#each similarIdeas as sim (sim.title)}
+				<div class="py-2 border-b border-white/8 last:border-b-0 cursor-pointer group">
 					<div class="text-[12.5px] text-primary-foreground leading-[1.4] mb-1 font-medium group-hover:text-accent transition-colors">
 						{sim.title}
 					</div>

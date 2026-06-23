@@ -1,5 +1,5 @@
 <script>
-	//import { resolve } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import Navbar from '$lib/components/Navbar.svelte';
 </script>
 
@@ -18,10 +18,10 @@
 		</div>
 
 		<a
-			class="flex flex-shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-primary bg-primary px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-inverted no-underline transition-colors duration-100 sm:rounded-md sm:border-none sm:bg-yellow-100 sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:font-medium sm:text-foreground"
-			href="#"
+			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-primary bg-primary px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-inverted no-underline transition-colors duration-100 sm:rounded-md sm:border-none sm:bg-yellow-100 sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:font-medium sm:text-foreground"
+			href={resolve("/")}
 		>
-			<div class="hidden h-4.5 w-4.5 flex-shrink-0 items-center justify-center sm:flex">
+			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
 				<svg
 					class="h-3.5 w-3.5"
 					viewBox="0 0 24 24"
@@ -36,10 +36,10 @@
 		</a>
 
 		<a
-			class="flex flex-shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-			href="#"
+			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
+			href={resolve("/")}
 		>
-			<div class="hidden h-4.5 w-4.5 flex-shrink-0 items-center justify-center sm:flex">
+			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
 				<svg
 					class="h-3.5 w-3.5"
 					viewBox="0 0 24 24"
@@ -55,10 +55,10 @@
 		</a>
 
 		<a
-			class="flex flex-shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-			href="#"
+			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
+			href={resolve("/")}
 		>
-			<div class="hidden h-4.5 w-4.5 flex-shrink-0 items-center justify-center sm:flex">
+			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
 				<svg
 					class="h-3.5 w-3.5"
 					viewBox="0 0 24 24"
@@ -74,10 +74,10 @@
 		</a>
 
 		<a
-			class="flex flex-shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-			href="#"
+			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
+			href={resolve("/")}
 		>
-			<div class="hidden h-4.5 w-4.5 flex-shrink-0 items-center justify-center sm:flex">
+			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
 				<svg
 					class="h-3.5 w-3.5"
 					viewBox="0 0 24 24"
@@ -94,9 +94,9 @@
 			</div>
 			Being built
 		</a>
-		<a class="flex flex-shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-        href="#">
-        <div class="hidden h-4.5 w-4.5 flex-shrink-0 items-center justify-center sm:flex">
+		<a class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
+        href={resolve("/")}>
+        <div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -114,10 +114,10 @@
 		</div>
 
 		<a
-			class="flex flex-shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-			href="#"
+			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
+			href={resolve("/")}
 		>
-			<div class="hidden h-4.5 w-4.5 flex-shrink-0 items-center justify-center sm:flex">
+			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
 				<svg
 					class="h-3.5 w-3.5"
 					viewBox="0 0 24 24"
@@ -131,9 +131,9 @@
 			</div>
 			Education
 		</a>
-		<a class="flex flex-shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-        href="#">
-        <div class="hidden h-4.5 w-4.5 flex-shrink-0 items-center justify-center sm:flex">
+		<a class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
+        href={resolve("/")}>
+        <div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -142,9 +142,9 @@
         </div>
         Health
       </a>
-      <a class="flex flex-shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-        href="#">
-        <div class="hidden h-4.5 w-4.5 flex-shrink-0 items-center justify-center sm:flex">
+      <a class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
+        href={resolve("/")}>
+        <div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="size-6">
             <rect x="2" y="3" width="20" height="14" rx="2" />
@@ -153,9 +153,9 @@
           </svg></div>
         Technology
       </a>
-      <a class="flex flex-shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-        href="#">
-        <div class="hidden h-4.5 w-4.5 flex-shrink-0 items-center justify-center sm:flex">
+      <a class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
+        href={resolve("/")}>
+        <div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -164,9 +164,9 @@
           </svg></div>
         Cities
       </a>
-      <a class="flex flex-shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-        href="#">
-        <div class="hidden h-4.5 w-4.5 flex-shrink-0 items-center justify-center sm:flex">
+      <a class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
+        href={resolve("/")}>
+        <div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 1v22" />
@@ -215,13 +215,13 @@
 		<article
 			class="cursor-pointer rounded-lg border border-border bg-background p-[18px_20px] transition-all hover:border-accent hover:[box-shadow:var(--shadow-focus)]"
 		>
-			<a href="./ideashare-detail.html">
+			<a href={resolve("/")}>
 				<div class="mb-[10px] flex items-start gap-[14px]">
 					<div class="flex-1 font-display text-[15px] leading-[1.4] font-semibold text-foreground">
 						A universal exam system independent of any university — certify your skills, study
 						anywhere
 					</div>
-					<div class="flex flex-shrink-0 flex-col items-center gap-[3px]">
+					<div class="flex shrink-0 flex-col items-center gap-[3px]">
 						<div
 							class="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-md border-[1.5px] border-accent bg-accent"
 						>
@@ -265,12 +265,12 @@
 							RK
 						</div>
 						<div
-							class="-ml-[6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-primary text-[9px] font-semibold text-foreground-inverted"
+							class="ml-[-6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-primary text-[9px] font-semibold text-foreground-inverted"
 						>
 							SM
 						</div>
 						<div
-							class="-ml-[6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-border-strong text-[9px] font-semibold text-foreground-secondary"
+							class="ml-[-6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-border-strong text-[9px] font-semibold text-foreground-secondary"
 						>
 							+4
 						</div>
@@ -287,7 +287,7 @@
 				<div class="flex-1 font-display text-[15px] leading-[1.4] font-semibold text-foreground">
 					Let patients own their medical records — stored on their phone, shared with any doctor
 				</div>
-				<div class="flex flex-shrink-0 flex-col items-center gap-[3px]">
+				<div class="flex shrink-0 flex-col items-center gap-[3px]">
 					<div
 						class="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-md border-[1.5px] border-border bg-background transition-all hover:border-accent hover:bg-yellow-100"
 					>
@@ -332,7 +332,7 @@
 							TA
 						</div>
 						<div
-							class="-ml-[6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-accent text-[9px] font-semibold text-accent-foreground"
+							class="ml-[-6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-accent text-[9px] font-semibold text-accent-foreground"
 						>
 							NI
 						</div>
@@ -350,7 +350,7 @@
 					Build your own university major — pick courses from different institutions to form a
 					custom degree
 				</div>
-				<div class="flex flex-shrink-0 flex-col items-center gap-[3px]">
+				<div class="flex shrink-0 flex-col items-center gap-[3px]">
 					<div
 						class="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-md border-[1.5px] border-border bg-background transition-all hover:border-accent hover:bg-yellow-100"
 					>
@@ -408,7 +408,7 @@
 					A neighbourhood app where locals vote on which small businesses get a temporary rent
 					subsidy
 				</div>
-				<div class="flex flex-shrink-0 flex-col items-center gap-[3px]">
+				<div class="flex shrink-0 flex-col items-center gap-[3px]">
 					<div
 						class="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-md border-[1.5px] border-border bg-background transition-all hover:border-accent hover:bg-yellow-100"
 					>
@@ -453,7 +453,7 @@
 							LM
 						</div>
 						<div
-							class="-ml-[6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-border-strong text-[9px] font-semibold text-foreground-secondary"
+							class="ml-[-6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-border-strong text-[9px] font-semibold text-foreground-secondary"
 						>
 							+2
 						</div>
@@ -483,7 +483,7 @@
 			<div class="mb-[6px] font-display text-[15px] leading-[1.35] font-semibold">
 				You had a thought today. Don't let it disappear.
 			</div>
-			<div class="mb-[14px] text-[12px] leading-[1.5] opacity-70">
+			<div class="mb-[14px] text-[12px] leading-normal opacity-70">
 				Ideas shared here have inspired real projects.
 			</div>
 			<button
