@@ -1,10 +1,12 @@
 <script>
-	import { userData } from '$lib/remotes/session.remote';
+	import { sessionData } from '$lib/remotes/session.remote';
 	import { resolve } from '$app/paths';
 	import AvatarDropdown from './AvatarDropdown.svelte';
-	import PlusIcon from 'phosphor-svelte/lib/PlusIcon'
-	let {hasBackButton} = $props()
-	const data = await userData();
+	import PlusIcon from 'phosphor-svelte/lib/PlusIcon';
+	let { hasBackButton } = $props();
+	const data = await sessionData();
+
+	console.log(data.userId);
 </script>
 
 <nav
@@ -18,23 +20,29 @@
 	</a>
 
 	{#if hasBackButton}
-	<button
-		class="nav-back-post flex items-center gap-[5px] text-[13px] text-foreground-muted cursor-pointer border-none bg-transparent font-[inherit] transition-colors hover:text-foreground">
-		<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-			<polyline points="15 18 9 12 15 6" />
-		</svg>
-		<a href={resolve('/')} class="max-[600px]:text-[12px]">Back to feed</a>
-	</button>
-
+		<button
+			class="nav-back-post flex cursor-pointer items-center gap-[5px] border-none bg-transparent font-[inherit] text-[13px] text-foreground-muted transition-colors hover:text-foreground"
+		>
+			<svg
+				width="14"
+				height="14"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+			>
+				<polyline points="15 18 9 12 15 6" />
+			</svg>
+			<a href={resolve('/')} class="max-[600px]:text-[12px]">Back to feed</a>
+		</button>
 	{:else}
-	<div class="nav-search ml-2 hidden max-w-[320px] flex-1 md:flex">
-		<input
-			type="text"
-			placeholder="Search ideas..."
-			class="placeholder:text-foreground-muted h-9 w-full rounded-full border border-border-input bg-background-muted px-4 text-[13px] text-foreground transition-colors outline-none focus:border-accent focus:bg-background"
-		/>
-	</div>
-
+		<div class="nav-search ml-2 hidden max-w-[320px] flex-1 md:flex">
+			<input
+				type="text"
+				placeholder="Search ideas..."
+				class="h-9 w-full rounded-full border border-border-input bg-background-muted px-4 text-[13px] text-foreground transition-colors outline-none placeholder:text-foreground-muted focus:border-accent focus:bg-background"
+			/>
+		</div>
 	{/if}
 	<div class="ml-auto flex items-center gap-[10px]">
 		{#if data}
@@ -48,17 +56,15 @@
 			>
 		{/if}
 		<a href={resolve('/post/create')}>
-
 			<button
 				class="flex cursor-pointer items-center gap-1.5 rounded-full border-none bg-primary px-4 py-1.5 text-[13px] font-medium text-primary-foreground transition-opacity hover:opacity-85"
 			>
 				<div
 					class="flex h-[15px] w-[15px] items-center justify-center rounded-full bg-accent text-[13px] leading-none text-foreground"
 				>
-					<PlusIcon size='.7em' weight='bold'/>
+					<PlusIcon size=".7em" weight="bold" />
 				</div>
 				Post idea
-				
 			</button>
 		</a>
 	</div>
@@ -84,7 +90,7 @@
 		Feed
 	</button>
 	<button
-		class="text-foreground-muted flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px]"
+		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px] text-foreground-muted"
 	>
 		<svg
 			width="20"
@@ -111,7 +117,7 @@
 		</div>
 	</button>
 	<button
-		class="text-foreground-muted flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px]"
+		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px] text-foreground-muted"
 	>
 		<svg
 			width="20"
@@ -127,7 +133,7 @@
 		Alerts
 	</button>
 	<button
-		class="text-foreground-muted flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px]"
+		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px] text-foreground-muted"
 	>
 		<svg
 			width="20"

@@ -2,7 +2,11 @@
 	import { resolve } from '$app/paths';
 	import { enhance } from '$app/forms';
 	import { signupSchema } from '$lib/validation_schema';
+	import CircleNotchIcon from 'phosphor-svelte/lib/CircleNotchIcon';
 	import z from 'zod';
+	import type { ActionData } from '../signup/$types';
+
+	let { form }: { form: ActionData } = $props();
 
 	let first_name = $state('');
 	let last_name = $state('');
@@ -44,7 +48,7 @@
 	class="fixed inset-0 flex h-screen w-screen overflow-hidden font-body text-foreground-inverted select-none"
 >
 	<!-- LEFT PANEL -->
-	<div class="left bg-primary relative flex w-[52%] flex-col overflow-hidden p-9 px-10">
+	<div class="left relative flex w-[52%] flex-col overflow-hidden bg-primary p-9 px-10">
 		<!-- Logo -->
 		<div class="relative z-2 mb-12 flex items-center gap-2.25">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="30" height="30">
@@ -62,7 +66,15 @@
 					transform="rotate(-20 38 26)"
 				/>
 				<rect x="39" y="83" width="22" height="5" rx="2.5" fill="var(--color-yellow-500)" />
-				<rect x="40.5" y="90" width="19" height="5" rx="2.5" fill="var(--color-yellow-500)" opacity="0.7" />
+				<rect
+					x="40.5"
+					y="90"
+					width="19"
+					height="5"
+					rx="2.5"
+					fill="var(--color-yellow-500)"
+					opacity="0.7"
+				/>
 				<path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="var(--color-primary)" />
 			</svg>
 			<span class="font-display text-lg font-bold tracking-[-0.3px] text-foreground-inverted"
@@ -93,7 +105,9 @@
 				>
 					#education
 				</div>
-				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted">
+				<div
+					class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted"
+				>
 					A universal exam that certifies your skills — no university required
 				</div>
 				<div class="flex items-center gap-2">
@@ -115,7 +129,9 @@
 				>
 					#health
 				</div>
-				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted">
+				<div
+					class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted"
+				>
 					Let patients own their medical records — shared with any doctor, anywhere
 				</div>
 				<div class="flex items-center gap-2">
@@ -137,7 +153,9 @@
 				>
 					#cities
 				</div>
-				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted">
+				<div
+					class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted"
+				>
 					Neighbourhoods vote on which small businesses get rent subsidies each quarter
 				</div>
 				<div class="flex items-center gap-2">
@@ -159,7 +177,9 @@
 				>
 					#economy
 				</div>
-				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted">
+				<div
+					class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted"
+				>
 					A global skills passport replacing the traditional CV once and for all
 				</div>
 				<div class="flex items-center gap-2">
@@ -181,7 +201,9 @@
 				>
 					#technology
 				</div>
-				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted">
+				<div
+					class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted"
+				>
 					Open-source AI trained only on public domain works — no copyright risk
 				</div>
 				<div class="flex items-center gap-2">
@@ -284,11 +306,9 @@
 				action="?/signUpEmail"
 				use:enhance={() => {
 					loading = true;
-					console.log('Submitting');
 					return async ({ update }) => {
 						await update();
 						loading = false;
-						console.log('Done');
 					};
 				}}
 			>
@@ -299,7 +319,9 @@
 				</div>
 				<div class="field-row grid grid-cols-2 gap-3">
 					<div class="field mb-4">
-						<label for="first_name" class="field-label mb-1.5 block text-xs font-semibold text-foreground"
+						<label
+							for="first_name"
+							class="field-label mb-1.5 block text-xs font-semibold text-foreground"
 							>First name</label
 						>
 						<input
@@ -316,7 +338,9 @@
 						{/if}
 					</div>
 					<div class="field mb-4">
-						<label for="lastName" class="field-label mb-1.5 block text-xs font-semibold text-foreground"
+						<label
+							for="lastName"
+							class="field-label mb-1.5 block text-xs font-semibold text-foreground"
 							>Last name</label
 						>
 						<input
@@ -348,10 +372,16 @@
 					{#if touched.email && errors.email}
 						<div class="pwd-hint mt-1 text-[11px] text-red-400">{errors.email[0]}</div>
 					{/if}
+					{#if form?.code === 'USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL'}
+						<p class="pwd-hint mt-1 text-[11px] text-red-400">
+							{form.message}
+						</p>
+					{/if}
 				</div>
 				<div class="field mb-4">
-					<label for="password" class="field-label mb-1.5 block text-xs font-semibold text-foreground"
-						>Password</label
+					<label
+						for="password"
+						class="field-label mb-1.5 block text-xs font-semibold text-foreground">Password</label
 					>
 					<input
 						type="password"
@@ -374,7 +404,8 @@
 				<div class="field mb-4">
 					<label
 						for="confirm_password"
-						class="field-label mb-1.5 block text-xs font-semibold text-foreground">Confirm Password</label
+						class="field-label mb-1.5 block text-xs font-semibold text-foreground"
+						>Confirm Password</label
 					>
 					<input
 						type="password"
@@ -390,16 +421,21 @@
 					{/if}
 				</div>
 				<button
-					disabled={loading || isFormInvalid}
+					disabled={loading || isFormInvalid || strength.score < 3}
 					class="btn-next mb-3.5 flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full border-none bg-primary font-body text-sm font-semibold text-foreground-inverted transition-all duration-150 hover:opacity-85 active:scale-99 disabled:bg-border-strong disabled:text-foreground-disabled"
 				>
-					Create account
+					{#if loading}
+						<CircleNotchIcon size="25px" class="animate-spin" />
+					{:else}
+						Create account
+					{/if}
 				</button>
 			</form>
 			<div class="already-have mt-6 text-center text-[13px] text-foreground-muted">
 				Already have an account? <a
 					href={resolve('/auth/login')}
-					class="cursor-pointer font-semibold text-foreground no-underline hover:underline">Sign in</a
+					class="cursor-pointer font-semibold text-foreground no-underline hover:underline"
+					>Sign in</a
 				>
 			</div>
 		</div>

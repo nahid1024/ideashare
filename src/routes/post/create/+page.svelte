@@ -1,16 +1,19 @@
 <script lang="ts">
-    import {resolve} from '$app/paths'
+	import { resolve } from '$app/paths';
 	import Navbar from '$lib/components/Navbar.svelte';
-
-	let title = $state('A universal exam system independent of any university — certify your skills, study anywhere');
-	let desc = $state('What if you could study from YouTube, books, or anywhere you want — and just show up to a standardised exam to get certified? No enrollment, no tuition fees, no geographic restriction. Your knowledge is what gets tested, not where you sat.');
-	let problem = $state('University degrees are expensive and location-dependent, but skills are what actually matter. Millions of people have the ability but not the access.');
+	import { createPost } from './page.remote';
+	let title = $state('');
+	let description = $state('');
+	let solvedProblem = $state('');
 	let selectedChips = $state(['Students', 'Working adults', 'Developing countries']);
 	let selectedTopics = $state(['#education', '#credentials']);
-	let anonymous = $state(false);
-
+	let isAnonymous = $state(false);
 	let focusedBlock = $state('title');
 	let showDupeWarning = $state(true);
+
+	//const session = await sessionData();
+
+	//console.log(session.userId);
 
 	const whoChips = [
 		{ name: 'Students', emoji: '🎓' },
@@ -49,6 +52,18 @@
 			selectedTopics = [...selectedTopics, topicName];
 		}
 	}
+
+	// async function createPost() {
+	// 	const post = await db.insert(posts).values([
+	// 		{
+	// 			title: title,
+	// 			description: description,
+	// 			solvedProblems: solvedProblem,
+	// 			isAnonymous: isAnonymous,
+	// 			authorId: session.userId
+	// 		}
+	// 	]);
+	// }
 </script>
 
 <svelte:head>
@@ -59,105 +74,200 @@
 <Navbar hasBackButton={true} />
 
 <!-- PAGE -->
-<div class="post-layout max-w-[860px] mx-auto grid gap-7 items-start grid-cols-1 min-[761px]:grid-cols-[minmax(0,1fr)_240px] pt-[14px] px-3 pb-[80px] min-[601px]:pt-[20px] min-[601px]:px-4 min-[761px]:pt-9 min-[761px]:px-6 min-[761px]:pb-[60px]">
-
+<div
+	class="post-layout mx-auto grid max-w-215 grid-cols-1 items-start gap-7 px-3 pt-3.5 pb-20 min-[601px]:px-4 min-[601px]:pt-5 min-[761px]:grid-cols-[minmax(0,1fr)_240px] min-[761px]:px-6 min-[761px]:pt-9 min-[761px]:pb-15"
+>
 	<!-- FORM -->
-	<div class="flex flex-col gap-0">
-
+	<form {...createPost} class="flex flex-col gap-0">
 		<div class="mb-7">
-			<div
-				class="inline-flex items-center gap-[6px] text-[11px] font-semibold uppercase tracking-[0.08em] text-yellow-500 bg-yellow-100 border border-yellow-200 py-[3px] px-[10px] rounded-full mb-[10px]">
-				💡 Step 2 of 3 — The idea</div>
-			<h1 class="font-display text-[26px] font-bold text-foreground tracking-[-0.4px] leading-tight mb-[6px]">What's the idea?</h1>
-			<p class="text-[13.5px] text-foreground-muted leading-[1.6]">Write it like you'd explain it to a friend. No need to be
-				formal — just be clear.</p>
+			<h1
+				class="mb-1.5 font-display text-[26px] leading-tight font-bold tracking-[-0.4px] text-foreground"
+			>
+				What's the idea?
+			</h1>
+			<p class="text-[13.5px] leading-[1.6] text-foreground-muted">
+				Write it like you'd explain it to a friend. No need to be formal — just be clear.
+			</p>
 		</div>
 
-		<div class="bg-background border border-border rounded-2xl overflow-hidden">
-
+		<div class="overflow-hidden rounded-2xl border border-border bg-background">
 			<!-- Title field -->
-			<div id="block-title"
-				class="field-block p-[20px_24px] border-b border-border-muted relative transition-colors {focusedBlock === 'title' ? 'bg-yellow-50' : ''}">
-				<div class="field-accent absolute left-0 top-0 bottom-0 w-[3px] rounded-none transition-colors {focusedBlock === 'title' ? 'bg-accent' : 'bg-transparent'}">
-				</div>
+			<div
+				id="block-title"
+				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
+				'title'
+					? 'bg-yellow-50'
+					: ''}"
+			>
 				<div
-					class="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground-muted mb-2 flex items-center gap-[6px]">
-					<div class="w-[5px] h-[5px] rounded-full bg-yellow-500 inline-block"></div>
+					class="field-accent absolute top-0 bottom-0 left-0 w-0.75 rounded-none transition-colors {focusedBlock ===
+					'title'
+						? 'bg-accent'
+						: 'bg-transparent'}"
+				></div>
+				<div
+					class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
+				>
+					<div class="inline-block h-1.25 w-1.25 rounded-full bg-yellow-500"></div>
 					Idea title
 				</div>
-				<textarea id="title-input" rows="2" bind:value={title} onfocus={() => focusedBlock = 'title'}
-					class="font-display w-full border-none outline-none bg-transparent resize-none leading-[1.4] placeholder:text-foreground-disabled placeholder:font-medium text-foreground text-[18px] font-semibold"
-					placeholder="e.g. A universal exam system where you study anywhere and just show up to get certified"></textarea>
-				<div id="title-count" class="flex justify-end text-[11px] mt-[6px] {title.length > 100 ? 'text-yellow-500' : 'text-foreground-disabled'}">{title.length} / 120</div>
+				<textarea
+					id="title-input"
+					rows="2"
+					bind:value={title}
+					onfocus={() => (focusedBlock = 'title')}
+					{...createPost.fields.title.as('text')}
+					class="w-full resize-none border-none bg-transparent font-display text-[18px] leading-[1.4] font-semibold text-foreground outline-none placeholder:font-medium placeholder:text-foreground-disabled"
+					placeholder="e.g. A universal exam system where you study anywhere and just show up to get certified"
+				></textarea>
+				<div
+					id="title-count"
+					class="mt-1.25 flex justify-end text-[11px] {title.length > 100
+						? 'text-yellow-500'
+						: 'text-foreground-disabled'}"
+				>
+					{title.length} / 120
+				</div>
 			</div>
 
 			<!-- Describe field -->
-			<div id="block-desc" class="field-block p-[20px_24px] border-b border-border-muted relative transition-colors {focusedBlock === 'desc' ? 'bg-yellow-50' : ''}">
-				<div class="field-accent absolute left-0 top-0 bottom-0 w-[3px] transition-colors {focusedBlock === 'desc' ? 'bg-accent' : 'bg-transparent'}"></div>
+			<div
+				id="block-desc"
+				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
+				'desc'
+					? 'bg-yellow-50'
+					: ''}"
+			>
 				<div
-					class="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground-muted mb-2 flex items-center gap-[6px]">
-					<div class="w-[5px] h-[5px] rounded-full bg-yellow-500 inline-block"></div>
+					class="field-accent absolute top-0 bottom-0 left-0 w-0.75 transition-colors {focusedBlock ===
+					'desc'
+						? 'bg-accent'
+						: 'bg-transparent'}"
+				></div>
+				<div
+					class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
+				>
+					<div class="inline-block h-1.25 w-1.25 rounded-full bg-yellow-500"></div>
 					Describe the idea
 				</div>
-				<textarea id="desc-input" rows="4" bind:value={desc} onfocus={() => focusedBlock = 'desc'}
-					class="w-full border-none outline-none bg-transparent resize-none text-sm leading-[1.7] text-foreground placeholder:text-foreground-disabled font-[inherit]"
-					placeholder="What exactly would this look like? How would it work? Even a rough picture is great."></textarea>
+				<textarea
+					id="desc-input"
+					rows="4"
+					bind:value={description}
+					{...createPost.fields.description.as('text')}
+					onfocus={() => (focusedBlock = 'desc')}
+					class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
+					placeholder="What exactly would this look like? How would it work? Even a rough picture is great."
+				></textarea>
 			</div>
 
 			<!-- Problem field -->
-			<div id="block-problem" class="field-block p-[20px_24px] border-b border-border-muted relative transition-colors {focusedBlock === 'problem' ? 'bg-yellow-50' : ''}">
-				<div class="field-accent absolute left-0 top-0 bottom-0 w-[3px] transition-colors {focusedBlock === 'problem' ? 'bg-accent' : 'bg-transparent'}"></div>
+			<div
+				id="block-problem"
+				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
+				'problem'
+					? 'bg-yellow-50'
+					: ''}"
+			>
 				<div
-					class="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground-muted mb-2 flex items-center gap-[6px]">
-					<div class="w-[5px] h-[5px] rounded-full bg-yellow-500 inline-block"></div>
+					class="field-accent absolute top-0 bottom-0 left-0 w-0.75 transition-colors {focusedBlock ===
+					'problem'
+						? 'bg-accent'
+						: 'bg-transparent'}"
+				></div>
+				<div
+					class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
+				>
+					<div class="inline-block h-1.25 w-1.25 rounded-full bg-yellow-500"></div>
 					What problem does this solve?
 				</div>
-				<textarea id="problem-input" rows="2" bind:value={problem} onfocus={() => focusedBlock = 'problem'}
-					class="w-full border-none outline-none bg-transparent resize-none text-sm leading-[1.7] text-foreground placeholder:text-foreground-disabled font-[inherit]"
-					placeholder="e.g. University is too expensive and location-dependent for most people in the world."></textarea>
+				<textarea
+					id="problem-input"
+					rows="2"
+					bind:value={solvedProblem}
+					{...createPost.fields.solvedProblems.as('text')}
+					onfocus={() => (focusedBlock = 'problem')}
+					class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
+					placeholder="e.g. University is too expensive and location-dependent for most people in the world."
+				></textarea>
 			</div>
 
 			<!-- Who benefits -->
-			<div id="block-who" role="presentation" onclick={() => focusedBlock = 'who'} class="field-block p-[20px_24px] border-b border-border-muted relative transition-colors {focusedBlock === 'who' ? 'bg-yellow-50' : ''}">
-				<div class="field-accent absolute left-0 top-0 bottom-0 w-[3px] transition-colors {focusedBlock === 'who' ? 'bg-accent' : 'bg-transparent'}"></div>
+			<div
+				id="block-who"
+				role="presentation"
+				onclick={() => (focusedBlock = 'who')}
+				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
+				'who'
+					? 'bg-yellow-50'
+					: ''}"
+			>
 				<div
-					class="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground-muted mb-2 flex items-center gap-[6px]">
-					<div class="w-[5px] h-[5px] rounded-full bg-yellow-500 inline-block"></div>
+					class="field-accent absolute top-0 bottom-0 left-0 w-0.75 transition-colors {focusedBlock ===
+					'who'
+						? 'bg-accent'
+						: 'bg-transparent'}"
+				></div>
+				<div
+					class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
+				>
+					<div class="inline-block h-1.25 w-1.25 rounded-full bg-yellow-500"></div>
 					Who would benefit?
 					<span
-						class="text-[10px] font-medium text-foreground-disabled normal-case tracking-normal bg-background-muted py-px px-[6px] rounded-full">Pick
-						all that apply</span>
+						class="rounded-full bg-background-muted px-1.5 py-px text-[10px] font-medium tracking-normal text-foreground-disabled normal-case"
+						>Pick all that apply</span
+					>
 				</div>
-				<div class="flex flex-wrap gap-[7px] mb-[10px]">
+				<div class="mb-2.5 flex flex-wrap gap-1.75">
 					{#each whoChips as chip (chip)}
 						{@const isSelected = selectedChips.includes(chip.name)}
 						<button
 							type="button"
-							class="bchip flex items-center gap-[5px] py-[6px] px-3 rounded-full border font-[inherit] text-[12.5px] cursor-pointer transition-colors {isSelected ? 'border-accent bg-yellow-100 font-semibold text-foreground' : 'border-border bg-transparent font-medium text-foreground-secondary hover:border-yellow-500 hover:text-foreground'}"
+							class="chip flex cursor-pointer items-center gap-1 rounded-full border px-2.5 py-1.5 font-[inherit] text-[12.5px] transition-colors {isSelected
+								? 'border-accent bg-yellow-100 font-semibold text-foreground'
+								: 'border-border bg-transparent font-medium text-foreground-secondary hover:border-yellow-500 hover:text-foreground'}"
 							onclick={() => toggleChip(chip.name)}
 						>
-							<span>{chip.emoji}</span> {chip.name}
+							<span>{chip.emoji}</span>
+							{chip.name}
 						</button>
 					{/each}
 				</div>
 			</div>
 
 			<!-- Topic tags -->
-			<div id="block-topic" role="presentation" onclick={() => focusedBlock = 'topic'} class="field-block p-[20px_24px] border-b border-border-muted relative transition-colors {focusedBlock === 'topic' ? 'bg-yellow-50' : ''}">
-				<div class="field-accent absolute left-0 top-0 bottom-0 w-[3px] transition-colors {focusedBlock === 'topic' ? 'bg-accent' : 'bg-transparent'}"></div>
+			<div
+				id="block-topic"
+				role="presentation"
+				onclick={() => (focusedBlock = 'topic')}
+				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
+				'topic'
+					? 'bg-yellow-50'
+					: ''}"
+			>
 				<div
-					class="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground-muted mb-2 flex items-center gap-[6px]">
+					class="field-accent absolute top-0 bottom-0 left-0 w-0.75 transition-colors {focusedBlock ===
+					'topic'
+						? 'bg-accent'
+						: 'bg-transparent'}"
+				></div>
+				<div
+					class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
+				>
 					Topic
 					<span
-						class="text-[10px] font-medium text-foreground-disabled normal-case tracking-normal bg-background-muted py-px px-[6px] rounded-full">Pick
-						up to 2</span>
+						class="rounded-full bg-background-muted px-1.5 py-px text-[10px] font-medium tracking-normal text-foreground-disabled normal-case"
+						>Pick up to 2</span
+					>
 				</div>
-				<div class="flex flex-wrap gap-[7px]">
+				<div class="flex flex-wrap gap-1.75">
 					{#each topicsList as topic (topic)}
 						{@const isSelected = selectedTopics.includes(topic)}
 						<button
 							type="button"
-							class="tchip py-[5px] px-3 rounded-full border font-[inherit] text-[12.5px] font-medium cursor-pointer transition-colors {isSelected ? 'bg-foreground border-foreground text-foreground-inverted' : 'bg-transparent border-border text-foreground-secondary hover:border-foreground hover:text-foreground'}"
+							class="chip cursor-pointer rounded-full border px-2.5 py-1.5 font-[inherit] text-[12.5px] font-medium transition-colors {isSelected
+								? 'border-foreground bg-foreground text-foreground-inverted'
+								: 'border-border bg-transparent text-foreground-secondary hover:border-foreground hover:text-foreground'}"
 							onclick={() => toggleTopic(topic)}
 						>
 							{topic}
@@ -165,136 +275,199 @@
 					{/each}
 				</div>
 			</div>
+			<input {...createPost.fields.isPublished.as('hidden', true)} />
 
 			<!-- Anonymous toggle -->
-			<div class="p-[20px_24px] relative">
+			<div class="relative p-[20px_24px]">
 				<div
-					class="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground-muted mb-2 flex items-center gap-[6px]">
+					class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
+				>
 					Post anonymously
 					<span
-						class="text-[10px] font-medium text-foreground-disabled normal-case tracking-normal bg-background-muted py-px px-[6px] rounded-full">optional</span>
+						class="px-[ 6px] rounded-full bg-background-muted py-px text-[10px] font-medium tracking-normal text-foreground-disabled normal-case"
+						>optional</span
+					>
 				</div>
 				<div class="flex items-center gap-3">
-					<label class="relative w-10 h-[22px] cursor-pointer shrink-0">
-						<input type="checkbox" id="anon-toggle" class="peer opacity-0 absolute w-0 h-0" bind:checked={anonymous}>
-						<div class="absolute inset-0 bg-border-strong rounded-full transition-colors peer-checked:bg-accent"></div>
+					<label class="relative h-5.5 w-10 shrink-0 cursor-pointer">
+						<input
+							id="anon-toggle"
+							class="peer absolute h-0 w-0 opacity-0"
+							{...createPost.fields.isAnonymous.as('checkbox')}
+						/>
 						<div
-							class="absolute top-[3px] left-[3px] w-4 h-4 rounded-full bg-white shadow-sm transition-all peer-checked:left-[21px]">
-						</div>
+							class="absolute inset-0 rounded-full bg-border-strong transition-colors peer-checked:bg-accent"
+						></div>
+						<div
+							class="absolute top-0.75 left-0.75 h-4 w-4 rounded-full bg-white shadow-sm transition-all peer-checked:left-5.25"
+						></div>
 					</label>
 					<div>
-						<div class="text-[13.5px] text-foreground font-medium">Hide my name on this idea</div>
-						<div class="text-[12px] text-foreground-muted mt-[2px]">Your contribution is still recorded — you'll get credit if
-							it gets built.</div>
+						<div class="text-[13.5px] font-medium text-foreground">Hide my name on this idea</div>
+						<div class="mt-0.5 text-[12px] text-foreground-muted">
+							Your contribution is still recorded — you'll get credit if it gets built.
+						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
 
 		<!-- Dupe warning -->
 		{#if showDupeWarning}
-		<div id="dupe-warning"
-			class="bg-yellow-100 border border-yellow-200 rounded-md p-[12px_16px] flex gap-3 items-start mt-[14px]">
 			<div
-				class="w-6 h-6 rounded-full bg-accent flex items-center justify-center shrink-0 mt-px text-[12px]">
-				💡</div>
-			<div class="text-[13px] text-foreground leading-[1.55]">
-				<strong>3 similar ideas already exist.</strong> Want to refine one instead of posting a new one?
-				<br><span class="font-semibold cursor-pointer underline">View similar ideas →</span>
+				id="dupe-warning"
+				class="mt-3.5 flex items-start gap-3 rounded-md border border-yellow-200 bg-yellow-100 p-[12px_16px]"
+			>
+				<div
+					class="mt-px flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-[12px]"
+				>
+					💡
+				</div>
+				<div class="text-[13px] leading-[1.55] text-foreground">
+					<strong>3 similar ideas already exist.</strong> Want to refine one instead of posting a
+					new one?
+					<br /><span class="cursor-pointer font-semibold underline">View similar ideas →</span>
+				</div>
+				<button
+					onclick={() => (showDupeWarning = false)}
+					class="ml-auto shrink-0 cursor-pointer border-none bg-transparent px-1 py-0.5 font-[inherit] text-[12px] text-foreground-muted"
+					>✕</button
+				>
 			</div>
-			<button onclick={() => showDupeWarning = false}
-				class="ml-auto text-[12px] text-foreground-muted cursor-pointer border-none bg-transparent font-[inherit] shrink-0 py-[2px] px-1">✕</button>
-		</div>
 		{/if}
 
 		<!-- Submit bar -->
-		<div class="flex items-center gap-[10px] mt-5 flex-wrap">
+		<div class="mt-5 flex flex-wrap items-center gap-2.5">
 			<button
-				class="flex items-center gap-2 py-[11px] px-7 border-none rounded-full bg-primary font-[inherit] text-sm font-semibold text-primary-foreground cursor-pointer transition-opacity hover:opacity-85">
-				<div class="w-5 h-5 bg-accent rounded-full flex items-center justify-center text-[12px] text-foreground">⚡</div>
+				class="flex cursor-pointer items-center gap-2 rounded-full border-none bg-primary px-7 py-2.75 font-[inherit] text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-85"
+				type="submit"
+				name="intent"
+				value="publish"
+			>
 				Publish idea
 			</button>
 			<button
-				class="py-[11px] px-5 border border-border rounded-full bg-transparent font-[inherit] text-[13px] font-medium text-foreground-secondary cursor-pointer transition-all hover:border-foreground hover:text-foreground">Save
-				as draft</button>
+				class="cursor-pointer rounded-full border border-border bg-transparent px-5 py-2.75 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground"
+				type="submit"
+				name="intent"
+				value="draft">Save as draft</button
+			>
 			<span class="text-[12px] text-foreground-muted">Your idea will be visible to everyone</span>
 		</div>
-
-	</div>
+	</form>
 
 	<!-- RIGHT COLUMN -->
-	<div class="preview-col flex-col gap-[14px] hidden min-[761px]:flex">
+	<div class="preview-col hidden flex-col gap-3.5 min-[761px]:flex">
+		<div class="text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase">
+			Live preview
+		</div>
 
-		<div class="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground-muted">Live preview</div>
-
-		<div class="bg-background-card border border-border rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+		<div
+			class="overflow-hidden rounded-2xl border border-border bg-background-card shadow-[0_4px_20px_rgba(0,0,0,0.06)]"
+		>
 			<div class="bg-accent p-4">
-				<div id="preview-title"
-					class="font-display text-[13.5px] font-bold text-foreground leading-[1.4]">
+				<div
+					id="preview-title"
+					class="font-display text-[13.5px] leading-[1.4] font-bold text-foreground"
+				>
 					{title || 'Your idea title will appear here...'}
 				</div>
 			</div>
 			<div class="p-3 px-4">
-				<div id="preview-desc" class="text-[12px] text-foreground-secondary leading-[1.6] mb-[10px]">
-					{desc ? (desc.substring(0, 120) + (desc.length > 120 ? '...' : '')) : 'Your description will appear here...'}
+				<div
+					id="preview-desc"
+					class="mb-[10px] text-[12px] leading-[1.6] text-foreground-secondary"
+				>
+					{description
+						? description.substring(0, 120) + (description.length > 120 ? '...' : '')
+						: 'Your description will appear here...'}
 				</div>
-				<div class="flex items-center gap-[6px] flex-wrap">
+				<div class="flex flex-wrap items-center gap-1.5">
 					{#each selectedTopics as topic (topic)}
 						<span
-							class="py-[2px] px-2 rounded-full bg-background-muted border border-border text-[11px] text-foreground-secondary">{topic}</span>
+							class="rounded-full border border-border bg-background-muted px-2 py-[2px] text-[11px] text-foreground-secondary"
+							>{topic}</span
+						>
 					{/each}
 					<span
-						class="py-[2px] px-2 rounded-full text-[11px] font-semibold bg-warning-background text-warning-foreground border border-warning-border">Raw
-						idea</span>
+						class="rounded-full border border-warning-border bg-warning-background px-2 py-[2px] text-[11px] font-semibold text-warning-foreground"
+						>Raw idea</span
+					>
 					<span class="ml-auto text-[12px] font-semibold text-foreground-muted">⚡ 0</span>
 				</div>
 			</div>
 		</div>
 
-		<div class="bg-primary rounded-2xl p-4">
-			<div class="text-[11px] font-semibold uppercase tracking-[0.08em] text-accent mb-3">Tips for a great idea
+		<div class="rounded-2xl bg-primary p-4">
+			<div class="mb-3 text-[11px] font-semibold tracking-[0.08em] text-accent uppercase">
+				Tips for a great idea
 			</div>
-			<div class="flex gap-[10px] mb-[10px] items-start">
+			<div class="mb-[10px] flex items-start gap-[10px]">
 				<div
-					class="w-[18px] h-[18px] rounded-full bg-accent text-foreground text-[10px] font-bold flex items-center justify-center shrink-0 mt-px">
-					1</div>
-				<div class="text-[12px] text-foreground-disabled leading-[1.55]"><strong class="text-white">Lead with the
-						problem,</strong> not the solution. "Millions can't afford university" is more compelling than "free
-					exams".</div>
+					class="mt-px flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-foreground"
+				>
+					1
+				</div>
+				<div class="text-[12px] leading-[1.55] text-foreground-disabled">
+					<strong class="text-white">Lead with the problem,</strong> not the solution. "Millions can't
+					afford university" is more compelling than "free exams".
+				</div>
 			</div>
-			<div class="flex gap-[10px] mb-[10px] items-start">
+			<div class="mb-[10px] flex items-start gap-[10px]">
 				<div
-					class="w-[18px] h-[18px] rounded-full bg-accent text-foreground text-[10px] font-bold flex items-center justify-center shrink-0 mt-px">
-					2</div>
-				<div class="text-[12px] text-foreground-disabled leading-[1.55]"><strong class="text-white">Be specific</strong> about
-					who benefits. "Students in rural areas" gets more traction than "everyone".</div>
+					class="mt-px flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-foreground"
+				>
+					2
+				</div>
+				<div class="text-[12px] leading-[1.55] text-foreground-disabled">
+					<strong class="text-white">Be specific</strong> about who benefits. "Students in rural areas"
+					gets more traction than "everyone".
+				</div>
 			</div>
-			<div class="flex gap-[10px] items-start">
+			<div class="flex items-start gap-[10px]">
 				<div
-					class="w-[18px] h-[18px] rounded-full bg-accent text-foreground text-[10px] font-bold flex items-center justify-center shrink-0 mt-px">
-					3</div>
-				<div class="text-[12px] text-foreground-disabled leading-[1.55]"><strong class="text-white">Raw ideas are
-						welcome.</strong> You don't need to have it all figured out — the community will help refine it.</div>
+					class="mt-px flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-foreground"
+				>
+					3
+				</div>
+				<div class="text-[12px] leading-[1.55] text-foreground-disabled">
+					<strong class="text-white">Raw ideas are welcome.</strong> You don't need to have it all figured
+					out — the community will help refine it.
+				</div>
 			</div>
 		</div>
 
-		<div class="bg-background border border-border rounded-2xl p-[14px]">
-			<div class="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground-muted mb-[10px]">Similar ideas already
-				posted</div>
-			<div class="py-[7px] border-b border-border-muted cursor-pointer">
-				<div class="text-[12.5px] text-foreground leading-[1.4] font-medium mb-[3px] hover:text-yellow-500">Build your own
-					university major from multiple institutions</div>
-				<div class="text-[11px] text-foreground-muted"><span class="text-yellow-500 font-medium">389 ⚡</span> · 2 builds</div>
+		<div class="rounded-2xl border border-border bg-background p-[14px]">
+			<div
+				class="mb-[10px] text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
+			>
+				Similar ideas already posted
 			</div>
-			<div class="py-[7px] border-b border-border-muted cursor-pointer">
-				<div class="text-[12.5px] text-foreground leading-[1.4] font-medium mb-[3px] hover:text-yellow-500">Employer-run
-					certification to replace degrees</div>
-				<div class="text-[11px] text-foreground-muted"><span class="text-yellow-500 font-medium">198 ⚡</span> · 1 build</div>
+			<div class="cursor-pointer border-b border-border-muted py-[7px]">
+				<div
+					class="mb-[3px] text-[12.5px] leading-[1.4] font-medium text-foreground hover:text-yellow-500"
+				>
+					Build your own university major from multiple institutions
+				</div>
+				<div class="text-[11px] text-foreground-muted">
+					<span class="font-medium text-yellow-500">389 ⚡</span> · 2 builds
+				</div>
 			</div>
-			<div class="mt-[10px] text-[12px] text-foreground-muted text-center">Want to <a href={resolve('/')}
-					class="text-foreground font-medium cursor-pointer">build on one of these</a> instead?</div>
+			<div class="cursor-pointer border-b border-border-muted py-[7px]">
+				<div
+					class="mb-[3px] text-[12.5px] leading-[1.4] font-medium text-foreground hover:text-yellow-500"
+				>
+					Employer-run certification to replace degrees
+				</div>
+				<div class="text-[11px] text-foreground-muted">
+					<span class="font-medium text-yellow-500">198 ⚡</span> · 1 build
+				</div>
+			</div>
+			<div class="mt-[10px] text-center text-[12px] text-foreground-muted">
+				Want to <a href={resolve('/')} class="cursor-pointer font-medium text-foreground"
+					>build on one of these</a
+				> instead?
+			</div>
 		</div>
-
 	</div>
 </div>

@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { enhance } from '$app/forms';
-
+	import type { ActionData } from '../login/$types';
+	import CircleNotchIcon from 'phosphor-svelte/lib/CircleNotchIcon';
 	let password = $state('');
 	let loading = $state(false);
+	let { form }: { form: ActionData } = $props();
 </script>
 
 <div
@@ -264,7 +266,7 @@
 
 			<form
 				method="post"
-				action="?/signUpEmail"
+				action="?/signInEmail"
 				use:enhance={() => {
 					loading = true;
 					return async ({ update }) => {
@@ -289,12 +291,17 @@
 						id="email"
 						name="email"
 					/>
+					{#if form?.code === 'INVALID_EMAIL_OR_PASSWORD'}
+						<p class="pwd-hint mt-1 text-[11px] text-red-400">
+							{form.message}
+						</p>
+					{/if}
 				</div>
 				<div class="field mb-4">
 					<div class="mb-1.5 flex items-center justify-between">
 						<label class="text-[12px] font-semibold text-foreground" for="password">Password</label>
 						<a
-							href={resolve("/")}
+							href={resolve('/')}
 							class="text-[12px] font-medium text-warning-foreground no-underline hover:underline"
 							>Forgot password?</a
 						>
@@ -322,9 +329,13 @@
 				</div>
 				<button
 					disabled={loading}
-					class="btn-next max-sm:text-span mb-3.5 flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full border-none bg-primary font-body text-sm font-semibold text-foreground-inverted transition-all duration-150 hover:opacity-85 active:scale-99 max-sm:h-[48px]"
+					class="btn-next max-sm:text-span mb-3.5 flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full border-none bg-primary font-body text-sm font-semibold text-foreground-inverted transition-all duration-150 hover:opacity-85 active:scale-99 max-sm:h-12"
 				>
-					Sign in to IdeaShare
+					{#if loading}
+						<CircleNotchIcon size="25px" class="animate-spin" />
+					{:else}
+						Sign in to IdeaShare
+					{/if}
 				</button>
 			</form>
 			<div class="text-center text-[13px] text-foreground-muted">
@@ -338,9 +349,13 @@
 
 			<div class="mt-6 text-center text-[11px] leading-relaxed text-foreground-muted">
 				By signing in you agree to our
-				<a href={resolve("/")} class="text-foreground no-underline hover:underline">Terms of Service</a>
+				<a href={resolve('/')} class="text-foreground no-underline hover:underline"
+					>Terms of Service</a
+				>
 				and
-				<a href={resolve("/")} class="text-foreground no-underline hover:underline">Privacy Policy</a>
+				<a href={resolve('/')} class="text-foreground no-underline hover:underline"
+					>Privacy Policy</a
+				>
 			</div>
 		</div>
 	</div>

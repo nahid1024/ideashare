@@ -12,3 +12,11 @@ export const signupSchema = z
 		message: "Passwords don't match",
 		path: ['confirm_password']
 	});
+
+export const postSchema = z.object({
+	title: z.string().nonempty(),
+	description: z.string(),
+	solvedProblems: z.string(),
+	isAnonymous: z.boolean().default(false),
+	intent: z.enum(['draft', 'publish'])
+});
