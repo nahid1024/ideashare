@@ -274,7 +274,6 @@
 					{/each}
 				</div>
 			</div>
-			<input {...createPost.fields.isPublished.as('hidden', true)} />
 
 			<!-- Anonymous toggle -->
 			<div class="relative p-[20px_24px]">
