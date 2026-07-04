@@ -7,7 +7,6 @@
 	let solvedProblem = $state('');
 	let selectedChips = $state(['Students', 'Working adults', 'Developing countries']);
 	let selectedTopics = $state(['#education', '#credentials']);
-	let isAnonymous = $state(false);
 	let focusedBlock = $state('title');
 	let showDupeWarning = $state(true);
 
