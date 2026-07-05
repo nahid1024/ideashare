@@ -2,18 +2,16 @@
 	import { Avatar, DropdownMenu } from 'bits-ui';
 	import Cardholder from 'phosphor-svelte/lib/Cardholder';
 	import GearSix from 'phosphor-svelte/lib/GearSix';
-	import UserCircle from 'phosphor-svelte/lib/UserCircle';
-	import SignOutIcon from "phosphor-svelte/lib/SignOutIcon"
+	import UserCircle from 'phosphor-svelte/lib/UserCircleIcon';
+	import SignOutIcon from 'phosphor-svelte/lib/SignOutIcon';
 	import { enhance } from '$app/forms';
 
-
 	let { avatar } = $props();
-
 </script>
 
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger
-		class="border-border-input shadow-xs inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full font-medium text-foreground select-none hover:bg-muted active:scale-[0.98]"
+		class="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-border-input font-medium text-foreground shadow-xs select-none hover:bg-muted active:scale-[0.98]"
 	>
 		<Avatar.Root
 			delayMs={200}
@@ -29,74 +27,77 @@
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Portal>
 		<DropdownMenu.Content
-			class="shadow-md w-[229px] rounded-lg border border-border bg-background px-1 py-1.5 outline-hidden focus-visible:outline-hidden"
+			class="w-[229px] rounded-lg border border-border bg-background px-1 py-1.5 shadow-md outline-hidden focus-visible:outline-hidden"
 			sideOffset={8}
 		>
 			<DropdownMenu.Item
-				class="rounded-md flex h-10 items-center py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground cursor-pointer"
+				class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
 			>
 				<div class="flex items-center">
-					<UserCircle class="text-foreground-muted mr-2 size-5" />
+					<UserCircle class="mr-2 size-5 text-foreground-muted" />
 					Profile
 				</div>
 				<div class="ml-auto flex items-center gap-px">
 					<kbd
-						class="rounded-xs border border-border bg-background-muted shadow-xs inline-flex size-5 items-center justify-center text-xs text-foreground-muted"
+						class="inline-flex size-5 items-center justify-center rounded-xs border border-border bg-background-muted text-xs text-foreground-muted shadow-xs"
 					>
 						⌘
 					</kbd>
 					<kbd
-						class="rounded-xs border border-border bg-background-muted shadow-xs inline-flex size-5 items-center justify-center text-[10px] text-foreground-muted"
+						class="inline-flex size-5 items-center justify-center rounded-xs border border-border bg-background-muted text-[10px] text-foreground-muted shadow-xs"
 					>
 						P
 					</kbd>
 				</div>
 			</DropdownMenu.Item>
 			<DropdownMenu.Item
-				class="rounded-md flex h-10 items-center py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground cursor-pointer"
+				class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
 			>
 				<div class="flex items-center">
-					<Cardholder class="text-foreground-muted mr-2 size-5" />
+					<Cardholder class="mr-2 size-5 text-foreground-muted" />
 					Billing
 				</div>
 				<div class="ml-auto flex items-center gap-px">
 					<kbd
-						class="rounded-xs border border-border bg-background-muted shadow-xs inline-flex size-5 items-center justify-center text-xs text-foreground-muted"
+						class="inline-flex size-5 items-center justify-center rounded-xs border border-border bg-background-muted text-xs text-foreground-muted shadow-xs"
 					>
 						⌘
 					</kbd>
 					<kbd
-						class="rounded-xs border border-border bg-background-muted shadow-xs inline-flex size-5 items-center justify-center text-[10px] text-foreground-muted"
+						class="inline-flex size-5 items-center justify-center rounded-xs border border-border bg-background-muted text-[10px] text-foreground-muted shadow-xs"
 					>
 						B
 					</kbd>
 				</div>
 			</DropdownMenu.Item>
 			<DropdownMenu.Item
-				class="rounded-md flex h-10 items-center py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground cursor-pointer"
+				class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
 			>
 				<div class="flex items-center">
-					<GearSix class="text-foreground-muted mr-2 size-5" />
+					<GearSix class="mr-2 size-5 text-foreground-muted" />
 					Settings
 				</div>
 				<div class="ml-auto flex items-center gap-px">
 					<kbd
-						class="rounded-xs border border-border bg-background-muted shadow-xs inline-flex size-5 items-center justify-center text-xs text-foreground-muted"
+						class="inline-flex size-5 items-center justify-center rounded-xs border border-border bg-background-muted text-xs text-foreground-muted shadow-xs"
 					>
 						⌘
 					</kbd>
 					<kbd
-						class="rounded-xs border border-border bg-background-muted shadow-xs inline-flex size-5 items-center justify-center text-[10px] text-foreground-muted"
+						class="inline-flex size-5 items-center justify-center rounded-xs border border-border bg-background-muted text-[10px] text-foreground-muted shadow-xs"
 					>
 						S
 					</kbd>
 				</div>
 			</DropdownMenu.Item>
 			<DropdownMenu.Item
-				class="rounded-md text-destructive flex h-10 items-center py-3 pr-1.5 pl-3 text-sm font-medium select-none focus-visible:outline-none data-highlighted:bg-destructive-background data-highlighted:text-destructive-foreground cursor-pointer"
+				class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-destructive select-none focus-visible:outline-none data-highlighted:bg-destructive-background data-highlighted:text-destructive-foreground"
 			>
 				<form method="post" action="/auth?/signOut" use:enhance class="w-full">
-					<button type="submit" class="flex w-full cursor-pointer items-center text-left font-inherit">
+					<button
+						type="submit"
+						class="font-inherit flex w-full cursor-pointer items-center text-left"
+					>
 						<SignOutIcon class="mr-2 size-5" />
 						Logout
 					</button>

@@ -1,911 +1,1594 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IdeaShare — Idea Detail</title>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --yellow: #F5C518;
-    --yellow-light: #FFF8DC;
-    --yellow-mid: #FFE066;
-    --yellow-dark: #C49A00;
-    --black: #111111;
-    --black-soft: #222222;
-    --gray-dark: #444444;
-    --gray-mid: #888888;
-    --gray-light: #DDDDDD;
-    --gray-faint: #F5F5F2;
-    --white: #FFFFFF;
-    --font-display: 'Bricolage Grotesque', sans-serif;
-    --font-body: 'DM Sans', sans-serif;
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 16px;
-    --radius-pill: 999px;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: var(--font-body);
-    background: var(--gray-faint);
-    color: var(--black);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  /* ── NAVBAR ── */
-  .navbar {
-    background: var(--white);
-    border-bottom: 1px solid var(--gray-light);
-    height: 54px;
-    display: flex;
-    align-items: center;
-    padding: 0 32px;
-    gap: 16px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-
-  .logo-icon {
-    width: 30px; height: 30px;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  .logo-text {
-    font-family: var(--font-display);
-    font-size: 16px; font-weight: 600;
-    color: var(--black); letter-spacing: -0.3px;
-  }
-
-  .logo-text span { color: var(--yellow-dark); }
-
-  .nav-back {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 13px; color: var(--gray-mid);
-    cursor: pointer; border: none; background: transparent;
-    font-family: var(--font-body);
-    transition: color 0.15s;
-  }
-  .nav-back:hover { color: var(--black); }
-  .nav-back svg { width: 14px; height: 14px; }
-
-  .nav-right {
-    margin-left: auto; display: flex; align-items: center; gap: 10px;
-  }
-
-  .btn-ghost {
-    padding: 6px 14px; border: 1px solid var(--gray-light);
-    border-radius: var(--radius-pill); background: transparent;
-    font-family: var(--font-body); font-size: 13px; font-weight: 500;
-    color: var(--gray-dark); cursor: pointer;
-    transition: border-color 0.15s, color 0.15s;
-  }
-  .btn-ghost:hover { border-color: var(--black); color: var(--black); }
-
-  .btn-primary {
-    padding: 6px 16px; border: none;
-    border-radius: var(--radius-pill); background: var(--black);
-    font-family: var(--font-body); font-size: 13px; font-weight: 500;
-    color: var(--white); cursor: pointer;
-    display: flex; align-items: center; gap: 6px;
-  }
-
-  .plus-dot {
-    width: 15px; height: 15px; background: var(--yellow);
-    border-radius: 50%; display: flex; align-items: center;
-    justify-content: center; font-size: 13px; color: var(--black); line-height: 1;
-  }
-
-  /* ── LAYOUT ── */
-  .layout {
-    max-width: 1000px; margin: 0 auto;
-    padding: 28px 24px;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 240px;
-    gap: 24px;
-    align-items: start;
-  }
-
-  /* ── MAIN COLUMN ── */
-  .main { display: flex; flex-direction: column; gap: 16px; }
-
-  /* ── IDEA HEADER CARD ── */
-  .idea-header {
-    background: var(--white);
-    border: 1px solid var(--gray-light);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-
-  .idea-hero {
-    background: var(--yellow);
-    padding: 28px 28px 24px;
-    position: relative;
-  }
-
-  .idea-hero-meta {
-    display: flex; align-items: center; gap: 8px;
-    margin-bottom: 14px;
-  }
-
-  .status-pill {
-    padding: 3px 10px; border-radius: var(--radius-pill);
-    font-size: 11px; font-weight: 600;
-    background: var(--black); color: var(--yellow);
-    letter-spacing: 0.03em;
-  }
-
-  .hero-tag {
-    padding: 3px 10px; border-radius: var(--radius-pill);
-    font-size: 11px; font-weight: 500;
-    background: rgba(0,0,0,0.1); color: var(--black);
-  }
-
-  .idea-title {
-    font-family: var(--font-display);
-    font-size: 24px; font-weight: 700;
-    color: var(--black); line-height: 1.3;
-    letter-spacing: -0.4px;
-    max-width: 560px;
-  }
-
-  .idea-body {
-    padding: 20px 28px;
-  }
-
-  .idea-desc {
-    font-size: 14.5px; color: var(--gray-dark);
-    line-height: 1.75; margin-bottom: 20px;
-  }
-
-  .idea-questions {
-    display: flex; flex-direction: column; gap: 12px;
-    margin-bottom: 20px;
-  }
-
-  .q-block {
-    background: var(--gray-faint);
-    border-radius: var(--radius-md);
-    padding: 12px 16px;
-  }
-
-  .q-label {
-    font-size: 11px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.07em;
-    color: var(--gray-mid); margin-bottom: 5px;
-  }
-
-  .q-answer {
-    font-size: 13.5px; color: var(--black); line-height: 1.6;
-  }
-
-  .idea-footer {
-    display: flex; align-items: center; gap: 12px;
-    padding-top: 16px; border-top: 1px solid var(--gray-light);
-  }
-
-  .author-row {
-    display: flex; align-items: center; gap: 8px;
-  }
-
-  .author-av {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: var(--black); color: var(--yellow);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 600;
-  }
-
-  .author-name { font-size: 13px; font-weight: 500; color: var(--black); }
-  .author-loc { font-size: 12px; color: var(--gray-mid); }
-
-  .posted-time {
-    margin-left: auto; font-size: 12px; color: var(--gray-mid);
-  }
-
-  /* ── ACTION BAR ── */
-  .action-bar {
-    background: var(--white);
-    border: 1px solid var(--gray-light);
-    border-radius: var(--radius-lg);
-    padding: 14px 20px;
-    display: flex; align-items: center; gap: 10px;
-  }
-
-  .spark-big {
-    display: flex; align-items: center; gap: 8px;
-    padding: 8px 18px;
-    border: 1.5px solid var(--yellow);
-    border-radius: var(--radius-pill);
-    background: var(--yellow-light);
-    cursor: pointer;
-    font-family: var(--font-body);
-    font-weight: 600; font-size: 14px;
-    color: var(--black);
-    transition: background 0.15s;
-  }
-
-  .spark-big:hover { background: var(--yellow); }
-  .spark-big.sparked { background: var(--yellow); border-color: var(--yellow-dark); }
-  .spark-big svg { width: 16px; height: 16px; }
-
-  .spark-count-big {
-    font-size: 15px; font-weight: 700; color: var(--black);
-    padding: 0 4px;
-  }
-
-  .action-divider {
-    width: 1px; height: 28px;
-    background: var(--gray-light); margin: 0 4px;
-  }
-
-  .action-btn {
-    display: flex; align-items: center; gap: 7px;
-    padding: 8px 16px;
-    border: 1px solid var(--gray-light);
-    border-radius: var(--radius-pill);
-    background: transparent; cursor: pointer;
-    font-family: var(--font-body); font-size: 13px;
-    font-weight: 500; color: var(--gray-dark);
-    transition: border-color 0.15s, color 0.15s, background 0.15s;
-  }
-
-  .action-btn:hover { border-color: var(--black); color: var(--black); }
-  .action-btn svg { width: 14px; height: 14px; }
-
-  .build-btn {
-    margin-left: auto;
-    display: flex; align-items: center; gap: 7px;
-    padding: 8px 20px;
-    border: none;
-    border-radius: var(--radius-pill);
-    background: var(--black); cursor: pointer;
-    font-family: var(--font-body); font-size: 13px;
-    font-weight: 600; color: var(--white);
-    transition: opacity 0.15s;
-  }
-
-  .build-btn:hover { opacity: 0.85; }
-  .build-btn svg { width: 14px; height: 14px; }
-
-  /* ── REFINEMENTS ── */
-  .section-title {
-    font-family: var(--font-display);
-    font-size: 16px; font-weight: 600;
-    color: var(--black); margin-bottom: 2px;
-  }
-
-  .section-sub {
-    font-size: 12px; color: var(--gray-mid); margin-bottom: 14px;
-  }
-
-  .refinement-card {
-    background: var(--white);
-    border: 1px solid var(--gray-light);
-    border-radius: var(--radius-lg);
-    padding: 16px 18px;
-    transition: border-color 0.15s;
-  }
-
-  .refinement-card:hover { border-color: var(--yellow); }
-
-  .ref-header {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
-  }
-
-  .ref-av {
-    width: 30px; height: 30px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 600; flex-shrink: 0;
-  }
-
-  .ref-av-a { background: var(--yellow-light); color: var(--yellow-dark); }
-  .ref-av-b { background: #EEF2FF; color: #3730A3; }
-  .ref-av-c { background: #ECFDF5; color: #065F46; }
-
-  .ref-name { font-size: 13px; font-weight: 500; color: var(--black); }
-  .ref-role {
-    font-size: 11px; color: var(--gray-mid);
-    background: var(--gray-faint); border: 1px solid var(--gray-light);
-    padding: 2px 7px; border-radius: var(--radius-pill);
-  }
-  .ref-time { margin-left: auto; font-size: 12px; color: var(--gray-mid); }
-
-  .ref-type {
-    display: inline-flex; align-items: center; gap: 5px;
-    font-size: 11px; font-weight: 600;
-    padding: 2px 8px; border-radius: var(--radius-pill);
-    margin-bottom: 7px;
-  }
-
-  .ref-type-build { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
-  .ref-type-concern { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
-  .ref-type-fork { background: #EEF2FF; color: #3730A3; border: 1px solid #C7D2FE; }
-
-  .ref-text {
-    font-size: 13.5px; color: var(--gray-dark); line-height: 1.65;
-    margin-bottom: 10px;
-  }
-
-  .ref-footer {
-    display: flex; align-items: center; gap: 10px;
-  }
-
-  .ref-upvote {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 12px; color: var(--gray-mid);
-    cursor: pointer; border: none; background: transparent;
-    font-family: var(--font-body);
-    padding: 4px 8px; border-radius: var(--radius-sm);
-    transition: background 0.1s, color 0.1s;
-  }
-  .ref-upvote:hover { background: var(--yellow-light); color: var(--black); }
-  .ref-upvote svg { width: 12px; height: 12px; }
-
-  .ref-reply {
-    font-size: 12px; color: var(--gray-mid);
-    cursor: pointer; border: none; background: transparent;
-    font-family: var(--font-body);
-    padding: 4px 8px; border-radius: var(--radius-sm);
-    transition: color 0.1s;
-  }
-  .ref-reply:hover { color: var(--black); }
-
-  /* ── FORK CARD ── */
-  .fork-card {
-    background: #EEF2FF;
-    border: 1px solid #C7D2FE;
-    border-radius: var(--radius-lg);
-    padding: 16px 18px;
-  }
-
-  .fork-label {
-    font-size: 11px; font-weight: 600;
-    color: #3730A3; letter-spacing: 0.05em;
-    text-transform: uppercase; margin-bottom: 8px;
-    display: flex; align-items: center; gap: 6px;
-  }
-
-  .fork-title {
-    font-family: var(--font-display);
-    font-size: 14px; font-weight: 600;
-    color: #1E1B4B; line-height: 1.4; margin-bottom: 6px;
-  }
-
-  .fork-desc {
-    font-size: 13px; color: #3730A3; line-height: 1.6;
-  }
-
-  /* ── ADD REFINEMENT ── */
-  .add-refinement {
-    background: var(--white);
-    border: 1px solid var(--gray-light);
-    border-radius: var(--radius-lg);
-    padding: 16px 18px;
-  }
-
-  .ref-type-picker {
-    display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap;
-  }
-
-  .type-chip {
-    padding: 5px 12px; border-radius: var(--radius-pill);
-    border: 1px solid var(--gray-light);
-    background: transparent; font-family: var(--font-body);
-    font-size: 12px; font-weight: 500; color: var(--gray-dark);
-    cursor: pointer; transition: all 0.15s;
-  }
-
-  .type-chip.active {
-    background: var(--yellow); border-color: var(--yellow-dark);
-    color: var(--black);
-  }
-
-  .ref-textarea {
-    width: 100%; min-height: 80px;
-    border: 1px solid var(--gray-light); border-radius: var(--radius-md);
-    padding: 12px 14px; font-family: var(--font-body);
-    font-size: 13.5px; color: var(--black);
-    background: var(--gray-faint); resize: vertical;
-    outline: none; transition: border-color 0.15s;
-    margin-bottom: 10px;
-  }
-
-  .ref-textarea:focus { border-color: var(--yellow); background: var(--white); }
-  .ref-textarea::placeholder { color: var(--gray-mid); }
-
-  .ref-submit {
-    padding: 8px 20px; border: none;
-    border-radius: var(--radius-pill); background: var(--black);
-    font-family: var(--font-body); font-size: 13px; font-weight: 500;
-    color: var(--white); cursor: pointer;
-  }
-
-  /* ── RIGHT SIDEBAR ── */
-  .sidebar { display: flex; flex-direction: column; gap: 14px; }
-
-  .stat-card {
-    background: var(--white);
-    border: 1px solid var(--gray-light);
-    border-radius: var(--radius-lg);
-    padding: 16px;
-  }
-
-  .stat-title {
-    font-size: 11px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.07em;
-    color: var(--gray-mid); margin-bottom: 14px;
-  }
-
-  .stat-row {
-    display: flex; align-items: center;
-    justify-content: space-between;
-    padding: 6px 0; border-bottom: 1px solid var(--gray-faint);
-    font-size: 13px;
-  }
-
-  .stat-row:last-child { border-bottom: none; }
-  .stat-label { color: var(--gray-mid); }
-  .stat-val { font-weight: 600; color: var(--black); }
-  .stat-val.yellow { color: var(--yellow-dark); }
-
-  .builders-card {
-    background: var(--white);
-    border: 1px solid var(--gray-light);
-    border-radius: var(--radius-lg);
-    padding: 16px;
-  }
-
-  .builder-row {
-    display: flex; align-items: center; gap: 10px;
-    padding: 7px 0; border-bottom: 1px solid var(--gray-faint);
-  }
-
-  .builder-row:last-child { border-bottom: none; }
-
-  .builder-av {
-    width: 28px; height: 28px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 600; flex-shrink: 0;
-  }
-
-  .bav-a { background: var(--yellow-light); color: var(--yellow-dark); }
-  .bav-b { background: #ECFDF5; color: #065F46; }
-  .bav-c { background: #EEF2FF; color: #3730A3; }
-  .bav-d { background: #FEF3C7; color: #92400E; }
-
-  .builder-info { flex: 1; }
-  .builder-name { font-size: 13px; font-weight: 500; color: var(--black); }
-  .builder-skill { font-size: 11px; color: var(--gray-mid); }
-
-  .builder-badge {
-    font-size: 10px; padding: 2px 7px;
-    border-radius: var(--radius-pill);
-    background: var(--yellow-light); color: var(--yellow-dark);
-    border: 1px solid var(--yellow-mid);
-    font-weight: 500; white-space: nowrap;
-  }
-
-  .similar-card {
-    background: var(--black);
-    border-radius: var(--radius-lg);
-    padding: 16px;
-  }
-
-  .similar-title {
-    font-size: 11px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.07em;
-    color: var(--yellow); margin-bottom: 12px;
-  }
-
-  .similar-item {
-    padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
-    cursor: pointer;
-  }
-
-  .similar-item:last-child { border-bottom: none; }
-
-  .similar-item-title {
-    font-size: 12.5px; color: var(--white);
-    line-height: 1.4; margin-bottom: 4px;
-    font-weight: 500;
-  }
-
-  .similar-item-title:hover { color: var(--yellow); }
-
-  .similar-sparks { font-size: 11px; color: var(--gray-mid); }
-  .similar-sparks span { color: var(--yellow); font-weight: 500; }
-</style>
-</head>
-<body>
-
-<!-- NAVBAR -->
-<nav class="navbar">
-  <a class="logo" href="#">
-    <div class="logo-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="30" height="30">
-        <path d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z" fill="#F5C518"/>
-        <ellipse cx="38" cy="26" rx="7" ry="10" fill="#FFF8DC" opacity="0.7" transform="rotate(-20 38 26)"/>
-        <rect x="39" y="83" width="22" height="5" rx="2.5" fill="#C49A00"/>
-        <rect x="40.5" y="90" width="19" height="5" rx="2.5" fill="#C49A00" opacity="0.7"/>
-        <rect x="43" y="97" width="14" height="4" rx="2" fill="#C49A00" opacity="0.45"/>
-        <path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="#111111"/>
-      </svg>
-    </div>
-    <span class="logo-text">Idea<span>Share</span></span>
-  </a>
-
-  <button class="nav-back">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    Back to feed
-  </button>
-
-  <div class="nav-right">
-    <button class="btn-ghost">Sign in</button>
-    <button class="btn-primary"><div class="plus-dot">+</div> Post idea</button>
-  </div>
-</nav>
-
-<!-- LAYOUT -->
-<div class="layout">
-
-  <!-- MAIN -->
-  <div class="main">
-
-    <!-- Idea header -->
-    <div class="idea-header">
-      <div class="idea-hero">
-        <div class="idea-hero-meta">
-          <span class="status-pill">⚡ Being refined</span>
-          <span class="hero-tag">#education</span>
-          <span class="hero-tag">#credentials</span>
-        </div>
-        <h1 class="idea-title">A universal exam system independent of any university — certify your skills, study anywhere</h1>
-      </div>
-      <div class="idea-body">
-        <p class="idea-desc">What if you could study from YouTube, books, MOOCs, or anywhere you want — and just show up to a standardised exam to get certified? No enrollment, no tuition fees, no geographic restriction. Your knowledge is what gets tested, not where you sat in a classroom.</p>
-
-        <div class="idea-questions">
-          <div class="q-block">
-            <div class="q-label">Problem it solves</div>
-            <div class="q-answer">University degrees are expensive and location-dependent, but skills are what actually matter to employers. Millions of people in developing countries have the ability but not the access.</div>
-          </div>
-          <div class="q-block">
-            <div class="q-label">Who would benefit</div>
-            <div class="q-answer">Students in developing countries, working adults who want to upskill, people who learn better independently, and employers who want to hire based on demonstrated ability.</div>
-          </div>
-        </div>
-
-        <div class="idea-footer">
-          <div class="author-row">
-            <div class="author-av">RK</div>
-            <div>
-              <div class="author-name">Rafiq Karim</div>
-              <div class="author-loc">Dhaka, Bangladesh</div>
-            </div>
-          </div>
-          <div class="posted-time">Posted 3 days ago</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Action bar -->
-    <div class="action-bar">
-      <button class="spark-big sparked">
-        <svg viewBox="0 0 24 24" fill="#111"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        Sparked
-      </button>
-      <div class="spark-count-big">847</div>
-
-      <div class="action-divider"></div>
-
-      <button class="action-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-        24 refinements
-      </button>
-
-      <button class="action-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        Share
-      </button>
-
-      <button class="action-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Fork idea
-      </button>
-
-      <button class="build-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
-        I want to build this
-      </button>
-    </div>
-
-    <!-- Refinements section -->
-    <div>
-      <div class="section-title">Refinements</div>
-      <div class="section-sub">24 people have added their thoughts — sorted by most helpful</div>
-    </div>
-
-    <!-- Fork card -->
-    <div class="fork-card">
-      <div class="fork-label">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Forked idea
-      </div>
-      <div class="fork-title">What if it was employer-run instead of government-run? Companies set the exam standards for their own industries.</div>
-      <div class="fork-desc">Removes the political barrier of getting governments to agree. Companies like Google or Siemens could certify skills directly — more trusted by hiring managers anyway.</div>
-    </div>
-
-    <!-- Refinement 1 -->
-    <div class="refinement-card">
-      <div class="ref-header">
-        <div class="ref-av ref-av-b">SM</div>
-        <div>
-          <div class="ref-name">Sara Müller</div>
-        </div>
-        <span class="ref-role">Works in education</span>
-        <span class="ref-time">2 days ago</span>
-      </div>
-      <div class="ref-type ref-type-concern">⚠ Potential obstacle</div>
-      <p class="ref-text">The biggest challenge is exam integrity — how do you prevent cheating when anyone can take it anywhere? The existing standardised tests like IELTS solve this with proctored centres. You'd need a global network of trusted testing locations, which is expensive to build.</p>
-      <div class="ref-footer">
-        <button class="ref-upvote">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/></svg>
-          38 helpful
-        </button>
-        <button class="ref-reply">Reply</button>
-      </div>
-    </div>
-
-    <!-- Refinement 2 -->
-    <div class="refinement-card">
-      <div class="ref-header">
-        <div class="ref-av ref-av-c">TA</div>
-        <div>
-          <div class="ref-name">Tolu Adeyemi</div>
-        </div>
-        <span class="ref-role">Software developer</span>
-        <span class="ref-time">2 days ago</span>
-      </div>
-      <div class="ref-type ref-type-build">✦ Builds on idea</div>
-      <p class="ref-text">This already partially exists — CompTIA, AWS certifications, and CFA all work this way. The gap is that they're industry-specific and not unified. What if there was a single credentialing body that issued a "passport" combining multiple such certifications into one verified profile?</p>
-      <div class="ref-footer">
-        <button class="ref-upvote">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/></svg>
-          61 helpful
-        </button>
-        <button class="ref-reply">Reply</button>
-      </div>
-    </div>
-
-    <!-- Refinement 3 -->
-    <div class="refinement-card">
-      <div class="ref-header">
-        <div class="ref-av ref-av-a">NI</div>
-        <div>
-          <div class="ref-name">Nadia Islam</div>
-        </div>
-        <span class="ref-role">Student</span>
-        <span class="ref-time">1 day ago</span>
-      </div>
-      <div class="ref-type ref-type-build">✦ Builds on idea</div>
-      <p class="ref-text">In Bangladesh this would be transformational. Internet access is widespread but quality universities are only in Dhaka. If a student in Sylhet could study online and sit an exam locally to get a credential recognised by employers, it would change everything for rural students.</p>
-      <div class="ref-footer">
-        <button class="ref-upvote">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/></svg>
-          44 helpful
-        </button>
-        <button class="ref-reply">Reply</button>
-      </div>
-    </div>
-
-    <!-- Add refinement -->
-    <div class="add-refinement">
-      <div class="section-title" style="margin-bottom:12px;">Add your refinement</div>
-      <div class="ref-type-picker">
-        <button class="type-chip active">✦ Builds on idea</button>
-        <button class="type-chip">⚠ Potential obstacle</button>
-        <button class="type-chip">↗ Fork idea</button>
-        <button class="type-chip">? Question</button>
-      </div>
-      <textarea class="ref-textarea" placeholder="Share how this idea could be improved, a challenge you see, or a real-world example..."></textarea>
-      <button class="ref-submit">Post refinement</button>
-    </div>
-
-  </div>
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-
-    <div class="stat-card">
-      <div class="stat-title">Idea stats</div>
-      <div class="stat-row"><span class="stat-label">Sparks</span><span class="stat-val yellow">847 ⚡</span></div>
-      <div class="stat-row"><span class="stat-label">Refinements</span><span class="stat-val">24</span></div>
-      <div class="stat-row"><span class="stat-label">Forks</span><span class="stat-val">6</span></div>
-      <div class="stat-row"><span class="stat-label">Builders</span><span class="stat-val">12</span></div>
-      <div class="stat-row"><span class="stat-label">Views</span><span class="stat-val">4.2k</span></div>
-      <div class="stat-row"><span class="stat-label">Status</span><span class="stat-val">Being refined</span></div>
-    </div>
-
-    <div class="builders-card">
-      <div class="stat-title">Want to build this</div>
-      <div class="builder-row">
-        <div class="builder-av bav-a">TK</div>
-        <div class="builder-info">
-          <div class="builder-name">Tariq Khan</div>
-          <div class="builder-skill">Full-stack dev</div>
-        </div>
-        <span class="builder-badge">Lead</span>
-      </div>
-      <div class="builder-row">
-        <div class="builder-av bav-b">LM</div>
-        <div class="builder-info">
-          <div class="builder-name">Lena Moser</div>
-          <div class="builder-skill">EdTech designer</div>
-        </div>
-      </div>
-      <div class="builder-row">
-        <div class="builder-av bav-c">PO</div>
-        <div class="builder-info">
-          <div class="builder-name">Paulo Oliveira</div>
-          <div class="builder-skill">Policy researcher</div>
-        </div>
-      </div>
-      <div class="builder-row">
-        <div class="builder-av bav-d">AJ</div>
-        <div class="builder-info">
-          <div class="builder-name">Aisha Jallow</div>
-          <div class="builder-skill">Backend dev</div>
-        </div>
-      </div>
-      <div style="margin-top:12px;">
-        <button style="width:100%; padding:8px; border:1.5px dashed #DDD; border-radius:10px; background:transparent; font-family:'DM Sans',sans-serif; font-size:13px; color:#888; cursor:pointer;">+ Join as builder</button>
-      </div>
-    </div>
-
-    <div class="similar-card">
-      <div class="similar-title">Similar ideas</div>
-      <div class="similar-item">
-        <div class="similar-item-title">Build your own university major from courses at different institutions</div>
-        <div class="similar-sparks"><span>389 ⚡</span> · 2 builds</div>
-      </div>
-      <div class="similar-item">
-        <div class="similar-item-title">A global skills passport replacing traditional CVs</div>
-        <div class="similar-sparks"><span>271 ⚡</span> · 4 builds</div>
-      </div>
-      <div class="similar-item">
-        <div class="similar-item-title">Employer-run certification replacing university degrees</div>
-        <div class="similar-sparks"><span>198 ⚡</span> · 1 build</div>
-      </div>
-    </div>
-
-  </aside>
-</div>
-
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>IdeaShare — Idea Detail</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--yellow: #f5c518;
+				--yellow-light: #fff8dc;
+				--yellow-mid: #ffe066;
+				--yellow-dark: #c49a00;
+				--black: #111111;
+				--black-soft: #222222;
+				--gray-dark: #444444;
+				--gray-mid: #888888;
+				--gray-light: #dddddd;
+				--gray-faint: #f5f5f2;
+				--white: #ffffff;
+				--font-display: 'Bricolage Grotesque', sans-serif;
+				--font-body: 'DM Sans', sans-serif;
+				--radius-sm: 6px;
+				--radius-md: 10px;
+				--radius-lg: 16px;
+				--radius-pill: 999px;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				font-family: var(--font-body);
+				background: var(--gray-faint);
+				color: var(--black);
+				font-size: 14px;
+				line-height: 1.6;
+			}
+
+			/* ── NAVBAR ── */
+			.navbar {
+				background: var(--white);
+				border-bottom: 1px solid var(--gray-light);
+				height: 54px;
+				display: flex;
+				align-items: center;
+				padding: 0 32px;
+				gap: 16px;
+				position: sticky;
+				top: 0;
+				z-index: 100;
+			}
+
+			.logo {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				text-decoration: none;
+			}
+
+			.logo-icon {
+				width: 30px;
+				height: 30px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.logo-text {
+				font-family: var(--font-display);
+				font-size: 16px;
+				font-weight: 600;
+				color: var(--black);
+				letter-spacing: -0.3px;
+			}
+
+			.logo-text span {
+				color: var(--yellow-dark);
+			}
+
+			.nav-back {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				font-size: 13px;
+				color: var(--gray-mid);
+				cursor: pointer;
+				border: none;
+				background: transparent;
+				font-family: var(--font-body);
+				transition: color 0.15s;
+			}
+			.nav-back:hover {
+				color: var(--black);
+			}
+			.nav-back svg {
+				width: 14px;
+				height: 14px;
+			}
+
+			.nav-right {
+				margin-left: auto;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+			.btn-ghost {
+				padding: 6px 14px;
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-pill);
+				background: transparent;
+				font-family: var(--font-body);
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--gray-dark);
+				cursor: pointer;
+				transition:
+					border-color 0.15s,
+					color 0.15s;
+			}
+			.btn-ghost:hover {
+				border-color: var(--black);
+				color: var(--black);
+			}
+
+			.btn-primary {
+				padding: 6px 16px;
+				border: none;
+				border-radius: var(--radius-pill);
+				background: var(--black);
+				font-family: var(--font-body);
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--white);
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+			}
+
+			.plus-dot {
+				width: 15px;
+				height: 15px;
+				background: var(--yellow);
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 13px;
+				color: var(--black);
+				line-height: 1;
+			}
+
+			/* ── LAYOUT ── */
+			.layout {
+				max-width: 1000px;
+				margin: 0 auto;
+				padding: 28px 24px;
+				display: grid;
+				grid-template-columns: minmax(0, 1fr) 240px;
+				gap: 24px;
+				align-items: start;
+			}
+
+			/* ── MAIN COLUMN ── */
+			.main {
+				display: flex;
+				flex-direction: column;
+				gap: 16px;
+			}
+
+			/* ── IDEA HEADER CARD ── */
+			.idea-header {
+				background: var(--white);
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-lg);
+				overflow: hidden;
+			}
+
+			.idea-hero {
+				background: var(--yellow);
+				padding: 28px 28px 24px;
+				position: relative;
+			}
+
+			.idea-hero-meta {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				margin-bottom: 14px;
+			}
+
+			.status-pill {
+				padding: 3px 10px;
+				border-radius: var(--radius-pill);
+				font-size: 11px;
+				font-weight: 600;
+				background: var(--black);
+				color: var(--yellow);
+				letter-spacing: 0.03em;
+			}
+
+			.hero-tag {
+				padding: 3px 10px;
+				border-radius: var(--radius-pill);
+				font-size: 11px;
+				font-weight: 500;
+				background: rgba(0, 0, 0, 0.1);
+				color: var(--black);
+			}
+
+			.idea-title {
+				font-family: var(--font-display);
+				font-size: 24px;
+				font-weight: 700;
+				color: var(--black);
+				line-height: 1.3;
+				letter-spacing: -0.4px;
+				max-width: 560px;
+			}
+
+			.idea-body {
+				padding: 20px 28px;
+			}
+
+			.idea-desc {
+				font-size: 14.5px;
+				color: var(--gray-dark);
+				line-height: 1.75;
+				margin-bottom: 20px;
+			}
+
+			.idea-questions {
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+				margin-bottom: 20px;
+			}
+
+			.q-block {
+				background: var(--gray-faint);
+				border-radius: var(--radius-md);
+				padding: 12px 16px;
+			}
+
+			.q-label {
+				font-size: 11px;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.07em;
+				color: var(--gray-mid);
+				margin-bottom: 5px;
+			}
+
+			.q-answer {
+				font-size: 13.5px;
+				color: var(--black);
+				line-height: 1.6;
+			}
+
+			.idea-footer {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				padding-top: 16px;
+				border-top: 1px solid var(--gray-light);
+			}
+
+			.author-row {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+
+			.author-av {
+				width: 32px;
+				height: 32px;
+				border-radius: 50%;
+				background: var(--black);
+				color: var(--yellow);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 12px;
+				font-weight: 600;
+			}
+
+			.author-name {
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--black);
+			}
+			.author-loc {
+				font-size: 12px;
+				color: var(--gray-mid);
+			}
+
+			.posted-time {
+				margin-left: auto;
+				font-size: 12px;
+				color: var(--gray-mid);
+			}
+
+			/* ── ACTION BAR ── */
+			.action-bar {
+				background: var(--white);
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-lg);
+				padding: 14px 20px;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+			.spark-big {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				padding: 8px 18px;
+				border: 1.5px solid var(--yellow);
+				border-radius: var(--radius-pill);
+				background: var(--yellow-light);
+				cursor: pointer;
+				font-family: var(--font-body);
+				font-weight: 600;
+				font-size: 14px;
+				color: var(--black);
+				transition: background 0.15s;
+			}
+
+			.spark-big:hover {
+				background: var(--yellow);
+			}
+			.spark-big.sparked {
+				background: var(--yellow);
+				border-color: var(--yellow-dark);
+			}
+			.spark-big svg {
+				width: 16px;
+				height: 16px;
+			}
+
+			.spark-count-big {
+				font-size: 15px;
+				font-weight: 700;
+				color: var(--black);
+				padding: 0 4px;
+			}
+
+			.action-divider {
+				width: 1px;
+				height: 28px;
+				background: var(--gray-light);
+				margin: 0 4px;
+			}
+
+			.action-btn {
+				display: flex;
+				align-items: center;
+				gap: 7px;
+				padding: 8px 16px;
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-pill);
+				background: transparent;
+				cursor: pointer;
+				font-family: var(--font-body);
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--gray-dark);
+				transition:
+					border-color 0.15s,
+					color 0.15s,
+					background 0.15s;
+			}
+
+			.action-btn:hover {
+				border-color: var(--black);
+				color: var(--black);
+			}
+			.action-btn svg {
+				width: 14px;
+				height: 14px;
+			}
+
+			.build-btn {
+				margin-left: auto;
+				display: flex;
+				align-items: center;
+				gap: 7px;
+				padding: 8px 20px;
+				border: none;
+				border-radius: var(--radius-pill);
+				background: var(--black);
+				cursor: pointer;
+				font-family: var(--font-body);
+				font-size: 13px;
+				font-weight: 600;
+				color: var(--white);
+				transition: opacity 0.15s;
+			}
+
+			.build-btn:hover {
+				opacity: 0.85;
+			}
+			.build-btn svg {
+				width: 14px;
+				height: 14px;
+			}
+
+			/* ── REFINEMENTS ── */
+			.section-title {
+				font-family: var(--font-display);
+				font-size: 16px;
+				font-weight: 600;
+				color: var(--black);
+				margin-bottom: 2px;
+			}
+
+			.section-sub {
+				font-size: 12px;
+				color: var(--gray-mid);
+				margin-bottom: 14px;
+			}
+
+			.refinement-card {
+				background: var(--white);
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-lg);
+				padding: 16px 18px;
+				transition: border-color 0.15s;
+			}
+
+			.refinement-card:hover {
+				border-color: var(--yellow);
+			}
+
+			.ref-header {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				margin-bottom: 10px;
+			}
+
+			.ref-av {
+				width: 30px;
+				height: 30px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 11px;
+				font-weight: 600;
+				flex-shrink: 0;
+			}
+
+			.ref-av-a {
+				background: var(--yellow-light);
+				color: var(--yellow-dark);
+			}
+			.ref-av-b {
+				background: #eef2ff;
+				color: #3730a3;
+			}
+			.ref-av-c {
+				background: #ecfdf5;
+				color: #065f46;
+			}
+
+			.ref-name {
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--black);
+			}
+			.ref-role {
+				font-size: 11px;
+				color: var(--gray-mid);
+				background: var(--gray-faint);
+				border: 1px solid var(--gray-light);
+				padding: 2px 7px;
+				border-radius: var(--radius-pill);
+			}
+			.ref-time {
+				margin-left: auto;
+				font-size: 12px;
+				color: var(--gray-mid);
+			}
+
+			.ref-type {
+				display: inline-flex;
+				align-items: center;
+				gap: 5px;
+				font-size: 11px;
+				font-weight: 600;
+				padding: 2px 8px;
+				border-radius: var(--radius-pill);
+				margin-bottom: 7px;
+			}
+
+			.ref-type-build {
+				background: #ecfdf5;
+				color: #065f46;
+				border: 1px solid #a7f3d0;
+			}
+			.ref-type-concern {
+				background: #fef3c7;
+				color: #92400e;
+				border: 1px solid #fde68a;
+			}
+			.ref-type-fork {
+				background: #eef2ff;
+				color: #3730a3;
+				border: 1px solid #c7d2fe;
+			}
+
+			.ref-text {
+				font-size: 13.5px;
+				color: var(--gray-dark);
+				line-height: 1.65;
+				margin-bottom: 10px;
+			}
+
+			.ref-footer {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+			.ref-upvote {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				font-size: 12px;
+				color: var(--gray-mid);
+				cursor: pointer;
+				border: none;
+				background: transparent;
+				font-family: var(--font-body);
+				padding: 4px 8px;
+				border-radius: var(--radius-sm);
+				transition:
+					background 0.1s,
+					color 0.1s;
+			}
+			.ref-upvote:hover {
+				background: var(--yellow-light);
+				color: var(--black);
+			}
+			.ref-upvote svg {
+				width: 12px;
+				height: 12px;
+			}
+
+			.ref-reply {
+				font-size: 12px;
+				color: var(--gray-mid);
+				cursor: pointer;
+				border: none;
+				background: transparent;
+				font-family: var(--font-body);
+				padding: 4px 8px;
+				border-radius: var(--radius-sm);
+				transition: color 0.1s;
+			}
+			.ref-reply:hover {
+				color: var(--black);
+			}
+
+			/* ── FORK CARD ── */
+			.fork-card {
+				background: #eef2ff;
+				border: 1px solid #c7d2fe;
+				border-radius: var(--radius-lg);
+				padding: 16px 18px;
+			}
+
+			.fork-label {
+				font-size: 11px;
+				font-weight: 600;
+				color: #3730a3;
+				letter-spacing: 0.05em;
+				text-transform: uppercase;
+				margin-bottom: 8px;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+			}
+
+			.fork-title {
+				font-family: var(--font-display);
+				font-size: 14px;
+				font-weight: 600;
+				color: #1e1b4b;
+				line-height: 1.4;
+				margin-bottom: 6px;
+			}
+
+			.fork-desc {
+				font-size: 13px;
+				color: #3730a3;
+				line-height: 1.6;
+			}
+
+			/* ── ADD REFINEMENT ── */
+			.add-refinement {
+				background: var(--white);
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-lg);
+				padding: 16px 18px;
+			}
+
+			.ref-type-picker {
+				display: flex;
+				gap: 6px;
+				margin-bottom: 12px;
+				flex-wrap: wrap;
+			}
+
+			.type-chip {
+				padding: 5px 12px;
+				border-radius: var(--radius-pill);
+				border: 1px solid var(--gray-light);
+				background: transparent;
+				font-family: var(--font-body);
+				font-size: 12px;
+				font-weight: 500;
+				color: var(--gray-dark);
+				cursor: pointer;
+				transition: all 0.15s;
+			}
+
+			.type-chip.active {
+				background: var(--yellow);
+				border-color: var(--yellow-dark);
+				color: var(--black);
+			}
+
+			.ref-textarea {
+				width: 100%;
+				min-height: 80px;
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-md);
+				padding: 12px 14px;
+				font-family: var(--font-body);
+				font-size: 13.5px;
+				color: var(--black);
+				background: var(--gray-faint);
+				resize: vertical;
+				outline: none;
+				transition: border-color 0.15s;
+				margin-bottom: 10px;
+			}
+
+			.ref-textarea:focus {
+				border-color: var(--yellow);
+				background: var(--white);
+			}
+			.ref-textarea::placeholder {
+				color: var(--gray-mid);
+			}
+
+			.ref-submit {
+				padding: 8px 20px;
+				border: none;
+				border-radius: var(--radius-pill);
+				background: var(--black);
+				font-family: var(--font-body);
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--white);
+				cursor: pointer;
+			}
+
+			/* ── RIGHT SIDEBAR ── */
+			.sidebar {
+				display: flex;
+				flex-direction: column;
+				gap: 14px;
+			}
+
+			.stat-card {
+				background: var(--white);
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-lg);
+				padding: 16px;
+			}
+
+			.stat-title {
+				font-size: 11px;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.07em;
+				color: var(--gray-mid);
+				margin-bottom: 14px;
+			}
+
+			.stat-row {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 6px 0;
+				border-bottom: 1px solid var(--gray-faint);
+				font-size: 13px;
+			}
+
+			.stat-row:last-child {
+				border-bottom: none;
+			}
+			.stat-label {
+				color: var(--gray-mid);
+			}
+			.stat-val {
+				font-weight: 600;
+				color: var(--black);
+			}
+			.stat-val.yellow {
+				color: var(--yellow-dark);
+			}
+
+			.builders-card {
+				background: var(--white);
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-lg);
+				padding: 16px;
+			}
+
+			.builder-row {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				padding: 7px 0;
+				border-bottom: 1px solid var(--gray-faint);
+			}
+
+			.builder-row:last-child {
+				border-bottom: none;
+			}
+
+			.builder-av {
+				width: 28px;
+				height: 28px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 10px;
+				font-weight: 600;
+				flex-shrink: 0;
+			}
+
+			.bav-a {
+				background: var(--yellow-light);
+				color: var(--yellow-dark);
+			}
+			.bav-b {
+				background: #ecfdf5;
+				color: #065f46;
+			}
+			.bav-c {
+				background: #eef2ff;
+				color: #3730a3;
+			}
+			.bav-d {
+				background: #fef3c7;
+				color: #92400e;
+			}
+
+			.builder-info {
+				flex: 1;
+			}
+			.builder-name {
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--black);
+			}
+			.builder-skill {
+				font-size: 11px;
+				color: var(--gray-mid);
+			}
+
+			.builder-badge {
+				font-size: 10px;
+				padding: 2px 7px;
+				border-radius: var(--radius-pill);
+				background: var(--yellow-light);
+				color: var(--yellow-dark);
+				border: 1px solid var(--yellow-mid);
+				font-weight: 500;
+				white-space: nowrap;
+			}
+
+			.similar-card {
+				background: var(--black);
+				border-radius: var(--radius-lg);
+				padding: 16px;
+			}
+
+			.similar-title {
+				font-size: 11px;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.07em;
+				color: var(--yellow);
+				margin-bottom: 12px;
+			}
+
+			.similar-item {
+				padding: 8px 0;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+				cursor: pointer;
+			}
+
+			.similar-item:last-child {
+				border-bottom: none;
+			}
+
+			.similar-item-title {
+				font-size: 12.5px;
+				color: var(--white);
+				line-height: 1.4;
+				margin-bottom: 4px;
+				font-weight: 500;
+			}
+
+			.similar-item-title:hover {
+				color: var(--yellow);
+			}
+
+			.similar-sparks {
+				font-size: 11px;
+				color: var(--gray-mid);
+			}
+			.similar-sparks span {
+				color: var(--yellow);
+				font-weight: 500;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- NAVBAR -->
+		<nav class="navbar">
+			<a class="logo" href="#">
+				<div class="logo-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="30" height="30">
+						<path
+							d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z"
+							fill="#F5C518"
+						/>
+						<ellipse
+							cx="38"
+							cy="26"
+							rx="7"
+							ry="10"
+							fill="#FFF8DC"
+							opacity="0.7"
+							transform="rotate(-20 38 26)"
+						/>
+						<rect x="39" y="83" width="22" height="5" rx="2.5" fill="#C49A00" />
+						<rect x="40.5" y="90" width="19" height="5" rx="2.5" fill="#C49A00" opacity="0.7" />
+						<rect x="43" y="97" width="14" height="4" rx="2" fill="#C49A00" opacity="0.45" />
+						<path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="#111111" />
+					</svg>
+				</div>
+				<span class="logo-text">Idea<span>Share</span></span>
+			</a>
+
+			<button class="nav-back">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<polyline points="15 18 9 12 15 6" />
+				</svg>
+				Back to feed
+			</button>
+
+			<div class="nav-right">
+				<button class="btn-ghost">Sign in</button>
+				<button class="btn-primary">
+					<div class="plus-dot">+</div>
+					Post idea
+				</button>
+			</div>
+		</nav>
+
+		<!-- LAYOUT -->
+		<div class="layout">
+			<!-- MAIN -->
+			<div class="main">
+				<!-- Idea header -->
+				<div class="idea-header">
+					<div class="idea-hero">
+						<div class="idea-hero-meta">
+							<span class="status-pill">⚡ Being refined</span>
+							<span class="hero-tag">#education</span>
+							<span class="hero-tag">#credentials</span>
+						</div>
+						<h1 class="idea-title">
+							A universal exam system independent of any university — certify your skills, study
+							anywhere
+						</h1>
+					</div>
+					<div class="idea-body">
+						<p class="idea-desc">
+							What if you could study from YouTube, books, MOOCs, or anywhere you want — and just
+							show up to a standardised exam to get certified? No enrollment, no tuition fees, no
+							geographic restriction. Your knowledge is what gets tested, not where you sat in a
+							classroom.
+						</p>
+
+						<div class="idea-questions">
+							<div class="q-block">
+								<div class="q-label">Problem it solves</div>
+								<div class="q-answer">
+									University degrees are expensive and location-dependent, but skills are what
+									actually matter to employers. Millions of people in developing countries have the
+									ability but not the access.
+								</div>
+							</div>
+							<div class="q-block">
+								<div class="q-label">Who would benefit</div>
+								<div class="q-answer">
+									Students in developing countries, working adults who want to upskill, people who
+									learn better independently, and employers who want to hire based on demonstrated
+									ability.
+								</div>
+							</div>
+						</div>
+
+						<div class="idea-footer">
+							<div class="author-row">
+								<div class="author-av">RK</div>
+								<div>
+									<div class="author-name">Rafiq Karim</div>
+									<div class="author-loc">Dhaka, Bangladesh</div>
+								</div>
+							</div>
+							<div class="posted-time">Posted 3 days ago</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Action bar -->
+				<div class="action-bar">
+					<button class="spark-big sparked">
+						<svg viewBox="0 0 24 24" fill="#111"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>
+						Sparked
+					</button>
+					<div class="spark-count-big">847</div>
+
+					<div class="action-divider"></div>
+
+					<button class="action-btn">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+						</svg>
+						24 refinements
+					</button>
+
+					<button class="action-btn">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<circle cx="18" cy="5" r="3" />
+							<circle cx="6" cy="12" r="3" />
+							<circle cx="18" cy="19" r="3" />
+							<line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+							<line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+						</svg>
+						Share
+					</button>
+
+					<button class="action-btn">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+							<polyline points="15 3 21 3 21 9" />
+							<line x1="10" y1="14" x2="21" y2="3" />
+						</svg>
+						Fork idea
+					</button>
+
+					<button class="build-btn">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path
+								d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"
+							/>
+						</svg>
+						I want to build this
+					</button>
+				</div>
+
+				<!-- Refinements section -->
+				<div>
+					<div class="section-title">Refinements</div>
+					<div class="section-sub">
+						24 people have added their thoughts — sorted by most helpful
+					</div>
+				</div>
+
+				<!-- Fork card -->
+				<div class="fork-card">
+					<div class="fork-label">
+						<svg
+							width="12"
+							height="12"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2.5"
+						>
+							<path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+							<polyline points="15 3 21 3 21 9" />
+							<line x1="10" y1="14" x2="21" y2="3" />
+						</svg>
+						Forked idea
+					</div>
+					<div class="fork-title">
+						What if it was employer-run instead of government-run? Companies set the exam standards
+						for their own industries.
+					</div>
+					<div class="fork-desc">
+						Removes the political barrier of getting governments to agree. Companies like Google or
+						Siemens could certify skills directly — more trusted by hiring managers anyway.
+					</div>
+				</div>
+
+				<!-- Refinement 1 -->
+				<div class="refinement-card">
+					<div class="ref-header">
+						<div class="ref-av ref-av-b">SM</div>
+						<div>
+							<div class="ref-name">Sara Müller</div>
+						</div>
+						<span class="ref-role">Works in education</span>
+						<span class="ref-time">2 days ago</span>
+					</div>
+					<div class="ref-type ref-type-concern">⚠ Potential obstacle</div>
+					<p class="ref-text">
+						The biggest challenge is exam integrity — how do you prevent cheating when anyone can
+						take it anywhere? The existing standardised tests like IELTS solve this with proctored
+						centres. You'd need a global network of trusted testing locations, which is expensive to
+						build.
+					</p>
+					<div class="ref-footer">
+						<button class="ref-upvote">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path
+									d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"
+								/>
+							</svg>
+							38 helpful
+						</button>
+						<button class="ref-reply">Reply</button>
+					</div>
+				</div>
+
+				<!-- Refinement 2 -->
+				<div class="refinement-card">
+					<div class="ref-header">
+						<div class="ref-av ref-av-c">TA</div>
+						<div>
+							<div class="ref-name">Tolu Adeyemi</div>
+						</div>
+						<span class="ref-role">Software developer</span>
+						<span class="ref-time">2 days ago</span>
+					</div>
+					<div class="ref-type ref-type-build">✦ Builds on idea</div>
+					<p class="ref-text">
+						This already partially exists — CompTIA, AWS certifications, and CFA all work this way.
+						The gap is that they're industry-specific and not unified. What if there was a single
+						credentialing body that issued a "passport" combining multiple such certifications into
+						one verified profile?
+					</p>
+					<div class="ref-footer">
+						<button class="ref-upvote">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path
+									d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"
+								/>
+							</svg>
+							61 helpful
+						</button>
+						<button class="ref-reply">Reply</button>
+					</div>
+				</div>
+
+				<!-- Refinement 3 -->
+				<div class="refinement-card">
+					<div class="ref-header">
+						<div class="ref-av ref-av-a">NI</div>
+						<div>
+							<div class="ref-name">Nadia Islam</div>
+						</div>
+						<span class="ref-role">Student</span>
+						<span class="ref-time">1 day ago</span>
+					</div>
+					<div class="ref-type ref-type-build">✦ Builds on idea</div>
+					<p class="ref-text">
+						In Bangladesh this would be transformational. Internet access is widespread but quality
+						universities are only in Dhaka. If a student in Sylhet could study online and sit an
+						exam locally to get a credential recognised by employers, it would change everything for
+						rural students.
+					</p>
+					<div class="ref-footer">
+						<button class="ref-upvote">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path
+									d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"
+								/>
+							</svg>
+							44 helpful
+						</button>
+						<button class="ref-reply">Reply</button>
+					</div>
+				</div>
+
+				<!-- Add refinement -->
+				<div class="add-refinement">
+					<div class="section-title" style="margin-bottom: 12px">Add your refinement</div>
+					<div class="ref-type-picker">
+						<button class="type-chip active">✦ Builds on idea</button>
+						<button class="type-chip">⚠ Potential obstacle</button>
+						<button class="type-chip">↗ Fork idea</button>
+						<button class="type-chip">? Question</button>
+					</div>
+					<textarea
+						class="ref-textarea"
+						placeholder="Share how this idea could be improved, a challenge you see, or a real-world example..."
+					></textarea>
+					<button class="ref-submit">Post refinement</button>
+				</div>
+			</div>
+
+			<!-- SIDEBAR -->
+			<aside class="sidebar">
+				<div class="stat-card">
+					<div class="stat-title">Idea stats</div>
+					<div class="stat-row">
+						<span class="stat-label">Sparks</span><span class="stat-val yellow">847 ⚡</span>
+					</div>
+					<div class="stat-row">
+						<span class="stat-label">Refinements</span><span class="stat-val">24</span>
+					</div>
+					<div class="stat-row">
+						<span class="stat-label">Forks</span><span class="stat-val">6</span>
+					</div>
+					<div class="stat-row">
+						<span class="stat-label">Builders</span><span class="stat-val">12</span>
+					</div>
+					<div class="stat-row">
+						<span class="stat-label">Views</span><span class="stat-val">4.2k</span>
+					</div>
+					<div class="stat-row">
+						<span class="stat-label">Status</span><span class="stat-val">Being refined</span>
+					</div>
+				</div>
+
+				<div class="builders-card">
+					<div class="stat-title">Want to build this</div>
+					<div class="builder-row">
+						<div class="builder-av bav-a">TK</div>
+						<div class="builder-info">
+							<div class="builder-name">Tariq Khan</div>
+							<div class="builder-skill">Full-stack dev</div>
+						</div>
+						<span class="builder-badge">Lead</span>
+					</div>
+					<div class="builder-row">
+						<div class="builder-av bav-b">LM</div>
+						<div class="builder-info">
+							<div class="builder-name">Lena Moser</div>
+							<div class="builder-skill">EdTech designer</div>
+						</div>
+					</div>
+					<div class="builder-row">
+						<div class="builder-av bav-c">PO</div>
+						<div class="builder-info">
+							<div class="builder-name">Paulo Oliveira</div>
+							<div class="builder-skill">Policy researcher</div>
+						</div>
+					</div>
+					<div class="builder-row">
+						<div class="builder-av bav-d">AJ</div>
+						<div class="builder-info">
+							<div class="builder-name">Aisha Jallow</div>
+							<div class="builder-skill">Backend dev</div>
+						</div>
+					</div>
+					<div style="margin-top: 12px">
+						<button
+							style="
+								width: 100%;
+								padding: 8px;
+								border: 1.5px dashed #ddd;
+								border-radius: 10px;
+								background: transparent;
+								font-family: 'DM Sans', sans-serif;
+								font-size: 13px;
+								color: #888;
+								cursor: pointer;
+							"
+						>
+							+ Join as builder
+						</button>
+					</div>
+				</div>
+
+				<div class="similar-card">
+					<div class="similar-title">Similar ideas</div>
+					<div class="similar-item">
+						<div class="similar-item-title">
+							Build your own university major from courses at different institutions
+						</div>
+						<div class="similar-sparks"><span>389 ⚡</span> · 2 builds</div>
+					</div>
+					<div class="similar-item">
+						<div class="similar-item-title">A global skills passport replacing traditional CVs</div>
+						<div class="similar-sparks"><span>271 ⚡</span> · 4 builds</div>
+					</div>
+					<div class="similar-item">
+						<div class="similar-item-title">
+							Employer-run certification replacing university degrees
+						</div>
+						<div class="similar-sparks"><span>198 ⚡</span> · 1 build</div>
+					</div>
+				</div>
+			</aside>
+		</div>
+	</body>
 </html>
 <style>
-/* ── RESPONSIVE ── */
-@media (max-width: 760px) {
-  .layout { grid-template-columns: 1fr; padding: 14px 12px 80px; gap: 14px; }
-  .sidebar { display: none; }
-  /* Show condensed stats inline */
-  .layout::after {
-    content: '';
-  }
-}
+	/* ── RESPONSIVE ── */
+	@media (max-width: 760px) {
+		.layout {
+			grid-template-columns: 1fr;
+			padding: 14px 12px 80px;
+			gap: 14px;
+		}
+		.sidebar {
+			display: none;
+		}
+		/* Show condensed stats inline */
+		.layout::after {
+			content: '';
+		}
+	}
 
-@media (max-width: 600px) {
-  html, body { overflow-x: hidden; }
+	@media (max-width: 600px) {
+		html,
+		body {
+			overflow-x: hidden;
+		}
 
-  .navbar { padding: 0 14px; height: 52px; }
-  .logo-text { font-size: 14px; }
-  .nav-back span { display: none; }
-  .btn-ghost { display: none; }
-  .btn-primary { padding: 5px 12px; font-size: 12px; }
+		.navbar {
+			padding: 0 14px;
+			height: 52px;
+		}
+		.logo-text {
+			font-size: 14px;
+		}
+		.nav-back span {
+			display: none;
+		}
+		.btn-ghost {
+			display: none;
+		}
+		.btn-primary {
+			padding: 5px 12px;
+			font-size: 12px;
+		}
 
-  .layout { grid-template-columns: 1fr; padding: 12px 12px 80px; gap: 12px; }
-  .sidebar { display: none; }
+		.layout {
+			grid-template-columns: 1fr;
+			padding: 12px 12px 80px;
+			gap: 12px;
+		}
+		.sidebar {
+			display: none;
+		}
 
-  .idea-hero { padding: 18px 16px 14px; }
-  .idea-title { font-size: 18px; }
-  .idea-body { padding: 14px 16px; }
+		.idea-hero {
+			padding: 18px 16px 14px;
+		}
+		.idea-title {
+			font-size: 18px;
+		}
+		.idea-body {
+			padding: 14px 16px;
+		}
 
-  /* Compact mobile stats bar */
-  .mobile-stats {
-    display: flex !important;
-    gap: 0;
-    background: var(--white);
-    border: 1px solid var(--gray-light);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-  .mstat {
-    flex: 1; padding: 10px 0; text-align: center;
-    border-right: 1px solid var(--gray-light);
-  }
-  .mstat:last-child { border-right: none; }
-  .mstat-num { font-size: 15px; font-weight: 700; color: var(--black); }
-  .mstat-num.y { color: var(--yellow-dark); }
-  .mstat-lbl { font-size: 10px; color: var(--gray-mid); margin-top: 2px; }
+		/* Compact mobile stats bar */
+		.mobile-stats {
+			display: flex !important;
+			gap: 0;
+			background: var(--white);
+			border: 1px solid var(--gray-light);
+			border-radius: var(--radius-lg);
+			overflow: hidden;
+		}
+		.mstat {
+			flex: 1;
+			padding: 10px 0;
+			text-align: center;
+			border-right: 1px solid var(--gray-light);
+		}
+		.mstat:last-child {
+			border-right: none;
+		}
+		.mstat-num {
+			font-size: 15px;
+			font-weight: 700;
+			color: var(--black);
+		}
+		.mstat-num.y {
+			color: var(--yellow-dark);
+		}
+		.mstat-lbl {
+			font-size: 10px;
+			color: var(--gray-mid);
+			margin-top: 2px;
+		}
 
-  .action-bar { padding: 10px 12px; gap: 7px; flex-wrap: wrap; overflow-x: auto; }
-  .action-bar::-webkit-scrollbar { display: none; }
-  .spark-big { padding: 7px 14px; font-size: 12px; }
-  .action-btn { padding: 6px 10px; font-size: 11.5px; white-space: nowrap; }
-  .build-btn { width: 100%; justify-content: center; padding: 10px; border-radius: var(--radius-md); margin-top: 4px; }
+		.action-bar {
+			padding: 10px 12px;
+			gap: 7px;
+			flex-wrap: wrap;
+			overflow-x: auto;
+		}
+		.action-bar::-webkit-scrollbar {
+			display: none;
+		}
+		.spark-big {
+			padding: 7px 14px;
+			font-size: 12px;
+		}
+		.action-btn {
+			padding: 6px 10px;
+			font-size: 11.5px;
+			white-space: nowrap;
+		}
+		.build-btn {
+			width: 100%;
+			justify-content: center;
+			padding: 10px;
+			border-radius: var(--radius-md);
+			margin-top: 4px;
+		}
 
-  .refinement-card { padding: 12px 14px; }
-  .ref-time { display: none; }
-  .ref-text { font-size: 13px; }
-  .ref-textarea { font-size: 13px; }
+		.refinement-card {
+			padding: 12px 14px;
+		}
+		.ref-time {
+			display: none;
+		}
+		.ref-text {
+			font-size: 13px;
+		}
+		.ref-textarea {
+			font-size: 13px;
+		}
 
-  /* Bottom nav */
-  .bottom-nav {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: var(--white); border-top: 1px solid var(--gray-light);
-    display: flex; height: 58px; z-index: 200;
-  }
-  .bnav-item {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 3px; cursor: pointer; font-size: 10px;
-    color: var(--gray-mid); border: none;
-    background: transparent; font-family: var(--font-body);
-  }
-  .bnav-item svg { width: 19px; height: 19px; }
-  .bnav-post {
-    width: 42px; height: 42px; border-radius: 50%;
-    background: var(--black); border: none;
-    display: flex; align-items: center; justify-content: center;
-    margin-top: -14px; cursor: pointer;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-  }
-}
+		/* Bottom nav */
+		.bottom-nav {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background: var(--white);
+			border-top: 1px solid var(--gray-light);
+			display: flex;
+			height: 58px;
+			z-index: 200;
+		}
+		.bnav-item {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 3px;
+			cursor: pointer;
+			font-size: 10px;
+			color: var(--gray-mid);
+			border: none;
+			background: transparent;
+			font-family: var(--font-body);
+		}
+		.bnav-item svg {
+			width: 19px;
+			height: 19px;
+		}
+		.bnav-post {
+			width: 42px;
+			height: 42px;
+			border-radius: 50%;
+			background: var(--black);
+			border: none;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-top: -14px;
+			cursor: pointer;
+			box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+		}
+	}
 </style>
 
 <!-- Mobile stats bar (hidden on desktop) -->
 <script>
-if (window.innerWidth <= 600) {
-  document.addEventListener('DOMContentLoaded', () => {
-    const layout = document.querySelector('.layout');
-    const actionBar = document.querySelector('.action-bar');
-    const statsHtml = `<div class="mobile-stats" style="display:none;">
+	if (window.innerWidth <= 600) {
+		document.addEventListener('DOMContentLoaded', () => {
+			const layout = document.querySelector('.layout');
+			const actionBar = document.querySelector('.action-bar');
+			const statsHtml = `<div class="mobile-stats" style="display:none;">
       <div class="mstat"><div class="mstat-num y">847⚡</div><div class="mstat-lbl">Sparks</div></div>
       <div class="mstat"><div class="mstat-num">24</div><div class="mstat-lbl">Refinements</div></div>
       <div class="mstat"><div class="mstat-num">12</div><div class="mstat-lbl">Builders</div></div>
       <div class="mstat"><div class="mstat-num">6</div><div class="mstat-lbl">Forks</div></div>
     </div>`;
-    actionBar.insertAdjacentHTML('afterend', statsHtml);
-    document.querySelector('.mobile-stats').style.display = 'flex';
-  });
-}
+			actionBar.insertAdjacentHTML('afterend', statsHtml);
+			document.querySelector('.mobile-stats').style.display = 'flex';
+		});
+	}
 </script>
 
 <!-- Bottom nav -->
-<div id="bnav" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #DDD; height:58px; z-index:200; flex-direction:row;">
-  <button class="bnav-item" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:#888;border:none;background:transparent;font-family:inherit;">
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Feed
-  </button>
-  <button class="bnav-item" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:#888;border:none;background:transparent;font-family:inherit;">
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Explore
-  </button>
-  <button style="width:42px;height:42px;border-radius:50%;background:#111;border:none;display:flex;align-items:center;justify-content:center;margin-top:-14px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.2);flex-shrink:0;align-self:center;">
-    <div style="width:16px;height:16px;background:#F5C518;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;color:#111;line-height:1;">+</div>
-  </button>
-  <button class="bnav-item" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:#888;border:none;background:transparent;font-family:inherit;">
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Alerts
-  </button>
-  <button class="bnav-item" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:#888;border:none;background:transparent;font-family:inherit;">
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
-  </button>
+<div
+	id="bnav"
+	style="
+		display: none;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: #fff;
+		border-top: 1px solid #ddd;
+		height: 58px;
+		z-index: 200;
+		flex-direction: row;
+	"
+>
+	<button
+		class="bnav-item"
+		style="
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 3px;
+			font-size: 10px;
+			color: #888;
+			border: none;
+			background: transparent;
+			font-family: inherit;
+		"
+	>
+		<svg
+			width="19"
+			height="19"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg
+		>Feed
+	</button>
+	<button
+		class="bnav-item"
+		style="
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 3px;
+			font-size: 10px;
+			color: #888;
+			border: none;
+			background: transparent;
+			font-family: inherit;
+		"
+	>
+		<svg
+			width="19"
+			height="19"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<circle cx="11" cy="11" r="8" />
+			<line x1="21" y1="21" x2="16.65" y2="16.65" /></svg
+		>Explore
+	</button>
+	<button
+		style="
+			width: 42px;
+			height: 42px;
+			border-radius: 50%;
+			background: #111;
+			border: none;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-top: -14px;
+			cursor: pointer;
+			box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+			flex-shrink: 0;
+			align-self: center;
+		"
+	>
+		<div
+			style="
+				width: 16px;
+				height: 16px;
+				background: #f5c518;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 13px;
+				color: #111;
+				line-height: 1;
+			"
+		>
+			+
+		</div>
+	</button>
+	<button
+		class="bnav-item"
+		style="
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 3px;
+			font-size: 10px;
+			color: #888;
+			border: none;
+			background: transparent;
+			font-family: inherit;
+		"
+	>
+		<svg
+			width="19"
+			height="19"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+			<path d="M13.73 21a2 2 0 01-3.46 0" /></svg
+		>Alerts
+	</button>
+	<button
+		class="bnav-item"
+		style="
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 3px;
+			font-size: 10px;
+			color: #888;
+			border: none;
+			background: transparent;
+			font-family: inherit;
+		"
+	>
+		<svg
+			width="19"
+			height="19"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+			<circle cx="12" cy="7" r="4" /></svg
+		>Profile
+	</button>
 </div>
 <script>
-  if(window.innerWidth<=600) document.getElementById('bnav').style.display='flex';
-  window.addEventListener('resize',()=>{ document.getElementById('bnav').style.display=window.innerWidth<=600?'flex':'none'; });
+	if (window.innerWidth <= 600) document.getElementById('bnav').style.display = 'flex';
+	window.addEventListener('resize', () => {
+		document.getElementById('bnav').style.display = window.innerWidth <= 600 ? 'flex' : 'none';
+	});
 </script>

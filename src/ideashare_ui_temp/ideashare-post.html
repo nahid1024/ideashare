@@ -1,404 +1,606 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>IdeaShare — Post an Idea</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							yellow: { DEFAULT: '#F5C518', light: '#FFF8DC', mid: '#FFE066', dark: '#C49A00' },
+							black: { DEFAULT: '#111111' },
+							gray: { dark: '#444444', mid: '#888888', light: '#DDDDDD', faint: '#F5F5F2' }
+						},
+						fontFamily: {
+							display: ["'Bricolage Grotesque'", 'sans-serif'],
+							body: ["'DM Sans'", 'sans-serif']
+						}
+					}
+				}
+			};
+		</script>
+		<style>
+			body {
+				font-family: 'DM Sans', sans-serif;
+			}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IdeaShare — Post an Idea</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap"
-    rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config = { theme: { extend: { colors: { yellow: { DEFAULT: '#F5C518', light: '#FFF8DC', mid: '#FFE066', dark: '#C49A00' }, black: { DEFAULT: '#111111' }, gray: { dark: '#444444', mid: '#888888', light: '#DDDDDD', faint: '#F5F5F2' } }, fontFamily: { display: ["'Bricolage Grotesque'", "sans-serif"], body: ["'DM Sans'", "sans-serif"] } } } }</script>
-  <style>
-    body {
-      font-family: 'DM Sans', sans-serif;
-    }
+			.field-block.focused {
+				background: #fefdf7;
+			}
 
-    .field-block.focused {
-      background: #FEFDF7;
-    }
+			.field-block.focused .field-accent {
+				background: #f5c518;
+			}
 
-    .field-block.focused .field-accent {
-      background: #F5C518;
-    }
+			@media (max-width: 760px) {
+				.preview-col {
+					display: none !important;
+				}
 
-    @media(max-width:760px) {
-      .preview-col {
-        display: none !important;
-      }
+				.post-layout {
+					grid-template-columns: 1fr !important;
+					padding: 20px 16px 80px !important;
+				}
+			}
 
-      .post-layout {
-        grid-template-columns: 1fr !important;
-        padding: 20px 16px 80px !important;
-      }
-    }
+			@media (max-width: 600px) {
+				.nav-back-post span {
+					font-size: 12px;
+				}
 
-    @media(max-width:600px) {
-      .nav-back-post span {
-        font-size: 12px;
-      }
+				.post-layout {
+					padding: 14px 12px 80px !important;
+				}
+			}
+		</style>
+	</head>
 
-      .post-layout {
-        padding: 14px 12px 80px !important;
-      }
-    }
-  </style>
-</head>
-
-<body class="bg-[#F5F5F2] text-[#111] min-h-screen">
-
-  <!-- NAVBAR -->
-  <nav class="bg-white border-b border-[#DDD] h-[54px] flex items-center px-8 gap-[14px] sticky top-0 z-[100]">
-    <a class="flex items-center gap-2 no-underline" href="./ideashare.html">
-      <!-- <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+	<body class="min-h-screen bg-[#F5F5F2] text-[#111]">
+		<!-- NAVBAR -->
+		<nav
+			class="sticky top-0 z-[100] flex h-[54px] items-center gap-[14px] border-b border-[#DDD] bg-white px-8"
+		>
+			<a class="flex items-center gap-2 no-underline" href="./ideashare.html">
+				<!-- <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
         <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z" fill="#111"/>
         <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z" fill="#111"/>
       </svg> -->
-      <img src="logo.svg" alt="logo" class="w-10 h-10">
-      <span class="font-display text-[17px] font-semibold text-black tracking-[-0.4px]">Idea<span
-          class="text-yellow-dark">Share</span></span>
-    </a>
+				<img src="logo.svg" alt="logo" class="h-10 w-10" />
+				<span class="font-display text-[17px] font-semibold tracking-[-0.4px] text-black"
+					>Idea<span class="text-yellow-dark">Share</span></span
+				>
+			</a>
 
-    <button
-      class="nav-back-post flex items-center gap-[5px] text-[13px] text-[#888] cursor-pointer border-none bg-transparent font-[inherit] transition-colors hover:text-[#111]">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polyline points="15 18 9 12 15 6" />
-      </svg>
-      <span>Back to feed</span>
-    </button>
+			<button
+				class="nav-back-post flex cursor-pointer items-center gap-[5px] border-none bg-transparent font-[inherit] text-[13px] text-[#888] transition-colors hover:text-[#111]"
+			>
+				<svg
+					width="14"
+					height="14"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<polyline points="15 18 9 12 15 6" />
+				</svg>
+				<span>Back to feed</span>
+			</button>
 
-    <!-- Step indicator -->
-    <div class="ml-auto flex items-center gap-[6px]">
-      <div
-        class="w-7 h-7 rounded-full bg-[#F5C518] text-[#111] flex items-center justify-center text-[12px] font-semibold">
-        ✓</div>
-      <div class="w-6 h-[2px] bg-[#F5C518] rounded"></div>
-      <div class="w-7 h-7 rounded-full bg-[#111] text-white flex items-center justify-center text-[12px] font-semibold">
-        2</div>
-      <div class="w-6 h-[2px] bg-[#DDD] rounded"></div>
-      <div
-        class="w-7 h-7 rounded-full bg-[#F5F5F2] text-[#888] flex items-center justify-center text-[12px] font-semibold border border-[#DDD]">
-        3</div>
-    </div>
-  </nav>
+			<!-- Step indicator -->
+			<div class="ml-auto flex items-center gap-[6px]">
+				<div
+					class="flex h-7 w-7 items-center justify-center rounded-full bg-[#F5C518] text-[12px] font-semibold text-[#111]"
+				>
+					✓
+				</div>
+				<div class="h-[2px] w-6 rounded bg-[#F5C518]"></div>
+				<div
+					class="flex h-7 w-7 items-center justify-center rounded-full bg-[#111] text-[12px] font-semibold text-white"
+				>
+					2
+				</div>
+				<div class="h-[2px] w-6 rounded bg-[#DDD]"></div>
+				<div
+					class="flex h-7 w-7 items-center justify-center rounded-full border border-[#DDD] bg-[#F5F5F2] text-[12px] font-semibold text-[#888]"
+				>
+					3
+				</div>
+			</div>
+		</nav>
 
-  <!-- PAGE -->
-  <div class="post-layout max-w-[860px] mx-auto py-9 px-6 pb-[60px] grid gap-7 items-start"
-    style="grid-template-columns:minmax(0,1fr) 240px">
+		<!-- PAGE -->
+		<div
+			class="post-layout mx-auto grid max-w-[860px] items-start gap-7 px-6 py-9 pb-[60px]"
+			style="grid-template-columns: minmax(0, 1fr) 240px"
+		>
+			<!-- FORM -->
+			<div class="flex flex-col gap-0">
+				<div class="mb-7">
+					<div
+						class="mb-[10px] inline-flex items-center gap-[6px] rounded-full border border-[#FFE066] bg-[#FFF8DC] px-[10px] py-[3px] text-[11px] font-semibold tracking-[0.08em] text-[#C49A00] uppercase"
+					>
+						💡 Step 2 of 3 — The idea
+					</div>
+					<h1
+						style="font-family: 'Bricolage Grotesque', sans-serif"
+						class="mb-[6px] text-[26px] leading-[1.25] font-bold tracking-[-0.4px] text-[#111]"
+					>
+						What's the idea?
+					</h1>
+					<p class="text-[13.5px] leading-[1.6] text-[#888]">
+						Write it like you'd explain it to a friend. No need to be formal — just be clear.
+					</p>
+				</div>
 
-    <!-- FORM -->
-    <div class="flex flex-col gap-0">
+				<div class="overflow-hidden rounded-2xl border border-[#DDD] bg-white">
+					<!-- Title field -->
+					<div
+						id="block-title"
+						class="field-block focused relative border-b border-[#F5F5F2] p-[20px_24px] transition-colors"
+					>
+						<div
+							class="field-accent absolute top-0 bottom-0 left-0 w-[3px] rounded-none bg-[#F5C518] transition-colors"
+						></div>
+						<div
+							class="mb-2 flex items-center gap-[6px] text-[11px] font-semibold tracking-[0.08em] text-[#888] uppercase"
+						>
+							<div class="inline-block h-[5px] w-[5px] rounded-full bg-[#C49A00]"></div>
+							Idea title
+						</div>
+						<textarea
+							id="title-input"
+							rows="2"
+							oninput="updatePreview()"
+							class="w-full resize-none border-none bg-transparent leading-[1.4] text-[#111] outline-none placeholder:font-medium placeholder:text-[#DDD]"
+							style="
+								font-family: 'Bricolage Grotesque', sans-serif;
+								font-size: 18px;
+								font-weight: 600;
+							"
+							placeholder="e.g. A universal exam system where you study anywhere and just show up to get certified"
+						>
+A universal exam system independent of any university — certify your skills, study anywhere</textarea
+						>
+						<div id="title-count" class="mt-[6px] flex justify-end text-[11px] text-[#DDD]">
+							89 / 120
+						</div>
+					</div>
 
-      <div class="mb-7">
-        <div
-          class="inline-flex items-center gap-[6px] text-[11px] font-semibold uppercase tracking-[0.08em] text-[#C49A00] bg-[#FFF8DC] border border-[#FFE066] py-[3px] px-[10px] rounded-full mb-[10px]">
-          💡 Step 2 of 3 — The idea</div>
-        <h1 style="font-family:'Bricolage Grotesque',sans-serif"
-          class="text-[26px] font-bold text-[#111] tracking-[-0.4px] leading-[1.25] mb-[6px]">What's the idea?</h1>
-        <p class="text-[13.5px] text-[#888] leading-[1.6]">Write it like you'd explain it to a friend. No need to be
-          formal — just be clear.</p>
-      </div>
+					<!-- Describe field -->
+					<div
+						id="block-desc"
+						class="field-block relative border-b border-[#F5F5F2] p-[20px_24px] transition-colors"
+					>
+						<div
+							class="field-accent absolute top-0 bottom-0 left-0 w-[3px] bg-transparent transition-colors"
+						></div>
+						<div
+							class="mb-2 flex items-center gap-[6px] text-[11px] font-semibold tracking-[0.08em] text-[#888] uppercase"
+						>
+							<div class="inline-block h-[5px] w-[5px] rounded-full bg-[#C49A00]"></div>
+							Describe the idea
+						</div>
+						<textarea
+							id="desc-input"
+							rows="4"
+							oninput="updatePreview()"
+							class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-[#111] outline-none placeholder:text-[#BBB]"
+							placeholder="What exactly would this look like? How would it work? Even a rough picture is great."
+						>
+What if you could study from YouTube, books, or anywhere you want — and just show up to a standardised exam to get certified? No enrollment, no tuition fees, no geographic restriction. Your knowledge is what gets tested, not where you sat.</textarea
+						>
+					</div>
 
-      <div class="bg-white border border-[#DDD] rounded-2xl overflow-hidden">
+					<!-- Problem field -->
+					<div
+						id="block-problem"
+						class="field-block relative border-b border-[#F5F5F2] p-[20px_24px] transition-colors"
+					>
+						<div
+							class="field-accent absolute top-0 bottom-0 left-0 w-[3px] bg-transparent transition-colors"
+						></div>
+						<div
+							class="mb-2 flex items-center gap-[6px] text-[11px] font-semibold tracking-[0.08em] text-[#888] uppercase"
+						>
+							<div class="inline-block h-[5px] w-[5px] rounded-full bg-[#C49A00]"></div>
+							What problem does this solve?
+						</div>
+						<textarea
+							id="problem-input"
+							rows="2"
+							class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-[#111] outline-none placeholder:text-[#BBB]"
+							placeholder="e.g. University is too expensive and location-dependent for most people in the world."
+						>
+University degrees are expensive and location-dependent, but skills are what actually matter. Millions of people have the ability but not the access.</textarea
+						>
+					</div>
 
-        <!-- Title field -->
-        <div id="block-title"
-          class="field-block focused p-[20px_24px] border-b border-[#F5F5F2] relative transition-colors">
-          <div class="field-accent absolute left-0 top-0 bottom-0 w-[3px] rounded-none transition-colors bg-[#F5C518]">
-          </div>
-          <div
-            class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#888] mb-2 flex items-center gap-[6px]">
-            <div class="w-[5px] h-[5px] rounded-full bg-[#C49A00] inline-block"></div>
-            Idea title
-          </div>
-          <textarea id="title-input" rows="2" oninput="updatePreview()"
-            class="w-full border-none outline-none bg-transparent resize-none leading-[1.4] placeholder:text-[#DDD] placeholder:font-medium text-[#111]"
-            style="font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:600"
-            placeholder="e.g. A universal exam system where you study anywhere and just show up to get certified">A universal exam system independent of any university — certify your skills, study anywhere</textarea>
-          <div id="title-count" class="flex justify-end text-[11px] text-[#DDD] mt-[6px]">89 / 120</div>
-        </div>
+					<!-- Who benefits -->
+					<div
+						id="block-who"
+						class="field-block relative border-b border-[#F5F5F2] p-[20px_24px] transition-colors"
+					>
+						<div
+							class="field-accent absolute top-0 bottom-0 left-0 w-[3px] bg-transparent transition-colors"
+						></div>
+						<div
+							class="mb-2 flex items-center gap-[6px] text-[11px] font-semibold tracking-[0.08em] text-[#888] uppercase"
+						>
+							<div class="inline-block h-[5px] w-[5px] rounded-full bg-[#C49A00]"></div>
+							Who would benefit?
+							<span
+								class="rounded-full bg-[#F5F5F2] px-[6px] py-[1px] text-[10px] font-medium tracking-normal text-[#DDD] normal-case"
+								>Pick all that apply</span
+							>
+						</div>
+						<div class="mb-[10px] flex flex-wrap gap-[7px]">
+							<button
+								class="bchip flex cursor-pointer items-center gap-[5px] rounded-full border border-[#F5C518] bg-[#FFF8DC] px-3 py-[6px] font-[inherit] text-[12.5px] font-semibold text-[#111]"
+								onclick="toggleChip(this)"
+							>
+								<span>🎓</span> Students
+							</button>
+							<button
+								class="bchip flex cursor-pointer items-center gap-[5px] rounded-full border border-[#F5C518] bg-[#FFF8DC] px-3 py-[6px] font-[inherit] text-[12.5px] font-semibold text-[#111]"
+								onclick="toggleChip(this)"
+							>
+								<span>💼</span> Working adults
+							</button>
+							<button
+								class="bchip flex cursor-pointer items-center gap-[5px] rounded-full border border-[#DDD] bg-transparent px-3 py-[6px] font-[inherit] text-[12.5px] font-medium text-[#444] hover:border-[#C49A00] hover:text-[#111]"
+								onclick="toggleChip(this)"
+							>
+								<span>🏢</span> Employers
+							</button>
+							<button
+								class="bchip flex cursor-pointer items-center gap-[5px] rounded-full border border-[#F5C518] bg-[#FFF8DC] px-3 py-[6px] font-[inherit] text-[12.5px] font-semibold text-[#111]"
+								onclick="toggleChip(this)"
+							>
+								<span>🌍</span> Developing countries
+							</button>
+							<button
+								class="bchip flex cursor-pointer items-center gap-[5px] rounded-full border border-[#DDD] bg-transparent px-3 py-[6px] font-[inherit] text-[12.5px] font-medium text-[#444] hover:border-[#C49A00] hover:text-[#111]"
+								onclick="toggleChip(this)"
+							>
+								<span>🏛️</span> Governments
+							</button>
+							<button
+								class="bchip flex cursor-pointer items-center gap-[5px] rounded-full border border-[#DDD] bg-transparent px-3 py-[6px] font-[inherit] text-[12.5px] font-medium text-[#444] hover:border-[#C49A00] hover:text-[#111]"
+								onclick="toggleChip(this)"
+							>
+								<span>🔬</span> Researchers
+							</button>
+							<button
+								class="bchip flex cursor-pointer items-center gap-[5px] rounded-full border border-[#DDD] bg-transparent px-3 py-[6px] font-[inherit] text-[12.5px] font-medium text-[#444] hover:border-[#C49A00] hover:text-[#111]"
+								onclick="toggleChip(this)"
+							>
+								<span>👩‍💻</span> Developers
+							</button>
+							<button
+								class="bchip flex cursor-pointer items-center gap-[5px] rounded-full border border-[#DDD] bg-transparent px-3 py-[6px] font-[inherit] text-[12.5px] font-medium text-[#444] hover:border-[#C49A00] hover:text-[#111]"
+								onclick="toggleChip(this)"
+							>
+								<span>🌱</span> Everyone
+							</button>
+						</div>
+					</div>
 
-        <!-- Describe field -->
-        <div id="block-desc" class="field-block p-[20px_24px] border-b border-[#F5F5F2] relative transition-colors">
-          <div class="field-accent absolute left-0 top-0 bottom-0 w-[3px] transition-colors bg-transparent"></div>
-          <div
-            class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#888] mb-2 flex items-center gap-[6px]">
-            <div class="w-[5px] h-[5px] rounded-full bg-[#C49A00] inline-block"></div>
-            Describe the idea
-          </div>
-          <textarea id="desc-input" rows="4" oninput="updatePreview()"
-            class="w-full border-none outline-none bg-transparent resize-none text-sm leading-[1.7] text-[#111] placeholder:text-[#BBB] font-[inherit]"
-            placeholder="What exactly would this look like? How would it work? Even a rough picture is great.">What if you could study from YouTube, books, or anywhere you want — and just show up to a standardised exam to get certified? No enrollment, no tuition fees, no geographic restriction. Your knowledge is what gets tested, not where you sat.</textarea>
-        </div>
+					<!-- Topic tags -->
+					<div
+						id="block-topic"
+						class="field-block relative border-b border-[#F5F5F2] p-[20px_24px] transition-colors"
+					>
+						<div
+							class="field-accent absolute top-0 bottom-0 left-0 w-[3px] bg-transparent transition-colors"
+						></div>
+						<div
+							class="mb-2 flex items-center gap-[6px] text-[11px] font-semibold tracking-[0.08em] text-[#888] uppercase"
+						>
+							Topic
+							<span
+								class="rounded-full bg-[#F5F5F2] px-[6px] py-[1px] text-[10px] font-medium tracking-normal text-[#DDD] normal-case"
+								>Pick up to 2</span
+							>
+						</div>
+						<div class="flex flex-wrap gap-[7px]">
+							<button
+								class="tchip cursor-pointer rounded-full border border-[#111] bg-[#111] px-3 py-[5px] font-[inherit] text-[12.5px] font-medium text-white"
+								onclick="toggleTopic(this)"
+							>
+								#education
+							</button>
+							<button
+								class="tchip cursor-pointer rounded-full border border-[#111] bg-[#111] px-3 py-[5px] font-[inherit] text-[12.5px] font-medium text-white"
+								onclick="toggleTopic(this)"
+							>
+								#credentials
+							</button>
+							<button
+								class="tchip cursor-pointer rounded-full border border-[#DDD] bg-transparent px-3 py-[5px] font-[inherit] text-[12.5px] font-medium text-[#444] hover:border-[#444] hover:text-[#111]"
+								onclick="toggleTopic(this)"
+							>
+								#health
+							</button>
+							<button
+								class="tchip cursor-pointer rounded-full border border-[#DDD] bg-transparent px-3 py-[5px] font-[inherit] text-[12.5px] font-medium text-[#444] hover:border-[#444] hover:text-[#111]"
+								onclick="toggleTopic(this)"
+							>
+								#technology
+							</button>
+							<button
+								class="tchip cursor-pointer rounded-full border border-[#DDD] bg-transparent px-3 py-[5px] font-[inherit] text-[12.5px] font-medium text-[#444] hover:border-[#444] hover:text-[#111]"
+								onclick="toggleTopic(this)"
+							>
+								#cities
+							</button>
+							<button
+								class="tchip cursor-pointer rounded-full border border-[#DDD] bg-transparent px-3 py-[5px] font-[inherit] text-[12.5px] font-medium text-[#444] hover:border-[#444] hover:text-[#111]"
+								onclick="toggleTopic(this)"
+							>
+								#economy
+							</button>
+							<button
+								class="tchip cursor-pointer rounded-full border border-[#DDD] bg-transparent px-3 py-[5px] font-[inherit] text-[12.5px] font-medium text-[#444] hover:border-[#444] hover:text-[#111]"
+								onclick="toggleTopic(this)"
+							>
+								#environment
+							</button>
+							<button
+								class="tchip cursor-pointer rounded-full border border-[#DDD] bg-transparent px-3 py-[5px] font-[inherit] text-[12.5px] font-medium text-[#444] hover:border-[#444] hover:text-[#111]"
+								onclick="toggleTopic(this)"
+							>
+								#governance
+							</button>
+						</div>
+					</div>
 
-        <!-- Problem field -->
-        <div id="block-problem" class="field-block p-[20px_24px] border-b border-[#F5F5F2] relative transition-colors">
-          <div class="field-accent absolute left-0 top-0 bottom-0 w-[3px] transition-colors bg-transparent"></div>
-          <div
-            class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#888] mb-2 flex items-center gap-[6px]">
-            <div class="w-[5px] h-[5px] rounded-full bg-[#C49A00] inline-block"></div>
-            What problem does this solve?
-          </div>
-          <textarea id="problem-input" rows="2"
-            class="w-full border-none outline-none bg-transparent resize-none text-sm leading-[1.7] text-[#111] placeholder:text-[#BBB] font-[inherit]"
-            placeholder="e.g. University is too expensive and location-dependent for most people in the world.">University degrees are expensive and location-dependent, but skills are what actually matter. Millions of people have the ability but not the access.</textarea>
-        </div>
+					<!-- Anonymous toggle -->
+					<div class="relative p-[20px_24px]">
+						<div
+							class="mb-2 flex items-center gap-[6px] text-[11px] font-semibold tracking-[0.08em] text-[#888] uppercase"
+						>
+							Post anonymously
+							<span
+								class="rounded-full bg-[#F5F5F2] px-[6px] py-[1px] text-[10px] font-medium tracking-normal text-[#DDD] normal-case"
+								>optional</span
+							>
+						</div>
+						<div class="flex items-center gap-3">
+							<label class="relative h-[22px] w-10 flex-shrink-0 cursor-pointer">
+								<input type="checkbox" id="anon-toggle" class="peer absolute h-0 w-0 opacity-0" />
+								<div
+									class="absolute inset-0 rounded-full bg-[#DDD] transition-colors peer-checked:bg-[#F5C518]"
+								></div>
+								<div
+									class="absolute top-[3px] left-[3px] h-4 w-4 rounded-full bg-white shadow-sm transition-all peer-checked:left-[21px]"
+								></div>
+							</label>
+							<div>
+								<div class="text-[13.5px] font-medium text-[#111]">Hide my name on this idea</div>
+								<div class="mt-[2px] text-[12px] text-[#888]">
+									Your contribution is still recorded — you'll get credit if it gets built.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-        <!-- Who benefits -->
-        <div id="block-who" class="field-block p-[20px_24px] border-b border-[#F5F5F2] relative transition-colors">
-          <div class="field-accent absolute left-0 top-0 bottom-0 w-[3px] transition-colors bg-transparent"></div>
-          <div
-            class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#888] mb-2 flex items-center gap-[6px]">
-            <div class="w-[5px] h-[5px] rounded-full bg-[#C49A00] inline-block"></div>
-            Who would benefit?
-            <span
-              class="text-[10px] font-medium text-[#DDD] normal-case tracking-normal bg-[#F5F5F2] py-[1px] px-[6px] rounded-full">Pick
-              all that apply</span>
-          </div>
-          <div class="flex flex-wrap gap-[7px] mb-[10px]">
-            <button
-              class="bchip flex items-center gap-[5px] py-[6px] px-3 rounded-full border border-[#F5C518] bg-[#FFF8DC] font-[inherit] text-[12.5px] font-semibold text-[#111] cursor-pointer"
-              onclick="toggleChip(this)"><span>🎓</span> Students</button>
-            <button
-              class="bchip flex items-center gap-[5px] py-[6px] px-3 rounded-full border border-[#F5C518] bg-[#FFF8DC] font-[inherit] text-[12.5px] font-semibold text-[#111] cursor-pointer"
-              onclick="toggleChip(this)"><span>💼</span> Working adults</button>
-            <button
-              class="bchip flex items-center gap-[5px] py-[6px] px-3 rounded-full border border-[#DDD] bg-transparent font-[inherit] text-[12.5px] font-medium text-[#444] cursor-pointer hover:border-[#C49A00] hover:text-[#111]"
-              onclick="toggleChip(this)"><span>🏢</span> Employers</button>
-            <button
-              class="bchip flex items-center gap-[5px] py-[6px] px-3 rounded-full border border-[#F5C518] bg-[#FFF8DC] font-[inherit] text-[12.5px] font-semibold text-[#111] cursor-pointer"
-              onclick="toggleChip(this)"><span>🌍</span> Developing countries</button>
-            <button
-              class="bchip flex items-center gap-[5px] py-[6px] px-3 rounded-full border border-[#DDD] bg-transparent font-[inherit] text-[12.5px] font-medium text-[#444] cursor-pointer hover:border-[#C49A00] hover:text-[#111]"
-              onclick="toggleChip(this)"><span>🏛️</span> Governments</button>
-            <button
-              class="bchip flex items-center gap-[5px] py-[6px] px-3 rounded-full border border-[#DDD] bg-transparent font-[inherit] text-[12.5px] font-medium text-[#444] cursor-pointer hover:border-[#C49A00] hover:text-[#111]"
-              onclick="toggleChip(this)"><span>🔬</span> Researchers</button>
-            <button
-              class="bchip flex items-center gap-[5px] py-[6px] px-3 rounded-full border border-[#DDD] bg-transparent font-[inherit] text-[12.5px] font-medium text-[#444] cursor-pointer hover:border-[#C49A00] hover:text-[#111]"
-              onclick="toggleChip(this)"><span>👩‍💻</span> Developers</button>
-            <button
-              class="bchip flex items-center gap-[5px] py-[6px] px-3 rounded-full border border-[#DDD] bg-transparent font-[inherit] text-[12.5px] font-medium text-[#444] cursor-pointer hover:border-[#C49A00] hover:text-[#111]"
-              onclick="toggleChip(this)"><span>🌱</span> Everyone</button>
-          </div>
-        </div>
+				<!-- Dupe warning -->
+				<div
+					id="dupe-warning"
+					class="mt-[14px] flex items-start gap-3 rounded-[10px] border border-[#FFE066] bg-[#FFF8DC] p-[12px_16px]"
+				>
+					<div
+						class="mt-[1px] flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[#F5C518] text-[12px]"
+					>
+						💡
+					</div>
+					<div class="text-[13px] leading-[1.55] text-[#111]">
+						<strong>3 similar ideas already exist.</strong> Want to refine one instead of posting a
+						new one? <br /><span class="cursor-pointer font-semibold underline"
+							>View similar ideas →</span
+						>
+					</div>
+					<button
+						onclick="document.getElementById('dupe-warning').style.display = 'none'"
+						class="ml-auto flex-shrink-0 cursor-pointer border-none bg-transparent px-1 py-[2px] font-[inherit] text-[12px] text-[#888]"
+					>
+						✕
+					</button>
+				</div>
 
-        <!-- Topic tags -->
-        <div id="block-topic" class="field-block p-[20px_24px] border-b border-[#F5F5F2] relative transition-colors">
-          <div class="field-accent absolute left-0 top-0 bottom-0 w-[3px] transition-colors bg-transparent"></div>
-          <div
-            class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#888] mb-2 flex items-center gap-[6px]">
-            Topic
-            <span
-              class="text-[10px] font-medium text-[#DDD] normal-case tracking-normal bg-[#F5F5F2] py-[1px] px-[6px] rounded-full">Pick
-              up to 2</span>
-          </div>
-          <div class="flex flex-wrap gap-[7px]">
-            <button
-              class="tchip py-[5px] px-3 rounded-full border border-[#111] bg-[#111] font-[inherit] text-[12.5px] font-medium text-white cursor-pointer"
-              onclick="toggleTopic(this)">#education</button>
-            <button
-              class="tchip py-[5px] px-3 rounded-full border border-[#111] bg-[#111] font-[inherit] text-[12.5px] font-medium text-white cursor-pointer"
-              onclick="toggleTopic(this)">#credentials</button>
-            <button
-              class="tchip py-[5px] px-3 rounded-full border border-[#DDD] bg-transparent font-[inherit] text-[12.5px] font-medium text-[#444] cursor-pointer hover:border-[#444] hover:text-[#111]"
-              onclick="toggleTopic(this)">#health</button>
-            <button
-              class="tchip py-[5px] px-3 rounded-full border border-[#DDD] bg-transparent font-[inherit] text-[12.5px] font-medium text-[#444] cursor-pointer hover:border-[#444] hover:text-[#111]"
-              onclick="toggleTopic(this)">#technology</button>
-            <button
-              class="tchip py-[5px] px-3 rounded-full border border-[#DDD] bg-transparent font-[inherit] text-[12.5px] font-medium text-[#444] cursor-pointer hover:border-[#444] hover:text-[#111]"
-              onclick="toggleTopic(this)">#cities</button>
-            <button
-              class="tchip py-[5px] px-3 rounded-full border border-[#DDD] bg-transparent font-[inherit] text-[12.5px] font-medium text-[#444] cursor-pointer hover:border-[#444] hover:text-[#111]"
-              onclick="toggleTopic(this)">#economy</button>
-            <button
-              class="tchip py-[5px] px-3 rounded-full border border-[#DDD] bg-transparent font-[inherit] text-[12.5px] font-medium text-[#444] cursor-pointer hover:border-[#444] hover:text-[#111]"
-              onclick="toggleTopic(this)">#environment</button>
-            <button
-              class="tchip py-[5px] px-3 rounded-full border border-[#DDD] bg-transparent font-[inherit] text-[12.5px] font-medium text-[#444] cursor-pointer hover:border-[#444] hover:text-[#111]"
-              onclick="toggleTopic(this)">#governance</button>
-          </div>
-        </div>
+				<!-- Submit bar -->
+				<div class="mt-5 flex flex-wrap items-center gap-[10px]">
+					<button
+						class="flex cursor-pointer items-center gap-2 rounded-full border-none bg-[#111] px-7 py-[11px] font-[inherit] text-sm font-semibold text-white transition-opacity hover:opacity-85"
+					>
+						<div
+							class="flex h-5 w-5 items-center justify-center rounded-full bg-[#F5C518] text-[12px]"
+						>
+							⚡
+						</div>
+						Publish idea
+					</button>
+					<button
+						class="cursor-pointer rounded-full border border-[#DDD] bg-transparent px-5 py-[11px] font-[inherit] text-[13px] font-medium text-[#444] transition-all hover:border-[#111] hover:text-[#111]"
+					>
+						Save as draft
+					</button>
+					<span class="text-[12px] text-[#888]">Your idea will be visible to everyone</span>
+				</div>
+			</div>
 
-        <!-- Anonymous toggle -->
-        <div class="p-[20px_24px] relative">
-          <div
-            class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#888] mb-2 flex items-center gap-[6px]">
-            Post anonymously
-            <span
-              class="text-[10px] font-medium text-[#DDD] normal-case tracking-normal bg-[#F5F5F2] py-[1px] px-[6px] rounded-full">optional</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <label class="relative w-10 h-[22px] cursor-pointer flex-shrink-0">
-              <input type="checkbox" id="anon-toggle" class="peer opacity-0 absolute w-0 h-0">
-              <div class="absolute inset-0 bg-[#DDD] rounded-full transition-colors peer-checked:bg-[#F5C518]"></div>
-              <div
-                class="absolute top-[3px] left-[3px] w-4 h-4 rounded-full bg-white shadow-sm transition-all peer-checked:left-[21px]">
-              </div>
-            </label>
-            <div>
-              <div class="text-[13.5px] text-[#111] font-medium">Hide my name on this idea</div>
-              <div class="text-[12px] text-[#888] mt-[2px]">Your contribution is still recorded — you'll get credit if
-                it gets built.</div>
-            </div>
-          </div>
-        </div>
+			<!-- RIGHT COLUMN -->
+			<div class="preview-col flex flex-col gap-[14px]">
+				<div class="text-[11px] font-semibold tracking-[0.08em] text-[#888] uppercase">
+					Live preview
+				</div>
 
-      </div>
+				<div
+					class="overflow-hidden rounded-2xl border border-[#DDD] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)]"
+				>
+					<div class="bg-[#F5C518] p-4">
+						<div
+							id="preview-title"
+							style="font-family: 'Bricolage Grotesque', sans-serif"
+							class="text-[13.5px] leading-[1.4] font-bold text-[#111]"
+						>
+							A universal exam system independent of any university — certify your skills, study
+							anywhere
+						</div>
+					</div>
+					<div class="p-3 px-4">
+						<div id="preview-desc" class="mb-[10px] text-[12px] leading-[1.6] text-[#444]">
+							What if you could study from YouTube, books, or anywhere — and just show up to get
+							certified? No enrollment, no fees, no geographic restriction.
+						</div>
+						<div class="flex flex-wrap items-center gap-[6px]">
+							<span
+								class="rounded-full border border-[#DDD] bg-[#F5F5F2] px-2 py-[2px] text-[11px] text-[#444]"
+								>#education</span
+							>
+							<span
+								class="rounded-full border border-[#DDD] bg-[#F5F5F2] px-2 py-[2px] text-[11px] text-[#444]"
+								>#credentials</span
+							>
+							<span
+								class="rounded-full border border-[#FFE08A] bg-[#FFF3CD] px-2 py-[2px] text-[11px] font-semibold text-[#7A5800]"
+								>Raw idea</span
+							>
+							<span class="ml-auto text-[12px] font-semibold text-[#888]">⚡ 0</span>
+						</div>
+					</div>
+				</div>
 
-      <!-- Dupe warning -->
-      <div id="dupe-warning"
-        class="bg-[#FFF8DC] border border-[#FFE066] rounded-[10px] p-[12px_16px] flex gap-3 items-start mt-[14px]">
-        <div
-          class="w-6 h-6 rounded-full bg-[#F5C518] flex items-center justify-center flex-shrink-0 mt-[1px] text-[12px]">
-          💡</div>
-        <div class="text-[13px] text-[#111] leading-[1.55]">
-          <strong>3 similar ideas already exist.</strong> Want to refine one instead of posting a new one?
-          <br><span class="font-semibold cursor-pointer underline">View similar ideas →</span>
-        </div>
-        <button onclick="document.getElementById('dupe-warning').style.display='none'"
-          class="ml-auto text-[12px] text-[#888] cursor-pointer border-none bg-transparent font-[inherit] flex-shrink-0 py-[2px] px-1">✕</button>
-      </div>
+				<div class="rounded-2xl bg-[#111] p-4">
+					<div class="mb-3 text-[11px] font-semibold tracking-[0.08em] text-[#F5C518] uppercase">
+						Tips for a great idea
+					</div>
+					<div class="mb-[10px] flex items-start gap-[10px]">
+						<div
+							class="mt-[1px] flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded-full bg-[#F5C518] text-[10px] font-bold text-[#111]"
+						>
+							1
+						</div>
+						<div class="text-[12px] leading-[1.55] text-[#AAAAAA]">
+							<strong class="text-white">Lead with the problem,</strong> not the solution. "Millions
+							can't afford university" is more compelling than "free exams".
+						</div>
+					</div>
+					<div class="mb-[10px] flex items-start gap-[10px]">
+						<div
+							class="mt-[1px] flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded-full bg-[#F5C518] text-[10px] font-bold text-[#111]"
+						>
+							2
+						</div>
+						<div class="text-[12px] leading-[1.55] text-[#AAAAAA]">
+							<strong class="text-white">Be specific</strong> about who benefits. "Students in rural
+							areas" gets more traction than "everyone".
+						</div>
+					</div>
+					<div class="flex items-start gap-[10px]">
+						<div
+							class="mt-[1px] flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded-full bg-[#F5C518] text-[10px] font-bold text-[#111]"
+						>
+							3
+						</div>
+						<div class="text-[12px] leading-[1.55] text-[#AAAAAA]">
+							<strong class="text-white">Raw ideas are welcome.</strong> You don't need to have it
+							all figured out — the community will help refine it.
+						</div>
+					</div>
+				</div>
 
-      <!-- Submit bar -->
-      <div class="flex items-center gap-[10px] mt-5 flex-wrap">
-        <button
-          class="flex items-center gap-2 py-[11px] px-7 border-none rounded-full bg-[#111] font-[inherit] text-sm font-semibold text-white cursor-pointer transition-opacity hover:opacity-85">
-          <div class="w-5 h-5 bg-[#F5C518] rounded-full flex items-center justify-center text-[12px]">⚡</div>
-          Publish idea
-        </button>
-        <button
-          class="py-[11px] px-5 border border-[#DDD] rounded-full bg-transparent font-[inherit] text-[13px] font-medium text-[#444] cursor-pointer transition-all hover:border-[#111] hover:text-[#111]">Save
-          as draft</button>
-        <span class="text-[12px] text-[#888]">Your idea will be visible to everyone</span>
-      </div>
+				<div class="rounded-2xl border border-[#DDD] bg-white p-[14px]">
+					<div class="mb-[10px] text-[11px] font-semibold tracking-[0.08em] text-[#888] uppercase">
+						Similar ideas already posted
+					</div>
+					<div class="cursor-pointer border-b border-[#F5F5F2] py-[7px]">
+						<div
+							class="mb-[3px] text-[12.5px] leading-[1.4] font-medium text-[#111] hover:text-[#C49A00]"
+						>
+							Build your own university major from multiple institutions
+						</div>
+						<div class="text-[11px] text-[#888]">
+							<span class="font-medium text-[#C49A00]">389 ⚡</span> · 2 builds
+						</div>
+					</div>
+					<div class="cursor-pointer border-b border-[#F5F5F2] py-[7px]">
+						<div
+							class="mb-[3px] text-[12.5px] leading-[1.4] font-medium text-[#111] hover:text-[#C49A00]"
+						>
+							Employer-run certification to replace degrees
+						</div>
+						<div class="text-[11px] text-[#888]">
+							<span class="font-medium text-[#C49A00]">198 ⚡</span> · 1 build
+						</div>
+					</div>
+					<div class="mt-[10px] text-center text-[12px] text-[#888]">
+						Want to
+						<a class="cursor-pointer font-medium text-[#111]">build on one of these</a> instead?
+					</div>
+				</div>
+			</div>
+		</div>
 
-    </div>
+		<script>
+			document.querySelectorAll('.field-block').forEach((block) => {
+				block.querySelectorAll('input,textarea').forEach((input) => {
+					input.addEventListener('focus', () => {
+						document.querySelectorAll('.field-block').forEach((b) => b.classList.remove('focused'));
+						block.classList.add('focused');
+					});
+				});
+			});
 
-    <!-- RIGHT COLUMN -->
-    <div class="preview-col flex flex-col gap-[14px]">
+			function toggleChip(el) {
+				const isSelected = el.classList.contains('border-[#F5C518]');
+				if (isSelected) {
+					el.classList.remove('border-[#F5C518]', 'bg-[#FFF8DC]', 'font-semibold', 'text-[#111]');
+					el.classList.add('border-[#DDD]', 'bg-transparent', 'font-medium', 'text-[#444]');
+				} else {
+					el.classList.add('border-[#F5C518]', 'bg-[#FFF8DC]', 'font-semibold', 'text-[#111]');
+					el.classList.remove('border-[#DDD]', 'bg-transparent', 'font-medium', 'text-[#444]');
+				}
+			}
 
-      <div class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#888]">Live preview</div>
+			function toggleTopic(el) {
+				const selected = document.querySelectorAll('.tchip.border-\\[\\#111\\]');
+				const isSelected = el.classList.contains('bg-[#111]');
+				if (!isSelected && selected.length >= 2) return;
+				if (isSelected) {
+					el.classList.remove('bg-[#111]', 'border-[#111]', 'text-white');
+					el.classList.add('bg-transparent', 'border-[#DDD]', 'text-[#444]');
+				} else {
+					el.classList.add('bg-[#111]', 'border-[#111]', 'text-white');
+					el.classList.remove('bg-transparent', 'border-[#DDD]', 'text-[#444]');
+				}
+			}
 
-      <div class="bg-white border border-[#DDD] rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
-        <div class="bg-[#F5C518] p-4">
-          <div id="preview-title" style="font-family:'Bricolage Grotesque',sans-serif"
-            class="text-[13.5px] font-bold text-[#111] leading-[1.4]">
-            A universal exam system independent of any university — certify your skills, study anywhere
-          </div>
-        </div>
-        <div class="p-3 px-4">
-          <div id="preview-desc" class="text-[12px] text-[#444] leading-[1.6] mb-[10px]">
-            What if you could study from YouTube, books, or anywhere — and just show up to get certified? No enrollment,
-            no fees, no geographic restriction.
-          </div>
-          <div class="flex items-center gap-[6px] flex-wrap">
-            <span
-              class="py-[2px] px-2 rounded-full bg-[#F5F5F2] border border-[#DDD] text-[11px] text-[#444]">#education</span>
-            <span
-              class="py-[2px] px-2 rounded-full bg-[#F5F5F2] border border-[#DDD] text-[11px] text-[#444]">#credentials</span>
-            <span
-              class="py-[2px] px-2 rounded-full text-[11px] font-semibold bg-[#FFF3CD] text-[#7A5800] border border-[#FFE08A]">Raw
-              idea</span>
-            <span class="ml-auto text-[12px] font-semibold text-[#888]">⚡ 0</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-[#111] rounded-2xl p-4">
-        <div class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#F5C518] mb-3">Tips for a great idea
-        </div>
-        <div class="flex gap-[10px] mb-[10px] items-start">
-          <div
-            class="w-[18px] h-[18px] rounded-full bg-[#F5C518] text-[#111] text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-[1px]">
-            1</div>
-          <div class="text-[12px] text-[#AAAAAA] leading-[1.55]"><strong class="text-white">Lead with the
-              problem,</strong> not the solution. "Millions can't afford university" is more compelling than "free
-            exams".</div>
-        </div>
-        <div class="flex gap-[10px] mb-[10px] items-start">
-          <div
-            class="w-[18px] h-[18px] rounded-full bg-[#F5C518] text-[#111] text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-[1px]">
-            2</div>
-          <div class="text-[12px] text-[#AAAAAA] leading-[1.55]"><strong class="text-white">Be specific</strong> about
-            who benefits. "Students in rural areas" gets more traction than "everyone".</div>
-        </div>
-        <div class="flex gap-[10px] items-start">
-          <div
-            class="w-[18px] h-[18px] rounded-full bg-[#F5C518] text-[#111] text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-[1px]">
-            3</div>
-          <div class="text-[12px] text-[#AAAAAA] leading-[1.55]"><strong class="text-white">Raw ideas are
-              welcome.</strong> You don't need to have it all figured out — the community will help refine it.</div>
-        </div>
-      </div>
-
-      <div class="bg-white border border-[#DDD] rounded-2xl p-[14px]">
-        <div class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#888] mb-[10px]">Similar ideas already
-          posted</div>
-        <div class="py-[7px] border-b border-[#F5F5F2] cursor-pointer">
-          <div class="text-[12.5px] text-[#111] leading-[1.4] font-medium mb-[3px] hover:text-[#C49A00]">Build your own
-            university major from multiple institutions</div>
-          <div class="text-[11px] text-[#888]"><span class="text-[#C49A00] font-medium">389 ⚡</span> · 2 builds</div>
-        </div>
-        <div class="py-[7px] border-b border-[#F5F5F2] cursor-pointer">
-          <div class="text-[12.5px] text-[#111] leading-[1.4] font-medium mb-[3px] hover:text-[#C49A00]">Employer-run
-            certification to replace degrees</div>
-          <div class="text-[11px] text-[#888]"><span class="text-[#C49A00] font-medium">198 ⚡</span> · 1 build</div>
-        </div>
-        <div class="mt-[10px] text-[12px] text-[#888] text-center">Want to <a
-            class="text-[#111] font-medium cursor-pointer">build on one of these</a> instead?</div>
-      </div>
-
-    </div>
-  </div>
-
-  <script>
-    document.querySelectorAll('.field-block').forEach(block => {
-      block.querySelectorAll('input,textarea').forEach(input => {
-        input.addEventListener('focus', () => {
-          document.querySelectorAll('.field-block').forEach(b => b.classList.remove('focused'));
-          block.classList.add('focused');
-        });
-      });
-    });
-
-    function toggleChip(el) {
-      const isSelected = el.classList.contains('border-[#F5C518]');
-      if (isSelected) {
-        el.classList.remove('border-[#F5C518]', 'bg-[#FFF8DC]', 'font-semibold', 'text-[#111]');
-        el.classList.add('border-[#DDD]', 'bg-transparent', 'font-medium', 'text-[#444]');
-      } else {
-        el.classList.add('border-[#F5C518]', 'bg-[#FFF8DC]', 'font-semibold', 'text-[#111]');
-        el.classList.remove('border-[#DDD]', 'bg-transparent', 'font-medium', 'text-[#444]');
-      }
-    }
-
-    function toggleTopic(el) {
-      const selected = document.querySelectorAll('.tchip.border-\\[\\#111\\]');
-      const isSelected = el.classList.contains('bg-[#111]');
-      if (!isSelected && selected.length >= 2) return;
-      if (isSelected) {
-        el.classList.remove('bg-[#111]', 'border-[#111]', 'text-white');
-        el.classList.add('bg-transparent', 'border-[#DDD]', 'text-[#444]');
-      } else {
-        el.classList.add('bg-[#111]', 'border-[#111]', 'text-white');
-        el.classList.remove('bg-transparent', 'border-[#DDD]', 'text-[#444]');
-      }
-    }
-
-    function updatePreview() {
-      const title = document.getElementById('title-input').value;
-      const desc = document.getElementById('desc-input').value;
-      const count = title.length;
-      const countEl = document.getElementById('title-count');
-      countEl.textContent = count + ' / 120';
-      countEl.className = count > 100 ? 'flex justify-end text-[11px] text-[#C49A00] mt-[6px]' : 'flex justify-end text-[11px] text-[#DDD] mt-[6px]';
-      document.getElementById('preview-title').textContent = title || 'Your idea title will appear here...';
-      document.getElementById('preview-desc').textContent = (desc.substring(0, 120) + (desc.length > 120 ? '...' : '')) || 'Your description will appear here...';
-    }
-  </script>
-</body>
-
+			function updatePreview() {
+				const title = document.getElementById('title-input').value;
+				const desc = document.getElementById('desc-input').value;
+				const count = title.length;
+				const countEl = document.getElementById('title-count');
+				countEl.textContent = count + ' / 120';
+				countEl.className =
+					count > 100
+						? 'flex justify-end text-[11px] text-[#C49A00] mt-[6px]'
+						: 'flex justify-end text-[11px] text-[#DDD] mt-[6px]';
+				document.getElementById('preview-title').textContent =
+					title || 'Your idea title will appear here...';
+				document.getElementById('preview-desc').textContent =
+					desc.substring(0, 120) + (desc.length > 120 ? '...' : '') ||
+					'Your description will appear here...';
+			}
+		</script>
+	</body>
 </html>

@@ -1,598 +1,814 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>IdeaShare — Reimagine University Admissions Challenge</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							brand: {
+								yellow: '#F5C518',
+								'yellow-light': '#FFF8DC',
+								'yellow-mid': '#FFE066',
+								'yellow-dark': '#C49A00',
+								black: '#111111',
+								'gray-dark': '#444444',
+								'gray-mid': '#888888',
+								'gray-light': '#DDDDDD',
+								'gray-faint': '#F5F5F2'
+							}
+						},
+						fontFamily: {
+							display: ['Bricolage Grotesque', 'sans-serif'],
+							body: ['DM Sans', 'sans-serif']
+						}
+					}
+				}
+			};
+		</script>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			body {
+				font-family: 'DM Sans', sans-serif;
+			}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IdeaShare — Reimagine University Admissions Challenge</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              yellow: '#F5C518', 'yellow-light': '#FFF8DC', 'yellow-mid': '#FFE066', 'yellow-dark': '#C49A00',
-              black: '#111111', 'gray-dark': '#444444', 'gray-mid': '#888888', 'gray-light': '#DDDDDD', 'gray-faint': '#F5F5F2',
-            }
-          },
-          fontFamily: { display: ['Bricolage Grotesque', 'sans-serif'], body: ['DM Sans', 'sans-serif'] }
-        }
-      }
-    }
-  </script>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500&display=swap"
-    rel="stylesheet">
-  <style>
-    body {
-      font-family: 'DM Sans', sans-serif;
-    }
+			.font-display {
+				font-family: 'Bricolage Grotesque', sans-serif;
+			}
 
-    .font-display {
-      font-family: 'Bricolage Grotesque', sans-serif;
-    }
+			.no-scrollbar::-webkit-scrollbar {
+				display: none;
+			}
 
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
+			.no-scrollbar {
+				-ms-overflow-style: none;
+				scrollbar-width: none;
+			}
 
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
+			/* Hero dot grid */
+			.hero-grid::before {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background-image: radial-gradient(circle, rgba(245, 197, 24, 0.12) 1px, transparent 1px);
+				background-size: 28px 28px;
+				pointer-events: none;
+			}
 
-    /* Hero dot grid */
-    .hero-grid::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle, rgba(245, 197, 24, 0.12) 1px, transparent 1px);
-      background-size: 28px 28px;
-      pointer-events: none;
-    }
+			/* Countdown pulse */
+			@keyframes pulse-ring {
+				0%,
+				100% {
+					box-shadow: 0 0 0 0 rgba(245, 197, 24, 0.4);
+				}
 
-    /* Countdown pulse */
-    @keyframes pulse-ring {
+				50% {
+					box-shadow: 0 0 0 8px rgba(245, 197, 24, 0);
+				}
+			}
 
-      0%,
-      100% {
-        box-shadow: 0 0 0 0 rgba(245, 197, 24, 0.4);
-      }
+			.countdown-pulse {
+				animation: pulse-ring 2s ease-in-out infinite;
+			}
 
-      50% {
-        box-shadow: 0 0 0 8px rgba(245, 197, 24, 0);
-      }
-    }
+			/* Progress bar fill */
+			.progress-fill {
+				transition: width 1s ease;
+			}
 
-    .countdown-pulse {
-      animation: pulse-ring 2s ease-in-out infinite;
-    }
+			@media (max-width: 860px) {
+				.sidebar-right {
+					display: none;
+				}
 
-    /* Progress bar fill */
-    .progress-fill {
-      transition: width 1s ease;
-    }
+				.main-grid {
+					grid-template-columns: 1fr !important;
+				}
+			}
 
-    @media (max-width: 860px) {
-      .sidebar-right {
-        display: none;
-      }
+			@media (max-width: 600px) {
+				.hero-stats {
+					grid-template-columns: 1fr 1fr !important;
+				}
 
-      .main-grid {
-        grid-template-columns: 1fr !important;
-      }
-    }
+				.prize-cards {
+					grid-template-columns: 1fr !important;
+				}
 
-    @media (max-width: 600px) {
-      .hero-stats {
-        grid-template-columns: 1fr 1fr !important;
-      }
+				#bnav {
+					display: flex !important;
+				}
+			}
+		</style>
+	</head>
 
-      .prize-cards {
-        grid-template-columns: 1fr !important;
-      }
-
-      #bnav {
-        display: flex !important;
-      }
-    }
-  </style>
-</head>
-
-<body class="bg-brand-gray-faint text-brand-black text-sm">
-
-  <!-- NAVBAR -->
-  <nav
-    class="bg-white border-b border-brand-gray-light h-[54px] flex items-center px-8 gap-3 sticky top-0 z-50 sm:px-4">
-    <a class="flex items-center gap-2 no-underline" href="./ideashare.html">
-      <!-- <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+	<body class="bg-brand-gray-faint text-brand-black text-sm">
+		<!-- NAVBAR -->
+		<nav
+			class="border-brand-gray-light sticky top-0 z-50 flex h-[54px] items-center gap-3 border-b bg-white px-8 sm:px-4"
+		>
+			<a class="flex items-center gap-2 no-underline" href="./ideashare.html">
+				<!-- <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
         <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z" fill="#111"/>
         <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z" fill="#111"/>
       </svg> -->
-      <img src="logo.svg" alt="logo" class="w-10 h-10">
-      <span class="font-display text-[17px] font-semibold text-black tracking-[-0.4px]">Idea<span
-          class="text-yellow-dark">Share</span></span>
-    </a>
+				<img src="logo.svg" alt="logo" class="h-10 w-10" />
+				<span class="font-display text-[17px] font-semibold tracking-[-0.4px] text-black"
+					>Idea<span class="text-yellow-dark">Share</span></span
+				>
+			</a>
 
-    <button
-      class="text-[13px] text-brand-gray-mid border-none bg-transparent cursor-pointer hover:text-brand-black transition-colors">←
-      All challenges</button>
+			<button
+				class="text-brand-gray-mid hover:text-brand-black cursor-pointer border-none bg-transparent text-[13px] transition-colors"
+			>
+				← All challenges
+			</button>
 
-    <div class="ml-auto flex items-center gap-2.5">
-      <button
-        class="px-3.5 py-1.5 border border-brand-gray-light rounded-full text-[13px] font-medium text-brand-gray-dark bg-transparent cursor-pointer hidden sm:block">Sign
-        in</button>
-      <button
-        class="px-4 py-1.5 border-none rounded-full bg-brand-black text-[13px] font-medium text-white cursor-pointer flex items-center gap-1.5 hover:opacity-85 transition-opacity">
-        <div
-          class="w-[15px] h-[15px] bg-brand-yellow rounded-full flex items-center justify-center text-sm text-brand-black leading-none">
-          +</div>
-        Submit idea
-      </button>
-    </div>
-  </nav>
+			<div class="ml-auto flex items-center gap-2.5">
+				<button
+					class="border-brand-gray-light text-brand-gray-dark hidden cursor-pointer rounded-full border bg-transparent px-3.5 py-1.5 text-[13px] font-medium sm:block"
+				>
+					Sign in
+				</button>
+				<button
+					class="bg-brand-black flex cursor-pointer items-center gap-1.5 rounded-full border-none px-4 py-1.5 text-[13px] font-medium text-white transition-opacity hover:opacity-85"
+				>
+					<div
+						class="bg-brand-yellow text-brand-black flex h-[15px] w-[15px] items-center justify-center rounded-full text-sm leading-none"
+					>
+						+
+					</div>
+					Submit idea
+				</button>
+			</div>
+		</nav>
 
-  <!-- HERO -->
-  <div class="hero-grid bg-brand-black relative overflow-hidden">
-    <!-- Yellow glow -->
-    <div class="absolute w-[600px] h-[600px] rounded-full pointer-events-none"
-      style="background: radial-gradient(circle, rgba(245,197,24,0.2) 0%, transparent 70%); top: -200px; left: -100px;">
-    </div>
+		<!-- HERO -->
+		<div class="hero-grid bg-brand-black relative overflow-hidden">
+			<!-- Yellow glow -->
+			<div
+				class="pointer-events-none absolute h-[600px] w-[600px] rounded-full"
+				style="
+					background: radial-gradient(circle, rgba(245, 197, 24, 0.2) 0%, transparent 70%);
+					top: -200px;
+					left: -100px;
+				"
+			></div>
 
-    <div class="max-w-[960px] mx-auto px-8 py-12 pb-10 relative z-10 sm:px-4 sm:py-8">
+			<div class="relative z-10 mx-auto max-w-[960px] px-8 py-12 pb-10 sm:px-4 sm:py-8">
+				<!-- Sponsor badge -->
+				<div class="mb-6 flex items-center gap-2.5">
+					<span class="text-brand-yellow text-[11px] font-bold tracking-widest uppercase"
+						>Sponsored challenge</span
+					>
+					<div class="h-px max-w-[60px] flex-1 bg-white/10"></div>
+					<div
+						class="flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 backdrop-blur-sm"
+					>
+						<div
+							class="text-brand-black flex h-5 w-5 items-center justify-center rounded bg-white text-[10px] font-bold"
+						>
+							DU
+						</div>
+						<span class="text-[12px] font-medium text-white">Dhaka University</span>
+					</div>
+				</div>
 
-      <!-- Sponsor badge -->
-      <div class="flex items-center gap-2.5 mb-6">
-        <span class="text-[11px] font-bold uppercase tracking-widest text-brand-yellow">Sponsored challenge</span>
-        <div class="h-px flex-1 bg-white/10 max-w-[60px]"></div>
-        <div
-          class="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full border border-white/15 backdrop-blur-sm">
-          <div class="w-5 h-5 rounded bg-white flex items-center justify-center text-[10px] font-bold text-brand-black">
-            DU</div>
-          <span class="text-[12px] font-medium text-white">Dhaka University</span>
-        </div>
-      </div>
+				<!-- Title -->
+				<h1
+					class="mb-4 max-w-[600px] font-display text-[36px] leading-tight font-extrabold tracking-tight text-white sm:text-[26px]"
+				>
+					Reimagine University<br />
+					<span class="text-brand-yellow">Admissions</span>
+				</h1>
+				<p class="mb-8 max-w-[520px] text-[15px] leading-relaxed text-white/55 sm:text-[13.5px]">
+					How should universities select students in 2025? Grades, interviews, portfolios, something
+					entirely new? Share your boldest idea — the best one wins.
+				</p>
 
-      <!-- Title -->
-      <h1
-        class="font-display text-[36px] font-extrabold text-white leading-tight tracking-tight max-w-[600px] mb-4 sm:text-[26px]">
-        Reimagine University<br>
-        <span class="text-brand-yellow">Admissions</span>
-      </h1>
-      <p class="text-[15px] text-white/55 max-w-[520px] leading-relaxed mb-8 sm:text-[13.5px]">
-        How should universities select students in 2025? Grades, interviews, portfolios, something entirely new? Share
-        your boldest idea — the best one wins.
-      </p>
+				<!-- Stats row -->
+				<div class="hero-stats mb-8 grid grid-cols-4 gap-3 sm:grid-cols-2">
+					<div class="rounded-2xl border border-white/10 bg-white/8 px-4 py-3 backdrop-blur-sm">
+						<div class="text-brand-yellow font-display text-[22px] font-bold">$500</div>
+						<div class="mt-0.5 text-[11px] text-white/45">Prize pool</div>
+					</div>
+					<div class="rounded-2xl border border-white/10 bg-white/8 px-4 py-3 backdrop-blur-sm">
+						<div class="font-display text-[22px] font-bold text-white">247</div>
+						<div class="mt-0.5 text-[11px] text-white/45">Ideas submitted</div>
+					</div>
+					<div class="rounded-2xl border border-white/10 bg-white/8 px-4 py-3 backdrop-blur-sm">
+						<div class="font-display text-[22px] font-bold text-white">1,840</div>
+						<div class="mt-0.5 text-[11px] text-white/45">Sparks given</div>
+					</div>
+					<div
+						class="countdown-pulse bg-brand-yellow/15 border-brand-yellow/30 rounded-2xl border px-4 py-3"
+					>
+						<div class="text-brand-yellow font-display text-[22px] font-bold" id="days-left">
+							12
+						</div>
+						<div class="mt-0.5 text-[11px] text-white/45">Days remaining</div>
+					</div>
+				</div>
 
-      <!-- Stats row -->
-      <div class="hero-stats grid grid-cols-4 gap-3 mb-8 sm:grid-cols-2">
-        <div class="bg-white/8 border border-white/10 rounded-2xl px-4 py-3 backdrop-blur-sm">
-          <div class="font-display text-[22px] font-bold text-brand-yellow">$500</div>
-          <div class="text-[11px] text-white/45 mt-0.5">Prize pool</div>
-        </div>
-        <div class="bg-white/8 border border-white/10 rounded-2xl px-4 py-3 backdrop-blur-sm">
-          <div class="font-display text-[22px] font-bold text-white">247</div>
-          <div class="text-[11px] text-white/45 mt-0.5">Ideas submitted</div>
-        </div>
-        <div class="bg-white/8 border border-white/10 rounded-2xl px-4 py-3 backdrop-blur-sm">
-          <div class="font-display text-[22px] font-bold text-white">1,840</div>
-          <div class="text-[11px] text-white/45 mt-0.5">Sparks given</div>
-        </div>
-        <div class="countdown-pulse bg-brand-yellow/15 border border-brand-yellow/30 rounded-2xl px-4 py-3">
-          <div class="font-display text-[22px] font-bold text-brand-yellow" id="days-left">12</div>
-          <div class="text-[11px] text-white/45 mt-0.5">Days remaining</div>
-        </div>
-      </div>
+				<!-- Progress bar -->
+				<div class="mb-8">
+					<div class="mb-2 flex items-center justify-between">
+						<span class="text-[12px] text-white/45">Challenge progress</span>
+						<span class="text-brand-yellow text-[12px] font-medium">Day 18 of 30</span>
+					</div>
+					<div class="h-1.5 overflow-hidden rounded-full bg-white/10">
+						<div class="progress-fill bg-brand-yellow h-full rounded-full" style="width: 60%"></div>
+					</div>
+				</div>
 
-      <!-- Progress bar -->
-      <div class="mb-8">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-[12px] text-white/45">Challenge progress</span>
-          <span class="text-[12px] text-brand-yellow font-medium">Day 18 of 30</span>
-        </div>
-        <div class="h-1.5 bg-white/10 rounded-full overflow-hidden">
-          <div class="progress-fill h-full bg-brand-yellow rounded-full" style="width: 60%"></div>
-        </div>
-      </div>
+				<!-- CTA buttons -->
+				<div class="flex flex-wrap items-center gap-3">
+					<button
+						onclick="document.getElementById('submit-modal').style.display = 'flex'"
+						class="bg-brand-yellow text-brand-black flex cursor-pointer items-center gap-2 rounded-full border-none px-6 py-3 text-[14px] font-bold transition-opacity hover:opacity-90"
+					>
+						<span>⚡</span> Submit your idea
+					</button>
+					<button
+						class="cursor-pointer rounded-full border border-white/20 px-6 py-3 text-[14px] font-medium text-white transition-colors hover:bg-white/10"
+					>
+						View all 247 ideas
+					</button>
+				</div>
+			</div>
+		</div>
 
-      <!-- CTA buttons -->
-      <div class="flex items-center gap-3 flex-wrap">
-        <button onclick="document.getElementById('submit-modal').style.display='flex'"
-          class="flex items-center gap-2 px-6 py-3 border-none rounded-full bg-brand-yellow text-brand-black text-[14px] font-bold cursor-pointer hover:opacity-90 transition-opacity">
-          <span>⚡</span> Submit your idea
-        </button>
-        <button
-          class="px-6 py-3 border border-white/20 rounded-full text-white text-[14px] font-medium cursor-pointer hover:bg-white/10 transition-colors">
-          View all 247 ideas
-        </button>
-      </div>
-    </div>
-  </div>
+		<!-- MAIN LAYOUT -->
+		<div
+			class="main-grid mx-auto grid max-w-[960px] items-start gap-6 px-8 py-6 pb-20 sm:px-4"
+			style="grid-template-columns: minmax(0, 1fr) 260px"
+		>
+			<!-- MAIN COLUMN -->
+			<div class="flex flex-col gap-5">
+				<!-- About the challenge -->
+				<div class="border-brand-gray-light rounded-2xl border bg-white p-5">
+					<div class="text-brand-gray-mid mb-3 text-[11px] font-bold tracking-widest uppercase">
+						About this challenge
+					</div>
+					<p class="text-brand-gray-dark mb-4 text-[13.5px] leading-[1.75]">
+						Dhaka University wants to hear from students, educators, employers, and everyday people.
+						Traditional admissions systems rely heavily on exam scores — but is that the best way to
+						find great students?
+					</p>
+					<p class="text-brand-gray-dark mb-4 text-[13.5px] leading-[1.75]">
+						Submit your boldest idea for how university admissions should work. Think about
+						fairness, access, skill recognition, and what universities are really trying to find in
+						a student.
+					</p>
+					<div
+						class="bg-brand-yellow-light border-brand-yellow-mid flex items-start gap-3 rounded-xl border px-4 py-3"
+					>
+						<span class="flex-shrink-0 text-[18px]">💡</span>
+						<div class="text-brand-black text-[13px] leading-relaxed">
+							<strong
+								>The best ideas will be shared directly with Dhaka University's admissions
+								board.</strong
+							>
+							The top 3 ideas also win cash prizes.
+						</div>
+					</div>
+				</div>
 
-  <!-- MAIN LAYOUT -->
-  <div class="main-grid max-w-[960px] mx-auto px-8 py-6 pb-20 grid gap-6 items-start sm:px-4"
-    style="grid-template-columns: minmax(0,1fr) 260px;">
+				<!-- Prize breakdown -->
+				<div>
+					<div class="text-brand-gray-mid mb-3 text-[11px] font-bold tracking-widest uppercase">
+						Prize breakdown
+					</div>
+					<div class="prize-cards grid grid-cols-3 gap-3">
+						<div class="bg-brand-black rounded-2xl p-4 text-center">
+							<div class="mb-1 text-[28px]">🥇</div>
+							<div class="text-brand-yellow mb-0.5 font-display text-[20px] font-bold">$300</div>
+							<div class="text-[12px] text-white/50">1st place</div>
+							<div class="mt-1.5 text-[11px] text-white/30">+ featured in DU newsletter</div>
+						</div>
+						<div class="border-brand-gray-light rounded-2xl border bg-white p-4 text-center">
+							<div class="mb-1 text-[28px]">🥈</div>
+							<div class="text-brand-black mb-0.5 font-display text-[20px] font-bold">$150</div>
+							<div class="text-brand-gray-mid text-[12px]">2nd place</div>
+						</div>
+						<div class="border-brand-gray-light rounded-2xl border bg-white p-4 text-center">
+							<div class="mb-1 text-[28px]">🥉</div>
+							<div class="text-brand-black mb-0.5 font-display text-[20px] font-bold">$50</div>
+							<div class="text-brand-gray-mid text-[12px]">3rd place</div>
+						</div>
+					</div>
+				</div>
 
-    <!-- MAIN COLUMN -->
-    <div class="flex flex-col gap-5">
+				<!-- Top ideas -->
+				<div>
+					<div class="mb-3 flex items-center justify-between">
+						<div class="text-brand-gray-mid text-[11px] font-bold tracking-widest uppercase">
+							Top ideas so far
+						</div>
+						<button
+							class="text-brand-black hover:text-brand-yellow-dark cursor-pointer border-none bg-transparent text-[12.5px] font-medium transition-colors"
+						>
+							View all →
+						</button>
+					</div>
 
-      <!-- About the challenge -->
-      <div class="bg-white border border-brand-gray-light rounded-2xl p-5">
-        <div class="text-[11px] font-bold uppercase tracking-widest text-brand-gray-mid mb-3">About this challenge</div>
-        <p class="text-[13.5px] text-brand-gray-dark leading-[1.75] mb-4">
-          Dhaka University wants to hear from students, educators, employers, and everyday people. Traditional
-          admissions systems rely heavily on exam scores — but is that the best way to find great students?
-        </p>
-        <p class="text-[13.5px] text-brand-gray-dark leading-[1.75] mb-4">
-          Submit your boldest idea for how university admissions should work. Think about fairness, access, skill
-          recognition, and what universities are really trying to find in a student.
-        </p>
-        <div class="bg-brand-yellow-light border border-brand-yellow-mid rounded-xl px-4 py-3 flex gap-3 items-start">
-          <span class="text-[18px] flex-shrink-0">💡</span>
-          <div class="text-[13px] text-brand-black leading-relaxed">
-            <strong>The best ideas will be shared directly with Dhaka University's admissions board.</strong> The top 3
-            ideas also win cash prizes.
-          </div>
-        </div>
-      </div>
+					<div class="flex flex-col gap-3">
+						<!-- #1 idea -->
+						<div
+							class="border-brand-gray-light hover:border-brand-yellow cursor-pointer rounded-2xl border bg-white px-5 py-4 transition-all hover:shadow-[0_0_0_3px_#FFF8DC]"
+						>
+							<div class="mb-2 flex items-center gap-2">
+								<div
+									class="bg-brand-yellow text-brand-black flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold"
+								>
+									#1
+								</div>
+								<div
+									class="text-brand-yellow-dark text-[11px] font-semibold tracking-wide uppercase"
+								>
+									Leading idea
+								</div>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="flex-1">
+									<div
+										class="text-brand-black mb-2 font-display text-[14px] leading-snug font-semibold"
+									>
+										Replace entrance exams with a 6-month project portfolio reviewed by alumni
+										panels
+									</div>
+									<p class="text-brand-gray-dark mb-3 text-[12.5px] leading-relaxed">
+										Students submit a real project — anything they built, solved, or created —
+										reviewed by a panel of alumni who actually work in relevant fields. Eliminates
+										exam bias completely.
+									</p>
+									<div class="flex flex-wrap items-center gap-1.5">
+										<span
+											class="bg-brand-gray-faint border-brand-gray-light text-brand-gray-dark rounded-full border px-2.5 py-0.5 text-[11px]"
+											>#fairness</span
+										>
+										<span
+											class="bg-brand-gray-faint border-brand-gray-light text-brand-gray-dark rounded-full border px-2.5 py-0.5 text-[11px]"
+											>#portfolio</span
+										>
+										<div class="ml-auto flex items-center gap-2">
+											<div class="flex -space-x-1.5">
+												<div
+													class="bg-brand-yellow text-brand-black flex h-5 w-5 items-center justify-center rounded-full border-2 border-white text-[8px] font-bold"
+												>
+													RK
+												</div>
+												<div
+													class="bg-brand-black flex h-5 w-5 items-center justify-center rounded-full border-2 border-white text-[8px] font-bold text-white"
+												>
+													SM
+												</div>
+												<div
+													class="flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-[#EEF2FF] text-[8px] font-bold text-[#3730A3]"
+												>
+													+8
+												</div>
+											</div>
+											<span class="text-brand-gray-mid text-[12px]">18 refinements</span>
+										</div>
+									</div>
+								</div>
+								<div class="flex flex-shrink-0 flex-col items-center gap-0.5">
+									<div
+										class="bg-brand-yellow border-brand-yellow flex h-8 w-8 cursor-pointer items-center justify-center rounded-[8px] border-[1.5px] text-sm"
+									>
+										⚡
+									</div>
+									<span class="text-brand-black text-[11px] font-bold">312</span>
+								</div>
+							</div>
+						</div>
 
-      <!-- Prize breakdown -->
-      <div>
-        <div class="text-[11px] font-bold uppercase tracking-widest text-brand-gray-mid mb-3">Prize breakdown</div>
-        <div class="prize-cards grid grid-cols-3 gap-3">
-          <div class="bg-brand-black rounded-2xl p-4 text-center">
-            <div class="text-[28px] mb-1">🥇</div>
-            <div class="font-display text-[20px] font-bold text-brand-yellow mb-0.5">$300</div>
-            <div class="text-[12px] text-white/50">1st place</div>
-            <div class="text-[11px] text-white/30 mt-1.5">+ featured in DU newsletter</div>
-          </div>
-          <div class="bg-white border border-brand-gray-light rounded-2xl p-4 text-center">
-            <div class="text-[28px] mb-1">🥈</div>
-            <div class="font-display text-[20px] font-bold text-brand-black mb-0.5">$150</div>
-            <div class="text-[12px] text-brand-gray-mid">2nd place</div>
-          </div>
-          <div class="bg-white border border-brand-gray-light rounded-2xl p-4 text-center">
-            <div class="text-[28px] mb-1">🥉</div>
-            <div class="font-display text-[20px] font-bold text-brand-black mb-0.5">$50</div>
-            <div class="text-[12px] text-brand-gray-mid">3rd place</div>
-          </div>
-        </div>
-      </div>
+						<!-- #2 idea -->
+						<div
+							class="border-brand-gray-light hover:border-brand-yellow cursor-pointer rounded-2xl border bg-white px-5 py-4 transition-all hover:shadow-[0_0_0_3px_#FFF8DC]"
+						>
+							<div class="mb-2 flex items-center gap-2">
+								<div
+									class="text-brand-gray-dark border-brand-gray-light flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border bg-[#F5F5F2] text-[11px] font-bold"
+								>
+									#2
+								</div>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="flex-1">
+									<div
+										class="text-brand-black mb-2 font-display text-[14px] leading-snug font-semibold"
+									>
+										A national skills passport that replaces exam scores entirely — built from
+										school, work, and community contributions
+									</div>
+									<p class="text-brand-gray-dark mb-3 text-[12.5px] leading-relaxed">
+										Every student accumulates verified micro-credentials from age 12 onwards.
+										Universities assess the passport holistically instead of a single exam day.
+									</p>
+									<div class="flex flex-wrap items-center gap-1.5">
+										<span
+											class="bg-brand-gray-faint border-brand-gray-light text-brand-gray-dark rounded-full border px-2.5 py-0.5 text-[11px]"
+											>#credentials</span
+										>
+										<span
+											class="bg-brand-gray-faint border-brand-gray-light text-brand-gray-dark rounded-full border px-2.5 py-0.5 text-[11px]"
+											>#access</span
+										>
+										<span class="text-brand-gray-mid ml-auto text-[12px]">9 refinements</span>
+									</div>
+								</div>
+								<div class="flex flex-shrink-0 flex-col items-center gap-0.5">
+									<div
+										class="border-brand-gray-light hover:border-brand-yellow hover:bg-brand-yellow-light flex h-8 w-8 cursor-pointer items-center justify-center rounded-[8px] border-[1.5px] text-sm transition-all"
+									>
+										⚡
+									</div>
+									<span class="text-brand-gray-dark text-[11px] font-medium">198</span>
+								</div>
+							</div>
+						</div>
 
-      <!-- Top ideas -->
-      <div>
-        <div class="flex items-center justify-between mb-3">
-          <div class="text-[11px] font-bold uppercase tracking-widest text-brand-gray-mid">Top ideas so far</div>
-          <button
-            class="text-[12.5px] font-medium text-brand-black cursor-pointer border-none bg-transparent hover:text-brand-yellow-dark transition-colors">View
-            all →</button>
-        </div>
+						<!-- #3 idea -->
+						<div
+							class="border-brand-gray-light hover:border-brand-yellow cursor-pointer rounded-2xl border bg-white px-5 py-4 transition-all hover:shadow-[0_0_0_3px_#FFF8DC]"
+						>
+							<div class="mb-2 flex items-center gap-2">
+								<div
+									class="text-brand-gray-dark border-brand-gray-light flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border bg-[#F5F5F2] text-[11px] font-bold"
+								>
+									#3
+								</div>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="flex-1">
+									<div
+										class="text-brand-black mb-2 font-display text-[14px] leading-snug font-semibold"
+									>
+										Blind admissions — remove names, schools, and locations. Only the idea or essay
+										is reviewed
+									</div>
+									<p class="text-brand-gray-dark mb-3 text-[12.5px] leading-relaxed">
+										Bias enters when reviewers know a student's background. Anonymise everything
+										until after initial selection. Let the thinking speak for itself.
+									</p>
+									<div class="flex flex-wrap items-center gap-1.5">
+										<span
+											class="bg-brand-gray-faint border-brand-gray-light text-brand-gray-dark rounded-full border px-2.5 py-0.5 text-[11px]"
+											>#bias</span
+										>
+										<span
+											class="bg-brand-gray-faint border-brand-gray-light text-brand-gray-dark rounded-full border px-2.5 py-0.5 text-[11px]"
+											>#fairness</span
+										>
+										<span class="text-brand-gray-mid ml-auto text-[12px]">6 refinements</span>
+									</div>
+								</div>
+								<div class="flex flex-shrink-0 flex-col items-center gap-0.5">
+									<div
+										class="border-brand-gray-light hover:border-brand-yellow hover:bg-brand-yellow-light flex h-8 w-8 cursor-pointer items-center justify-center rounded-[8px] border-[1.5px] text-sm transition-all"
+									>
+										⚡
+									</div>
+									<span class="text-brand-gray-dark text-[11px] font-medium">141</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-        <div class="flex flex-col gap-3">
+				<!-- Submit CTA banner -->
+				<div class="bg-brand-black flex flex-wrap items-center gap-5 rounded-2xl px-6 py-5">
+					<div>
+						<div class="mb-1 font-display text-[16px] font-bold text-white">
+							Have a better idea?
+						</div>
+						<div class="text-[13px] text-white/50">12 days left to submit. Anyone can enter.</div>
+					</div>
+					<button
+						onclick="document.getElementById('submit-modal').style.display = 'flex'"
+						class="bg-brand-yellow text-brand-black ml-auto flex cursor-pointer items-center gap-2 rounded-full border-none px-5 py-2.5 text-[13.5px] font-bold whitespace-nowrap transition-opacity hover:opacity-90"
+					>
+						⚡ Submit idea
+					</button>
+				</div>
+			</div>
 
-          <!-- #1 idea -->
-          <div
-            class="bg-white border border-brand-gray-light rounded-2xl px-5 py-4 cursor-pointer hover:border-brand-yellow hover:shadow-[0_0_0_3px_#FFF8DC] transition-all">
-            <div class="flex items-center gap-2 mb-2">
-              <div
-                class="w-6 h-6 rounded-full bg-brand-yellow text-brand-black flex items-center justify-center text-[11px] font-bold flex-shrink-0">
-                #1</div>
-              <div class="text-[11px] font-semibold text-brand-yellow-dark uppercase tracking-wide">Leading idea</div>
-            </div>
-            <div class="flex gap-3 items-start">
-              <div class="flex-1">
-                <div class="font-display text-[14px] font-semibold text-brand-black leading-snug mb-2">Replace entrance
-                  exams with a 6-month project portfolio reviewed by alumni panels</div>
-                <p class="text-[12.5px] text-brand-gray-dark leading-relaxed mb-3">Students submit a real project —
-                  anything they built, solved, or created — reviewed by a panel of alumni who actually work in relevant
-                  fields. Eliminates exam bias completely.</p>
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <span
-                    class="px-2.5 py-0.5 rounded-full bg-brand-gray-faint border border-brand-gray-light text-[11px] text-brand-gray-dark">#fairness</span>
-                  <span
-                    class="px-2.5 py-0.5 rounded-full bg-brand-gray-faint border border-brand-gray-light text-[11px] text-brand-gray-dark">#portfolio</span>
-                  <div class="ml-auto flex items-center gap-2">
-                    <div class="flex -space-x-1.5">
-                      <div
-                        class="w-5 h-5 rounded-full bg-brand-yellow text-brand-black border-2 border-white text-[8px] font-bold flex items-center justify-center">
-                        RK</div>
-                      <div
-                        class="w-5 h-5 rounded-full bg-brand-black text-white border-2 border-white text-[8px] font-bold flex items-center justify-center">
-                        SM</div>
-                      <div
-                        class="w-5 h-5 rounded-full bg-[#EEF2FF] text-[#3730A3] border-2 border-white text-[8px] font-bold flex items-center justify-center">
-                        +8</div>
-                    </div>
-                    <span class="text-[12px] text-brand-gray-mid">18 refinements</span>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col items-center gap-0.5 flex-shrink-0">
-                <div
-                  class="w-8 h-8 bg-brand-yellow border-brand-yellow border-[1.5px] rounded-[8px] flex items-center justify-center text-sm cursor-pointer">
-                  ⚡</div>
-                <span class="text-[11px] font-bold text-brand-black">312</span>
-              </div>
-            </div>
-          </div>
+			<!-- RIGHT SIDEBAR -->
+			<aside class="sidebar-right flex flex-col gap-4">
+				<!-- Sponsor card -->
+				<div class="border-brand-gray-light rounded-2xl border bg-white p-4">
+					<div class="text-brand-gray-mid mb-3 text-[11px] font-bold tracking-widest uppercase">
+						Sponsored by
+					</div>
+					<div class="mb-3 flex items-center gap-3">
+						<div
+							class="bg-brand-black text-brand-yellow flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl font-display text-[14px] font-bold"
+						>
+							DU
+						</div>
+						<div>
+							<div class="text-brand-black text-[13.5px] font-semibold">Dhaka University</div>
+							<div class="text-brand-gray-mid text-[11.5px]">Est. 1921 · Dhaka, BD</div>
+						</div>
+					</div>
+					<p class="text-brand-gray-dark mb-3 text-[12px] leading-relaxed">
+						Bangladesh's oldest and largest public university, committed to rethinking how it
+						selects and serves students.
+					</p>
+					<a
+						href="#"
+						class="text-brand-yellow-dark text-[12px] font-medium no-underline hover:underline"
+						>Visit website →</a
+					>
+				</div>
 
-          <!-- #2 idea -->
-          <div
-            class="bg-white border border-brand-gray-light rounded-2xl px-5 py-4 cursor-pointer hover:border-brand-yellow hover:shadow-[0_0_0_3px_#FFF8DC] transition-all">
-            <div class="flex items-center gap-2 mb-2">
-              <div
-                class="w-6 h-6 rounded-full bg-[#F5F5F2] text-brand-gray-dark flex items-center justify-center text-[11px] font-bold flex-shrink-0 border border-brand-gray-light">
-                #2</div>
-            </div>
-            <div class="flex gap-3 items-start">
-              <div class="flex-1">
-                <div class="font-display text-[14px] font-semibold text-brand-black leading-snug mb-2">A national skills
-                  passport that replaces exam scores entirely — built from school, work, and community contributions
-                </div>
-                <p class="text-[12.5px] text-brand-gray-dark leading-relaxed mb-3">Every student accumulates verified
-                  micro-credentials from age 12 onwards. Universities assess the passport holistically instead of a
-                  single exam day.</p>
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <span
-                    class="px-2.5 py-0.5 rounded-full bg-brand-gray-faint border border-brand-gray-light text-[11px] text-brand-gray-dark">#credentials</span>
-                  <span
-                    class="px-2.5 py-0.5 rounded-full bg-brand-gray-faint border border-brand-gray-light text-[11px] text-brand-gray-dark">#access</span>
-                  <span class="ml-auto text-[12px] text-brand-gray-mid">9 refinements</span>
-                </div>
-              </div>
-              <div class="flex flex-col items-center gap-0.5 flex-shrink-0">
-                <div
-                  class="w-8 h-8 border-[1.5px] border-brand-gray-light rounded-[8px] flex items-center justify-center text-sm cursor-pointer hover:border-brand-yellow hover:bg-brand-yellow-light transition-all">
-                  ⚡</div>
-                <span class="text-[11px] font-medium text-brand-gray-dark">198</span>
-              </div>
-            </div>
-          </div>
+				<!-- Deadline countdown -->
+				<div class="bg-brand-yellow rounded-2xl p-4">
+					<div class="text-brand-black/50 mb-3 text-[11px] font-bold tracking-widest uppercase">
+						Deadline
+					</div>
+					<div
+						class="text-brand-black mb-1 font-display text-[28px] font-extrabold tracking-tight"
+						id="countdown-display"
+					>
+						12 days
+					</div>
+					<div class="text-brand-black/60 mb-3 text-[12px]">
+						Closes January 31, 2025 at midnight
+					</div>
+					<div class="bg-brand-black/15 h-1.5 overflow-hidden rounded-full">
+						<div class="bg-brand-black h-full rounded-full" style="width: 60%"></div>
+					</div>
+					<div class="text-brand-black/50 mt-1.5 flex justify-between text-[11px]">
+						<span>Day 18</span><span>Day 30</span>
+					</div>
+				</div>
 
-          <!-- #3 idea -->
-          <div
-            class="bg-white border border-brand-gray-light rounded-2xl px-5 py-4 cursor-pointer hover:border-brand-yellow hover:shadow-[0_0_0_3px_#FFF8DC] transition-all">
-            <div class="flex items-center gap-2 mb-2">
-              <div
-                class="w-6 h-6 rounded-full bg-[#F5F5F2] text-brand-gray-dark flex items-center justify-center text-[11px] font-bold flex-shrink-0 border border-brand-gray-light">
-                #3</div>
-            </div>
-            <div class="flex gap-3 items-start">
-              <div class="flex-1">
-                <div class="font-display text-[14px] font-semibold text-brand-black leading-snug mb-2">Blind admissions
-                  — remove names, schools, and locations. Only the idea or essay is reviewed</div>
-                <p class="text-[12.5px] text-brand-gray-dark leading-relaxed mb-3">Bias enters when reviewers know a
-                  student's background. Anonymise everything until after initial selection. Let the thinking speak for
-                  itself.</p>
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <span
-                    class="px-2.5 py-0.5 rounded-full bg-brand-gray-faint border border-brand-gray-light text-[11px] text-brand-gray-dark">#bias</span>
-                  <span
-                    class="px-2.5 py-0.5 rounded-full bg-brand-gray-faint border border-brand-gray-light text-[11px] text-brand-gray-dark">#fairness</span>
-                  <span class="ml-auto text-[12px] text-brand-gray-mid">6 refinements</span>
-                </div>
-              </div>
-              <div class="flex flex-col items-center gap-0.5 flex-shrink-0">
-                <div
-                  class="w-8 h-8 border-[1.5px] border-brand-gray-light rounded-[8px] flex items-center justify-center text-sm cursor-pointer hover:border-brand-yellow hover:bg-brand-yellow-light transition-all">
-                  ⚡</div>
-                <span class="text-[11px] font-medium text-brand-gray-dark">141</span>
-              </div>
-            </div>
-          </div>
+				<!-- How it works -->
+				<div class="border-brand-gray-light rounded-2xl border bg-white p-4">
+					<div class="text-brand-gray-mid mb-3 text-[11px] font-bold tracking-widest uppercase">
+						How it works
+					</div>
+					<div class="flex flex-col gap-3">
+						<div class="flex items-start gap-3">
+							<div
+								class="bg-brand-yellow text-brand-black mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold"
+							>
+								1
+							</div>
+							<div class="text-brand-gray-dark text-[12.5px] leading-snug">
+								<strong class="text-brand-black">Submit</strong> your idea before the deadline
+							</div>
+						</div>
+						<div class="flex items-start gap-3">
+							<div
+								class="bg-brand-yellow text-brand-black mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold"
+							>
+								2
+							</div>
+							<div class="text-brand-gray-dark text-[12.5px] leading-snug">
+								<strong class="text-brand-black">Community votes</strong> and refines the best ideas
+							</div>
+						</div>
+						<div class="flex items-start gap-3">
+							<div
+								class="bg-brand-yellow text-brand-black mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold"
+							>
+								3
+							</div>
+							<div class="text-brand-gray-dark text-[12.5px] leading-snug">
+								<strong class="text-brand-black">Dhaka University</strong> reviews the top 10
+							</div>
+						</div>
+						<div class="flex items-start gap-3">
+							<div
+								class="bg-brand-black text-brand-yellow mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold"
+							>
+								4
+							</div>
+							<div class="text-brand-gray-dark text-[12.5px] leading-snug">
+								<strong class="text-brand-black">Winners announced</strong> Feb 5 with prizes paid
+							</div>
+						</div>
+					</div>
+				</div>
 
-        </div>
-      </div>
+				<!-- Participants -->
+				<div class="border-brand-gray-light rounded-2xl border bg-white p-4">
+					<div class="text-brand-gray-mid mb-3 text-[11px] font-bold tracking-widest uppercase">
+						Participants
+					</div>
+					<div class="mb-2 flex -space-x-2">
+						<div
+							class="bg-brand-yellow text-brand-black flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-[10px] font-bold"
+						>
+							RK
+						</div>
+						<div
+							class="bg-brand-black flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-[10px] font-bold text-white"
+						>
+							SM
+						</div>
+						<div
+							class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-[#EEF2FF] text-[10px] font-bold text-[#3730A3]"
+						>
+							TA
+						</div>
+						<div
+							class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-[#ECFDF5] text-[10px] font-bold text-[#065F46]"
+						>
+							NI
+						</div>
+						<div
+							class="bg-brand-gray-faint text-brand-gray-dark flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-[10px] font-bold"
+						>
+							+243
+						</div>
+					</div>
+					<div class="text-brand-gray-mid text-[12px]">
+						From <strong class="text-brand-black">28 countries</strong> worldwide
+					</div>
+				</div>
 
-      <!-- Submit CTA banner -->
-      <div class="bg-brand-black rounded-2xl px-6 py-5 flex items-center gap-5 flex-wrap">
-        <div>
-          <div class="font-display text-[16px] font-bold text-white mb-1">Have a better idea?</div>
-          <div class="text-[13px] text-white/50">12 days left to submit. Anyone can enter.</div>
-        </div>
-        <button onclick="document.getElementById('submit-modal').style.display='flex'"
-          class="ml-auto flex items-center gap-2 px-5 py-2.5 border-none rounded-full bg-brand-yellow text-brand-black text-[13.5px] font-bold cursor-pointer hover:opacity-90 transition-opacity whitespace-nowrap">
-          ⚡ Submit idea
-        </button>
-      </div>
+				<!-- Share -->
+				<div class="border-brand-gray-light rounded-2xl border bg-white p-4">
+					<div class="text-brand-gray-mid mb-3 text-[11px] font-bold tracking-widest uppercase">
+						Share this challenge
+					</div>
+					<div class="flex flex-col gap-2">
+						<button
+							class="border-brand-gray-light text-brand-black hover:bg-brand-gray-faint flex cursor-pointer items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] font-medium transition-colors"
+						>
+							<span>🔗</span> Copy link
+						</button>
+						<button
+							class="border-brand-gray-light text-brand-black hover:bg-brand-gray-faint flex cursor-pointer items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] font-medium transition-colors"
+						>
+							<span>𝕏</span> Share on X
+						</button>
+					</div>
+				</div>
+			</aside>
+		</div>
 
-    </div>
+		<!-- SUBMIT MODAL -->
+		<div
+			id="submit-modal"
+			class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+		>
+			<div class="w-full max-w-[520px] overflow-hidden rounded-2xl bg-white shadow-2xl">
+				<div class="bg-brand-yellow px-6 py-5">
+					<div class="text-brand-black mb-1 font-display text-[20px] font-bold">
+						Submit your idea
+					</div>
+					<div class="text-brand-black/60 text-[13px]">
+						Reimagine University Admissions · 12 days left
+					</div>
+				</div>
+				<div class="px-6 py-5">
+					<div class="mb-4">
+						<label class="text-brand-black mb-1.5 block text-[12px] font-semibold"
+							>Your idea in one sentence <span class="text-brand-yellow-dark">*</span></label
+						>
+						<input
+							type="text"
+							placeholder="e.g. Replace exams with a 6-month project portfolio..."
+							class="border-brand-gray-light bg-brand-gray-faint focus:border-brand-yellow h-[46px] w-full rounded-xl border-[1.5px] px-4 text-[14px] transition-all outline-none focus:bg-white focus:shadow-[0_0_0_3px_#FFF8DC]"
+						/>
+					</div>
+					<div class="mb-4">
+						<label class="text-brand-black mb-1.5 block text-[12px] font-semibold"
+							>Describe how it works <span class="text-brand-yellow-dark">*</span></label
+						>
+						<textarea
+							rows="4"
+							placeholder="How would this system work in practice? Who benefits most?"
+							class="border-brand-gray-light bg-brand-gray-faint focus:border-brand-yellow w-full resize-none rounded-xl border-[1.5px] px-4 py-3 font-body text-[13.5px] transition-all outline-none focus:bg-white focus:shadow-[0_0_0_3px_#FFF8DC]"
+						></textarea>
+					</div>
+					<div class="mb-5">
+						<label class="text-brand-black mb-1.5 block text-[12px] font-semibold"
+							>Who benefits most?</label
+						>
+						<input
+							type="text"
+							placeholder="e.g. Students from rural areas, first-generation students..."
+							class="border-brand-gray-light bg-brand-gray-faint focus:border-brand-yellow h-[46px] w-full rounded-xl border-[1.5px] px-4 text-[14px] transition-all outline-none focus:bg-white focus:shadow-[0_0_0_3px_#FFF8DC]"
+						/>
+					</div>
+					<div class="flex gap-3">
+						<button
+							onclick="document.getElementById('submit-modal').style.display = 'none'"
+							class="border-brand-gray-light text-brand-gray-dark hover:border-brand-black flex-1 cursor-pointer rounded-full border bg-transparent py-3 text-[13px] font-medium transition-colors"
+						>
+							Cancel
+						</button>
+						<button
+							class="bg-brand-black flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full border-none py-3 text-[13px] font-bold text-white transition-opacity hover:opacity-85"
+						>
+							<div
+								class="bg-brand-yellow text-brand-black flex h-[18px] w-[18px] items-center justify-center rounded-full text-[11px]"
+							>
+								⚡
+							</div>
+							Submit idea
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
-    <!-- RIGHT SIDEBAR -->
-    <aside class="sidebar-right flex flex-col gap-4">
+		<!-- MOBILE BOTTOM NAV -->
+		<div
+			id="bnav"
+			class="border-brand-gray-light fixed right-0 bottom-0 left-0 z-50 hidden h-[58px] border-t bg-white"
+		>
+			<div class="flex h-full">
+				<button
+					class="text-brand-gray-mid flex flex-1 cursor-pointer flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[10px]"
+				>
+					<svg
+						class="h-5 w-5"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg
+					>Feed
+				</button>
+				<button
+					class="text-brand-gray-mid flex flex-1 cursor-pointer flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[10px]"
+				>
+					<svg
+						class="h-5 w-5"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<circle cx="11" cy="11" r="8" />
+						<line x1="21" y1="21" x2="16.65" y2="16.65" /></svg
+					>Explore
+				</button>
+				<div class="flex flex-shrink-0 items-center justify-center self-center">
+					<button
+						onclick="document.getElementById('submit-modal').style.display = 'flex'"
+						class="bg-brand-yellow -mt-3.5 flex h-[42px] w-[42px] cursor-pointer items-center justify-center rounded-full border-none shadow-lg"
+					>
+						⚡
+					</button>
+				</div>
+				<button
+					class="text-brand-gray-mid flex flex-1 cursor-pointer flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[10px]"
+				>
+					<svg
+						class="h-5 w-5"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" /></svg
+					>Alerts
+				</button>
+				<button
+					class="text-brand-gray-mid flex flex-1 cursor-pointer flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[10px]"
+				>
+					<svg
+						class="h-5 w-5"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+						<circle cx="12" cy="7" r="4" /></svg
+					>Profile
+				</button>
+			</div>
+		</div>
 
-      <!-- Sponsor card -->
-      <div class="bg-white border border-brand-gray-light rounded-2xl p-4">
-        <div class="text-[11px] font-bold uppercase tracking-widest text-brand-gray-mid mb-3">Sponsored by</div>
-        <div class="flex items-center gap-3 mb-3">
-          <div
-            class="w-10 h-10 rounded-xl bg-brand-black flex items-center justify-center text-brand-yellow font-display font-bold text-[14px] flex-shrink-0">
-            DU</div>
-          <div>
-            <div class="text-[13.5px] font-semibold text-brand-black">Dhaka University</div>
-            <div class="text-[11.5px] text-brand-gray-mid">Est. 1921 · Dhaka, BD</div>
-          </div>
-        </div>
-        <p class="text-[12px] text-brand-gray-dark leading-relaxed mb-3">Bangladesh's oldest and largest public
-          university, committed to rethinking how it selects and serves students.</p>
-        <a href="#" class="text-[12px] font-medium text-brand-yellow-dark no-underline hover:underline">Visit website
-          →</a>
-      </div>
-
-      <!-- Deadline countdown -->
-      <div class="bg-brand-yellow rounded-2xl p-4">
-        <div class="text-[11px] font-bold uppercase tracking-widest text-brand-black/50 mb-3">Deadline</div>
-        <div class="font-display text-[28px] font-extrabold text-brand-black tracking-tight mb-1"
-          id="countdown-display">12 days</div>
-        <div class="text-[12px] text-brand-black/60 mb-3">Closes January 31, 2025 at midnight</div>
-        <div class="h-1.5 bg-brand-black/15 rounded-full overflow-hidden">
-          <div class="h-full bg-brand-black rounded-full" style="width: 60%"></div>
-        </div>
-        <div class="flex justify-between mt-1.5 text-[11px] text-brand-black/50">
-          <span>Day 18</span><span>Day 30</span>
-        </div>
-      </div>
-
-      <!-- How it works -->
-      <div class="bg-white border border-brand-gray-light rounded-2xl p-4">
-        <div class="text-[11px] font-bold uppercase tracking-widest text-brand-gray-mid mb-3">How it works</div>
-        <div class="flex flex-col gap-3">
-          <div class="flex gap-3 items-start">
-            <div
-              class="w-6 h-6 rounded-full bg-brand-yellow text-brand-black flex items-center justify-center text-[11px] font-bold flex-shrink-0 mt-0.5">
-              1</div>
-            <div class="text-[12.5px] text-brand-gray-dark leading-snug"><strong
-                class="text-brand-black">Submit</strong> your idea before the deadline</div>
-          </div>
-          <div class="flex gap-3 items-start">
-            <div
-              class="w-6 h-6 rounded-full bg-brand-yellow text-brand-black flex items-center justify-center text-[11px] font-bold flex-shrink-0 mt-0.5">
-              2</div>
-            <div class="text-[12.5px] text-brand-gray-dark leading-snug"><strong class="text-brand-black">Community
-                votes</strong> and refines the best ideas</div>
-          </div>
-          <div class="flex gap-3 items-start">
-            <div
-              class="w-6 h-6 rounded-full bg-brand-yellow text-brand-black flex items-center justify-center text-[11px] font-bold flex-shrink-0 mt-0.5">
-              3</div>
-            <div class="text-[12.5px] text-brand-gray-dark leading-snug"><strong class="text-brand-black">Dhaka
-                University</strong> reviews the top 10</div>
-          </div>
-          <div class="flex gap-3 items-start">
-            <div
-              class="w-6 h-6 rounded-full bg-brand-black text-brand-yellow flex items-center justify-center text-[11px] font-bold flex-shrink-0 mt-0.5">
-              4</div>
-            <div class="text-[12.5px] text-brand-gray-dark leading-snug"><strong class="text-brand-black">Winners
-                announced</strong> Feb 5 with prizes paid</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Participants -->
-      <div class="bg-white border border-brand-gray-light rounded-2xl p-4">
-        <div class="text-[11px] font-bold uppercase tracking-widest text-brand-gray-mid mb-3">Participants</div>
-        <div class="flex -space-x-2 mb-2">
-          <div
-            class="w-8 h-8 rounded-full bg-brand-yellow text-brand-black border-2 border-white flex items-center justify-center text-[10px] font-bold">
-            RK</div>
-          <div
-            class="w-8 h-8 rounded-full bg-brand-black text-white border-2 border-white flex items-center justify-center text-[10px] font-bold">
-            SM</div>
-          <div
-            class="w-8 h-8 rounded-full bg-[#EEF2FF] text-[#3730A3] border-2 border-white flex items-center justify-center text-[10px] font-bold">
-            TA</div>
-          <div
-            class="w-8 h-8 rounded-full bg-[#ECFDF5] text-[#065F46] border-2 border-white flex items-center justify-center text-[10px] font-bold">
-            NI</div>
-          <div
-            class="w-8 h-8 rounded-full bg-brand-gray-faint text-brand-gray-dark border-2 border-white flex items-center justify-center text-[10px] font-bold">
-            +243</div>
-        </div>
-        <div class="text-[12px] text-brand-gray-mid">From <strong class="text-brand-black">28 countries</strong>
-          worldwide</div>
-      </div>
-
-      <!-- Share -->
-      <div class="bg-white border border-brand-gray-light rounded-2xl p-4">
-        <div class="text-[11px] font-bold uppercase tracking-widest text-brand-gray-mid mb-3">Share this challenge</div>
-        <div class="flex flex-col gap-2">
-          <button
-            class="flex items-center gap-2.5 px-3 py-2 border border-brand-gray-light rounded-xl text-[12.5px] font-medium text-brand-black cursor-pointer hover:bg-brand-gray-faint transition-colors">
-            <span>🔗</span> Copy link
-          </button>
-          <button
-            class="flex items-center gap-2.5 px-3 py-2 border border-brand-gray-light rounded-xl text-[12.5px] font-medium text-brand-black cursor-pointer hover:bg-brand-gray-faint transition-colors">
-            <span>𝕏</span> Share on X
-          </button>
-        </div>
-      </div>
-
-    </aside>
-  </div>
-
-  <!-- SUBMIT MODAL -->
-  <div id="submit-modal"
-    class="hidden fixed inset-0 bg-black/60 z-[200] items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl w-full max-w-[520px] overflow-hidden shadow-2xl">
-      <div class="bg-brand-yellow px-6 py-5">
-        <div class="font-display text-[20px] font-bold text-brand-black mb-1">Submit your idea</div>
-        <div class="text-[13px] text-brand-black/60">Reimagine University Admissions · 12 days left</div>
-      </div>
-      <div class="px-6 py-5">
-        <div class="mb-4">
-          <label class="text-[12px] font-semibold text-brand-black mb-1.5 block">Your idea in one sentence <span
-              class="text-brand-yellow-dark">*</span></label>
-          <input type="text" placeholder="e.g. Replace exams with a 6-month project portfolio..."
-            class="w-full h-[46px] border-[1.5px] border-brand-gray-light rounded-xl px-4 text-[14px] bg-brand-gray-faint outline-none focus:border-brand-yellow focus:bg-white focus:shadow-[0_0_0_3px_#FFF8DC] transition-all">
-        </div>
-        <div class="mb-4">
-          <label class="text-[12px] font-semibold text-brand-black mb-1.5 block">Describe how it works <span
-              class="text-brand-yellow-dark">*</span></label>
-          <textarea rows="4" placeholder="How would this system work in practice? Who benefits most?"
-            class="w-full border-[1.5px] border-brand-gray-light rounded-xl px-4 py-3 text-[13.5px] bg-brand-gray-faint outline-none focus:border-brand-yellow focus:bg-white focus:shadow-[0_0_0_3px_#FFF8DC] transition-all resize-none font-body"></textarea>
-        </div>
-        <div class="mb-5">
-          <label class="text-[12px] font-semibold text-brand-black mb-1.5 block">Who benefits most?</label>
-          <input type="text" placeholder="e.g. Students from rural areas, first-generation students..."
-            class="w-full h-[46px] border-[1.5px] border-brand-gray-light rounded-xl px-4 text-[14px] bg-brand-gray-faint outline-none focus:border-brand-yellow focus:bg-white focus:shadow-[0_0_0_3px_#FFF8DC] transition-all">
-        </div>
-        <div class="flex gap-3">
-          <button onclick="document.getElementById('submit-modal').style.display='none'"
-            class="flex-1 py-3 border border-brand-gray-light rounded-full bg-transparent text-[13px] font-medium text-brand-gray-dark cursor-pointer hover:border-brand-black transition-colors">Cancel</button>
-          <button
-            class="flex-1 py-3 border-none rounded-full bg-brand-black text-white text-[13px] font-bold cursor-pointer hover:opacity-85 transition-opacity flex items-center justify-center gap-2">
-            <div
-              class="w-[18px] h-[18px] bg-brand-yellow rounded-full flex items-center justify-center text-[11px] text-brand-black">
-              ⚡</div>
-            Submit idea
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MOBILE BOTTOM NAV -->
-  <div id="bnav" class="hidden fixed bottom-0 left-0 right-0 bg-white border-t border-brand-gray-light h-[58px] z-50">
-    <div class="flex h-full">
-      <button
-        class="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] text-brand-gray-mid border-none bg-transparent cursor-pointer"><svg
-          class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-        </svg>Feed</button>
-      <button
-        class="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] text-brand-gray-mid border-none bg-transparent cursor-pointer"><svg
-          class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
-        </svg>Explore</button>
-      <div class="flex items-center justify-center self-center flex-shrink-0">
-        <button onclick="document.getElementById('submit-modal').style.display='flex'"
-          class="w-[42px] h-[42px] rounded-full bg-brand-yellow border-none flex items-center justify-center -mt-3.5 cursor-pointer shadow-lg">⚡</button>
-      </div>
-      <button
-        class="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] text-brand-gray-mid border-none bg-transparent cursor-pointer"><svg
-          class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
-        </svg>Alerts</button>
-      <button
-        class="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] text-brand-gray-mid border-none bg-transparent cursor-pointer"><svg
-          class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>Profile</button>
-    </div>
-  </div>
-
-  <script>
-    // Close modal on backdrop click
-    document.getElementById('submit-modal').addEventListener('click', function (e) {
-      if (e.target === this) this.style.display = 'none';
-    });
-    // Mobile nav
-    function s() { document.getElementById('bnav').style.display = window.innerWidth <= 600 ? 'block' : 'none'; }
-    s(); window.addEventListener('resize', s);
-  </script>
-</body>
-
+		<script>
+			// Close modal on backdrop click
+			document.getElementById('submit-modal').addEventListener('click', function (e) {
+				if (e.target === this) this.style.display = 'none';
+			});
+			// Mobile nav
+			function s() {
+				document.getElementById('bnav').style.display = window.innerWidth <= 600 ? 'block' : 'none';
+			}
+			s();
+			window.addEventListener('resize', s);
+		</script>
+	</body>
 </html>

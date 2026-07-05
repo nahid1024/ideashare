@@ -1,1389 +1,1475 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IdeaShare — Home Feed</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap"
-    rel="stylesheet">
-  <style>
-    :root {
-      --yellow: #F5C518;
-      --yellow-light: #FFF8DC;
-      --yellow-mid: #FFE066;
-      --yellow-dark: #C49A00;
-      --black: #111111;
-      --black-soft: #222222;
-      --gray-dark: #444444;
-      --gray-mid: #888888;
-      --gray-light: #DDDDDD;
-      --gray-faint: #F5F5F2;
-      --white: #FFFFFF;
-      --font-display: 'Bricolage Grotesque', sans-serif;
-      --font-body: 'DM Sans', sans-serif;
-      --radius-sm: 6px;
-      --radius-md: 10px;
-      --radius-lg: 16px;
-      --radius-pill: 999px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: var(--font-body);
-      background: var(--gray-faint);
-      color: var(--black);
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    /* ── NAVBAR ── */
-    .navbar {
-      background: var(--white);
-      border-bottom: 1px solid var(--gray-light);
-      height: 58px;
-      display: flex;
-      align-items: center;
-      padding: 0 32px;
-      gap: 20px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-    }
-
-    .logo-bulb {
-      width: 32px;
-      height: 32px;
-      background: var(--yellow);
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .logo-bulb svg {
-      width: 18px;
-      height: 18px;
-    }
-
-    .logo-text {
-      font-family: var(--font-display);
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--black);
-      letter-spacing: -0.4px;
-    }
-
-    .logo-text span {
-      color: var(--yellow-dark);
-    }
-
-    .nav-search {
-      flex: 1;
-      max-width: 320px;
-      margin-left: 8px;
-    }
-
-    .nav-search input {
-      width: 100%;
-      height: 36px;
-      border: 1px solid var(--gray-light);
-      border-radius: var(--radius-pill);
-      padding: 0 16px;
-      font-family: var(--font-body);
-      font-size: 13px;
-      color: var(--black);
-      background: var(--gray-faint);
-      outline: none;
-      transition: border-color 0.15s;
-    }
-
-    .nav-search input:focus {
-      border-color: var(--yellow);
-      background: var(--white);
-    }
-
-    .nav-search input::placeholder {
-      color: var(--gray-mid);
-    }
-
-    .nav-right {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .btn-ghost {
-      padding: 7px 16px;
-      border: 1px solid var(--gray-light);
-      border-radius: var(--radius-pill);
-      background: transparent;
-      font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--gray-dark);
-      cursor: pointer;
-      transition: border-color 0.15s, color 0.15s;
-    }
-
-    .btn-ghost:hover {
-      border-color: var(--black);
-      color: var(--black);
-    }
-
-    .btn-primary {
-      padding: 7px 18px;
-      border: none;
-      border-radius: var(--radius-pill);
-      background: var(--black);
-      font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--white);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.15s;
-    }
-
-    .btn-primary:hover {
-      background: var(--black-soft);
-    }
-
-    .btn-primary .plus {
-      width: 16px;
-      height: 16px;
-      background: var(--yellow);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: var(--black);
-      line-height: 1;
-    }
-
-    /* ── LAYOUT ── */
-    .layout {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 28px 24px;
-      display: grid;
-      grid-template-columns: 200px minmax(0, 1fr) 220px;
-      gap: 24px;
-    }
-
-    /* ── LEFT SIDEBAR ── */
-    .sidebar-left {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .sbl-section {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--gray-mid);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      margin-top: 16px;
-    }
-
-    .sbl-section:first-child {
-      margin-top: 0;
-    }
-
-    .sbl-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 10px;
-      border-radius: var(--radius-md);
-      font-size: 13.5px;
-      color: var(--gray-dark);
-      cursor: pointer;
-      transition: background 0.1s, color 0.1s;
-      text-decoration: none;
-    }
-
-    .sbl-item:hover {
-      background: var(--white);
-      color: var(--black);
-    }
-
-    .sbl-item.active {
-      background: var(--yellow-light);
-      color: var(--black);
-      font-weight: 500;
-    }
-
-    .sbl-icon {
-      width: 18px;
-      height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .sbl-icon svg {
-      width: 15px;
-      height: 15px;
-    }
-
-    /* ── MAIN FEED ── */
-    .feed {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .feed-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .feed-tabs {
-      display: flex;
-      gap: 4px;
-      background: var(--white);
-      border: 1px solid var(--gray-light);
-      border-radius: var(--radius-pill);
-      padding: 3px;
-    }
-
-    .ftab {
-      padding: 5px 14px;
-      border-radius: var(--radius-pill);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--gray-mid);
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      font-family: var(--font-body);
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .ftab.active {
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .ftab:hover:not(.active) {
-      color: var(--black);
-    }
-
-    .filter-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border: 1px solid var(--gray-light);
-      border-radius: var(--radius-pill);
-      background: var(--white);
-      font-family: var(--font-body);
-      font-size: 13px;
-      color: var(--gray-dark);
-      cursor: pointer;
-    }
-
-    /* ── DUPE BANNER ── */
-    .dupe-banner {
-      background: var(--yellow-light);
-      border: 1px solid var(--yellow-mid);
-      border-radius: var(--radius-md);
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      color: var(--black);
-    }
-
-    .dupe-bulb {
-      width: 22px;
-      height: 22px;
-      background: var(--yellow);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .dupe-bulb svg {
-      width: 12px;
-      height: 12px;
-    }
-
-    .dupe-link {
-      margin-left: auto;
-      font-weight: 500;
-      color: var(--black);
-      cursor: pointer;
-      text-decoration: underline;
-      white-space: nowrap;
-    }
-
-    /* ── IDEA CARD ── */
-    .idea-card {
-      background: var(--white);
-      border: 1px solid var(--gray-light);
-      border-radius: var(--radius-lg);
-      padding: 18px 20px;
-      cursor: pointer;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-
-    .idea-card:hover {
-      border-color: var(--yellow);
-      box-shadow: 0 0 0 3px var(--yellow-light);
-    }
-
-    .card-row1 {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 10px;
-    }
-
-    .card-title {
-      font-family: var(--font-display);
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--black);
-      line-height: 1.4;
-      flex: 1;
-    }
-
-    .spark-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      flex-shrink: 0;
-    }
-
-    .spark-icon {
-      width: 34px;
-      height: 34px;
-      border: 1.5px solid var(--gray-light);
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.15s;
-      background: var(--white);
-    }
-
-    .spark-icon svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .spark-icon:hover {
-      border-color: var(--yellow);
-      background: var(--yellow-light);
-    }
-
-    .spark-icon.sparked {
-      border-color: var(--yellow);
-      background: var(--yellow);
-    }
-
-    .spark-count {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--gray-dark);
-    }
-
-    .card-desc {
-      font-size: 13.5px;
-      color: var(--gray-dark);
-      line-height: 1.65;
-      margin-bottom: 14px;
-    }
-
-    .card-footer {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .tag {
-      padding: 3px 10px;
-      border-radius: var(--radius-pill);
-      background: var(--gray-faint);
-      border: 1px solid var(--gray-light);
-      font-size: 12px;
-      color: var(--gray-dark);
-    }
-
-    .status {
-      padding: 3px 10px;
-      border-radius: var(--radius-pill);
-      font-size: 12px;
-      font-weight: 500;
-    }
-
-    .status-raw {
-      background: #FFF3CD;
-      color: #7A5800;
-      border: 1px solid #FFE08A;
-    }
-
-    .status-refining {
-      background: #EEF2FF;
-      color: #3730A3;
-      border: 1px solid #C7D2FE;
-    }
-
-    .status-building {
-      background: #ECFDF5;
-      color: #065F46;
-      border: 1px solid #A7F3D0;
-    }
-
-    .card-meta {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .avatars {
-      display: flex;
-      align-items: center;
-    }
-
-    .av {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      border: 2px solid var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 9px;
-      font-weight: 600;
-      margin-left: -6px;
-    }
-
-    .av:first-child {
-      margin-left: 0;
-    }
-
-    .av-1 {
-      background: var(--yellow);
-      color: var(--black);
-    }
-
-    .av-2 {
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .av-3 {
-      background: var(--gray-light);
-      color: var(--gray-dark);
-    }
-
-    .meta-txt {
-      font-size: 12px;
-      color: var(--gray-mid);
-      white-space: nowrap;
-    }
-
-    /* ── RIGHT SIDEBAR ── */
-    .sidebar-right {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .cta-card {
-      background: var(--yellow);
-      border-radius: var(--radius-lg);
-      padding: 18px 16px;
-    }
-
-    .cta-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--black);
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 12px;
-    }
-
-    .cta-icon svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .cta-heading {
-      font-family: var(--font-display);
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--black);
-      margin-bottom: 6px;
-      line-height: 1.35;
-    }
-
-    .cta-sub {
-      font-size: 12px;
-      color: var(--black-soft);
-      margin-bottom: 14px;
-      line-height: 1.5;
-      opacity: 0.7;
-    }
-
-    .cta-btn {
-      width: 100%;
-      padding: 9px;
-      background: var(--black);
-      color: var(--white);
-      border: none;
-      border-radius: var(--radius-md);
-      font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: opacity 0.15s;
-    }
-
-    .cta-btn:hover {
-      opacity: 0.85;
-    }
-
-    .widget {
-      background: var(--white);
-      border: 1px solid var(--gray-light);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-    }
-
-    .widget-title {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--gray-mid);
-      margin-bottom: 12px;
-    }
-
-    .topic-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 0;
-      border-bottom: 1px solid var(--gray-faint);
-      font-size: 13px;
-    }
-
-    .topic-row:last-child {
-      border-bottom: none;
-    }
-
-    .topic-name {
-      color: var(--black);
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    .topic-name:hover {
-      color: var(--yellow-dark);
-    }
-
-    .topic-count {
-      font-size: 12px;
-      color: var(--gray-mid);
-    }
-
-    .week-card {
-      background: var(--black);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-    }
-
-    .week-label {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--yellow);
-      margin-bottom: 8px;
-    }
-
-    .week-title {
-      font-family: var(--font-display);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--white);
-      line-height: 1.45;
-      margin-bottom: 10px;
-    }
-
-    .week-stat {
-      font-size: 12px;
-      color: var(--gray-mid);
-    }
-
-    .week-stat span {
-      color: var(--yellow);
-      font-weight: 500;
-    }
-
-    /* ── DESIGN TOKENS REFERENCE ── */
-    .tokens-section {
-      max-width: 1080px;
-      margin: 0 auto 40px;
-      padding: 0 24px;
-    }
-
-    .tokens-title {
-      font-family: var(--font-display);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--gray-mid);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-      padding-top: 8px;
-      border-top: 1px solid var(--gray-light);
-    }
-
-    .tokens-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      gap: 10px;
-    }
-
-    .token-swatch {
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      border: 1px solid var(--gray-light);
-    }
-
-    .swatch-color {
-      height: 40px;
-    }
-
-    .swatch-info {
-      background: var(--white);
-      padding: 6px 8px;
-    }
-
-    .swatch-name {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--black);
-      display: block;
-    }
-
-    .swatch-hex {
-      font-size: 10px;
-      color: var(--gray-mid);
-      font-family: monospace;
-    }
-
-    .type-section {
-      margin-top: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .type-sample {
-      display: flex;
-      align-items: baseline;
-      gap: 16px;
-      padding: 10px 14px;
-      background: var(--white);
-      border: 1px solid var(--gray-light);
-      border-radius: var(--radius-md);
-    }
-
-    .type-label {
-      font-size: 11px;
-      color: var(--gray-mid);
-      min-width: 130px;
-      font-family: monospace;
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <a class="logo" href="#">
-      <div class="logo-bulb">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path
-            d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z"
-            fill="#111" />
-          <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z" fill="#111" />
-        </svg>
-      </div>
-      <span class="logo-text">Idea<span>Share</span></span>
-    </a>
-
-    <div class="nav-search">
-      <input type="text" placeholder="Search ideas...">
-    </div>
-
-    <div class="nav-right">
-      <button class="btn-ghost">Sign in</button>
-      <button class="btn-primary">
-        <div class="plus">+</div>
-        Post idea
-      </button>
-    </div>
-  </nav>
-
-  <!-- MAIN LAYOUT -->
-  <div class="layout">
-
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar-left">
-      <div class="sbl-section">Discover</div>
-      <a class="sbl-item active" href="#">
-        <div class="sbl-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-          </svg>
-        </div>
-        All ideas
-      </a>
-      <a class="sbl-item" href="#">
-        <div class="sbl-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-            <polyline points="17 6 23 6 23 12" />
-          </svg>
-        </div>
-        Trending
-      </a>
-      <a class="sbl-item" href="#">
-        <div class="sbl-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10" />
-            <polyline points="12 6 12 12 16 14" />
-          </svg>
-        </div>
-        New today
-      </a>
-      <a class="sbl-item" href="#">
-        <div class="sbl-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M8 3h8v2a4 4 0 01-4 4 4 4 0 01-4-4V3z" />
-            <path d="M5 7H3a2 2 0 002 2 2 2 0 002-2H7" />
-            <path d="M17 7h2a2 2 0 01-2 2 2 2 0 01-2-2" />
-            <path d="M8 14h8" />
-            <path d="M12 14v7" />
-          </svg>
-        </div>
-        Being built
-      </a>
-
-      <div class="sbl-section">Topics</div>
-      <a class="sbl-item" href="#">
-        <div class="sbl-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" />
-            <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
-          </svg>
-        </div>
-        Education
-      </a>
-      <a class="sbl-item" href="#">
-        <div class="sbl-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-          </svg>
-        </div>
-        Health
-      </a>
-      <a class="sbl-item" href="#">
-        <div class="sbl-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="3" width="20" height="14" rx="2" />
-            <line x1="8" y1="21" x2="16" y2="21" />
-            <line x1="12" y1="17" x2="12" y2="21" />
-          </svg>
-        </div>
-        Technology
-      </a>
-      <a class="sbl-item" href="#">
-        <div class="sbl-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-          </svg>
-        </div>
-        Cities
-      </a>
-      <a class="sbl-item" href="#">
-        <div class="sbl-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="1" x2="12" y2="23" />
-            <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
-          </svg>
-        </div>
-        Economy
-      </a>
-    </aside>
-
-    <!-- FEED -->
-    <main class="feed">
-
-      <div class="feed-header">
-        <div class="feed-tabs">
-          <button class="ftab active">For you</button>
-          <button class="ftab">Latest</button>
-          <button class="ftab">Most sparked</button>
-        </div>
-        <button class="filter-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="4" y1="6" x2="20" y2="6" />
-            <line x1="8" y1="12" x2="16" y2="12" />
-            <line x1="11" y1="18" x2="13" y2="18" />
-          </svg>
-          Filter
-        </button>
-      </div>
-
-      <div class="dupe-banner">
-        <div class="dupe-bulb">
-          <svg viewBox="0 0 24 24" fill="#111">
-            <path
-              d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z" />
-            <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z" />
-          </svg>
-        </div>
-        <span>3 similar ideas already exist — want to refine one instead?</span>
-        <span class="dupe-link">View similar →</span>
-      </div>
-
-      <!-- Card 1 — sparked -->
-      <article class="idea-card">
-        <div class="card-row1">
-          <div class="card-title">A universal exam system independent of any university — certify your skills, study
-            anywhere</div>
-          <div class="spark-btn">
-            <div class="spark-icon sparked">
-              <svg viewBox="0 0 24 24" fill="#111">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-              </svg>
-            </div>
-            <div class="spark-count">847</div>
-          </div>
-        </div>
-        <p class="card-desc">What if you could study from YouTube, books, or anywhere you want — and just show up to a
-          standardised exam to get certified? No enrollment, no fees, no location barrier.</p>
-        <div class="card-footer">
-          <span class="tag">#education</span>
-          <span class="tag">#credentials</span>
-          <span class="status status-refining">Being refined</span>
-          <div class="card-meta">
-            <div class="avatars">
-              <div class="av av-1">RK</div>
-              <div class="av av-2">SM</div>
-              <div class="av av-3">+4</div>
-            </div>
-            <span class="meta-txt">12 builds</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- Card 2 -->
-      <article class="idea-card">
-        <div class="card-row1">
-          <div class="card-title">Let patients own their medical records — stored on their phone, shared with any doctor
-          </div>
-          <div class="spark-btn">
-            <div class="spark-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-              </svg>
-            </div>
-            <div class="spark-count">512</div>
-          </div>
-        </div>
-        <p class="card-desc">Right now hospitals hold your data hostage. What if every person had a personal health file
-          they control — share it with any doctor, anywhere in the world, instantly.</p>
-        <div class="card-footer">
-          <span class="tag">#health</span>
-          <span class="tag">#data</span>
-          <span class="status status-building">Someone's building it</span>
-          <div class="card-meta">
-            <div class="avatars">
-              <div class="av av-2">TA</div>
-              <div class="av av-1">NI</div>
-            </div>
-            <span class="meta-txt">5 builds</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- Card 3 -->
-      <article class="idea-card">
-        <div class="card-row1">
-          <div class="card-title">Build your own university major — pick courses from different institutions to form a
-            custom degree</div>
-          <div class="spark-btn">
-            <div class="spark-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-              </svg>
-            </div>
-            <div class="spark-count">389</div>
-          </div>
-        </div>
-        <p class="card-desc">Why does a major have to be pre-defined? Let students mix AI ethics from MIT, film theory
-          from NYU, and economics from LSE into a single recognised credential.</p>
-        <div class="card-footer">
-          <span class="tag">#education</span>
-          <span class="tag">#future</span>
-          <span class="status status-raw">Raw idea</span>
-          <div class="card-meta">
-            <div class="avatars">
-              <div class="av av-1">FK</div>
-            </div>
-            <span class="meta-txt">2 builds</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- Card 4 -->
-      <article class="idea-card">
-        <div class="card-row1">
-          <div class="card-title">A neighbourhood app where locals vote on which small businesses get a temporary rent
-            subsidy</div>
-          <div class="spark-btn">
-            <div class="spark-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-              </svg>
-            </div>
-            <div class="spark-count">204</div>
-          </div>
-        </div>
-        <p class="card-desc">High rents kill the best local spots. What if the community could pool a small monthly fund
-          and vote each quarter on which café, bookshop, or repair shop gets supported?</p>
-        <div class="card-footer">
-          <span class="tag">#cities</span>
-          <span class="tag">#economy</span>
-          <span class="status status-raw">Raw idea</span>
-          <div class="card-meta">
-            <div class="avatars">
-              <div class="av av-2">LM</div>
-              <div class="av av-3">+2</div>
-            </div>
-            <span class="meta-txt">3 builds</span>
-          </div>
-        </div>
-      </article>
-
-    </main>
-
-    <!-- RIGHT SIDEBAR -->
-    <aside class="sidebar-right">
-
-      <div class="cta-card">
-        <div class="cta-icon">
-          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
-            <path
-              d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z"
-              fill="#F5C518" />
-            <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z" fill="#F5C518" />
-          </svg>
-        </div>
-        <div class="cta-heading">You had a thought today. Don't let it disappear.</div>
-        <div class="cta-sub">Ideas shared here have inspired real projects.</div>
-        <button class="cta-btn">+ Share your idea</button>
-      </div>
-
-      <div class="widget">
-        <div class="widget-title">Trending topics</div>
-        <div class="topic-row"><span class="topic-name">#education</span><span class="topic-count">1.2k ideas</span>
-        </div>
-        <div class="topic-row"><span class="topic-name">#health</span><span class="topic-count">874 ideas</span></div>
-        <div class="topic-row"><span class="topic-name">#cities</span><span class="topic-count">631 ideas</span></div>
-        <div class="topic-row"><span class="topic-name">#technology</span><span class="topic-count">590 ideas</span>
-        </div>
-        <div class="topic-row"><span class="topic-name">#economy</span><span class="topic-count">412 ideas</span></div>
-      </div>
-
-      <div class="week-card">
-        <div class="week-label">This week's top idea</div>
-        <div class="week-title">Universal exam system gains 800+ sparks in 3 days</div>
-        <div class="week-stat"><span>12 people</span> want to build it</div>
-      </div>
-
-    </aside>
-  </div>
-
-  <!-- DESIGN TOKENS REFERENCE -->
-  <div class="tokens-section">
-    <div class="tokens-title">Design tokens — for Figma reference</div>
-    <div class="tokens-grid">
-      <div class="token-swatch">
-        <div class="swatch-color" style="background:#F5C518"></div>
-        <div class="swatch-info"><span class="swatch-name">Yellow</span><span class="swatch-hex">#F5C518</span></div>
-      </div>
-      <div class="token-swatch">
-        <div class="swatch-color" style="background:#FFF8DC; border-bottom:1px solid #eee"></div>
-        <div class="swatch-info"><span class="swatch-name">Yellow light</span><span class="swatch-hex">#FFF8DC</span>
-        </div>
-      </div>
-      <div class="token-swatch">
-        <div class="swatch-color" style="background:#FFE066"></div>
-        <div class="swatch-info"><span class="swatch-name">Yellow mid</span><span class="swatch-hex">#FFE066</span>
-        </div>
-      </div>
-      <div class="token-swatch">
-        <div class="swatch-color" style="background:#C49A00"></div>
-        <div class="swatch-info"><span class="swatch-name">Yellow dark</span><span class="swatch-hex">#C49A00</span>
-        </div>
-      </div>
-      <div class="token-swatch">
-        <div class="swatch-color" style="background:#111111"></div>
-        <div class="swatch-info"><span class="swatch-name">Black</span><span class="swatch-hex">#111111</span></div>
-      </div>
-      <div class="token-swatch">
-        <div class="swatch-color" style="background:#444444"></div>
-        <div class="swatch-info"><span class="swatch-name">Gray dark</span><span class="swatch-hex">#444444</span></div>
-      </div>
-      <div class="token-swatch">
-        <div class="swatch-color" style="background:#888888"></div>
-        <div class="swatch-info"><span class="swatch-name">Gray mid</span><span class="swatch-hex">#888888</span></div>
-      </div>
-      <div class="token-swatch">
-        <div class="swatch-color" style="background:#DDDDDD"></div>
-        <div class="swatch-info"><span class="swatch-name">Gray light</span><span class="swatch-hex">#DDDDDD</span>
-        </div>
-      </div>
-      <div class="token-swatch">
-        <div class="swatch-color" style="background:#F5F5F2; border-bottom:1px solid #eee"></div>
-        <div class="swatch-info"><span class="swatch-name">Background</span><span class="swatch-hex">#F5F5F2</span>
-        </div>
-      </div>
-      <div class="token-swatch">
-        <div class="swatch-color" style="background:#FFFFFF; border-bottom:1px solid #eee"></div>
-        <div class="swatch-info"><span class="swatch-name">White</span><span class="swatch-hex">#FFFFFF</span></div>
-      </div>
-    </div>
-
-    <div class="type-section">
-      <div class="type-sample">
-        <span class="type-label">Display / 17px 600</span>
-        <span style="font-family:'Bricolage Grotesque',sans-serif; font-size:17px; font-weight:600;">IdeaShare — share
-          what you think</span>
-      </div>
-      <div class="type-sample">
-        <span class="type-label">Card title / 15px 600</span>
-        <span style="font-family:'Bricolage Grotesque',sans-serif; font-size:15px; font-weight:600;">A universal exam
-          system for everyone</span>
-      </div>
-      <div class="type-sample">
-        <span class="type-label">Body / 13.5px 400</span>
-        <span style="font-family:'DM Sans',sans-serif; font-size:13.5px;">What if you could study from anywhere and just
-          show up to get certified?</span>
-      </div>
-      <div class="type-sample">
-        <span class="type-label">Label / 11px 600 caps</span>
-        <span
-          style="font-family:'DM Sans',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;">Trending
-          topics</span>
-      </div>
-      <div class="type-sample">
-        <span class="type-label">Tag / 12px 400</span>
-        <span
-          style="font-family:'DM Sans',sans-serif; font-size:12px; padding:3px 10px; background:#F5F5F2; border:1px solid #DDD; border-radius:999px;">#education</span>
-      </div>
-    </div>
-  </div>
-
-</body>
-
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>IdeaShare — Home Feed</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--yellow: #f5c518;
+				--yellow-light: #fff8dc;
+				--yellow-mid: #ffe066;
+				--yellow-dark: #c49a00;
+				--black: #111111;
+				--black-soft: #222222;
+				--gray-dark: #444444;
+				--gray-mid: #888888;
+				--gray-light: #dddddd;
+				--gray-faint: #f5f5f2;
+				--white: #ffffff;
+				--font-display: 'Bricolage Grotesque', sans-serif;
+				--font-body: 'DM Sans', sans-serif;
+				--radius-sm: 6px;
+				--radius-md: 10px;
+				--radius-lg: 16px;
+				--radius-pill: 999px;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				font-family: var(--font-body);
+				background: var(--gray-faint);
+				color: var(--black);
+				font-size: 14px;
+				line-height: 1.5;
+			}
+
+			/* ── NAVBAR ── */
+			.navbar {
+				background: var(--white);
+				border-bottom: 1px solid var(--gray-light);
+				height: 58px;
+				display: flex;
+				align-items: center;
+				padding: 0 32px;
+				gap: 20px;
+				position: sticky;
+				top: 0;
+				z-index: 100;
+			}
+
+			.logo {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				text-decoration: none;
+			}
+
+			.logo-bulb {
+				width: 32px;
+				height: 32px;
+				background: var(--yellow);
+				border-radius: var(--radius-sm);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.logo-bulb svg {
+				width: 18px;
+				height: 18px;
+			}
+
+			.logo-text {
+				font-family: var(--font-display);
+				font-size: 17px;
+				font-weight: 600;
+				color: var(--black);
+				letter-spacing: -0.4px;
+			}
+
+			.logo-text span {
+				color: var(--yellow-dark);
+			}
+
+			.nav-search {
+				flex: 1;
+				max-width: 320px;
+				margin-left: 8px;
+			}
+
+			.nav-search input {
+				width: 100%;
+				height: 36px;
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-pill);
+				padding: 0 16px;
+				font-family: var(--font-body);
+				font-size: 13px;
+				color: var(--black);
+				background: var(--gray-faint);
+				outline: none;
+				transition: border-color 0.15s;
+			}
+
+			.nav-search input:focus {
+				border-color: var(--yellow);
+				background: var(--white);
+			}
+
+			.nav-search input::placeholder {
+				color: var(--gray-mid);
+			}
+
+			.nav-right {
+				margin-left: auto;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+			.btn-ghost {
+				padding: 7px 16px;
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-pill);
+				background: transparent;
+				font-family: var(--font-body);
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--gray-dark);
+				cursor: pointer;
+				transition:
+					border-color 0.15s,
+					color 0.15s;
+			}
+
+			.btn-ghost:hover {
+				border-color: var(--black);
+				color: var(--black);
+			}
+
+			.btn-primary {
+				padding: 7px 18px;
+				border: none;
+				border-radius: var(--radius-pill);
+				background: var(--black);
+				font-family: var(--font-body);
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--white);
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				transition: background 0.15s;
+			}
+
+			.btn-primary:hover {
+				background: var(--black-soft);
+			}
+
+			.btn-primary .plus {
+				width: 16px;
+				height: 16px;
+				background: var(--yellow);
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 14px;
+				color: var(--black);
+				line-height: 1;
+			}
+
+			/* ── LAYOUT ── */
+			.layout {
+				max-width: 1080px;
+				margin: 0 auto;
+				padding: 28px 24px;
+				display: grid;
+				grid-template-columns: 200px minmax(0, 1fr) 220px;
+				gap: 24px;
+			}
+
+			/* ── LEFT SIDEBAR ── */
+			.sidebar-left {
+				display: flex;
+				flex-direction: column;
+				gap: 2px;
+			}
+
+			.sbl-section {
+				font-size: 11px;
+				font-weight: 600;
+				color: var(--gray-mid);
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				padding: 4px 10px;
+				margin-top: 16px;
+			}
+
+			.sbl-section:first-child {
+				margin-top: 0;
+			}
+
+			.sbl-item {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				padding: 8px 10px;
+				border-radius: var(--radius-md);
+				font-size: 13.5px;
+				color: var(--gray-dark);
+				cursor: pointer;
+				transition:
+					background 0.1s,
+					color 0.1s;
+				text-decoration: none;
+			}
+
+			.sbl-item:hover {
+				background: var(--white);
+				color: var(--black);
+			}
+
+			.sbl-item.active {
+				background: var(--yellow-light);
+				color: var(--black);
+				font-weight: 500;
+			}
+
+			.sbl-icon {
+				width: 18px;
+				height: 18px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+			}
+
+			.sbl-icon svg {
+				width: 15px;
+				height: 15px;
+			}
+
+			/* ── MAIN FEED ── */
+			.feed {
+				display: flex;
+				flex-direction: column;
+				gap: 14px;
+			}
+
+			.feed-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+
+			.feed-tabs {
+				display: flex;
+				gap: 4px;
+				background: var(--white);
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-pill);
+				padding: 3px;
+			}
+
+			.ftab {
+				padding: 5px 14px;
+				border-radius: var(--radius-pill);
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--gray-mid);
+				cursor: pointer;
+				border: none;
+				background: transparent;
+				font-family: var(--font-body);
+				transition:
+					background 0.15s,
+					color 0.15s;
+			}
+
+			.ftab.active {
+				background: var(--black);
+				color: var(--white);
+			}
+
+			.ftab:hover:not(.active) {
+				color: var(--black);
+			}
+
+			.filter-btn {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				padding: 6px 14px;
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-pill);
+				background: var(--white);
+				font-family: var(--font-body);
+				font-size: 13px;
+				color: var(--gray-dark);
+				cursor: pointer;
+			}
+
+			/* ── DUPE BANNER ── */
+			.dupe-banner {
+				background: var(--yellow-light);
+				border: 1px solid var(--yellow-mid);
+				border-radius: var(--radius-md);
+				padding: 10px 14px;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				font-size: 13px;
+				color: var(--black);
+			}
+
+			.dupe-bulb {
+				width: 22px;
+				height: 22px;
+				background: var(--yellow);
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+			}
+
+			.dupe-bulb svg {
+				width: 12px;
+				height: 12px;
+			}
+
+			.dupe-link {
+				margin-left: auto;
+				font-weight: 500;
+				color: var(--black);
+				cursor: pointer;
+				text-decoration: underline;
+				white-space: nowrap;
+			}
+
+			/* ── IDEA CARD ── */
+			.idea-card {
+				background: var(--white);
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-lg);
+				padding: 18px 20px;
+				cursor: pointer;
+				transition:
+					border-color 0.15s,
+					box-shadow 0.15s;
+			}
+
+			.idea-card:hover {
+				border-color: var(--yellow);
+				box-shadow: 0 0 0 3px var(--yellow-light);
+			}
+
+			.card-row1 {
+				display: flex;
+				align-items: flex-start;
+				gap: 14px;
+				margin-bottom: 10px;
+			}
+
+			.card-title {
+				font-family: var(--font-display);
+				font-size: 15px;
+				font-weight: 600;
+				color: var(--black);
+				line-height: 1.4;
+				flex: 1;
+			}
+
+			.spark-btn {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 3px;
+				flex-shrink: 0;
+			}
+
+			.spark-icon {
+				width: 34px;
+				height: 34px;
+				border: 1.5px solid var(--gray-light);
+				border-radius: var(--radius-md);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				transition: all 0.15s;
+				background: var(--white);
+			}
+
+			.spark-icon svg {
+				width: 16px;
+				height: 16px;
+			}
+
+			.spark-icon:hover {
+				border-color: var(--yellow);
+				background: var(--yellow-light);
+			}
+
+			.spark-icon.sparked {
+				border-color: var(--yellow);
+				background: var(--yellow);
+			}
+
+			.spark-count {
+				font-size: 12px;
+				font-weight: 500;
+				color: var(--gray-dark);
+			}
+
+			.card-desc {
+				font-size: 13.5px;
+				color: var(--gray-dark);
+				line-height: 1.65;
+				margin-bottom: 14px;
+			}
+
+			.card-footer {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				flex-wrap: wrap;
+			}
+
+			.tag {
+				padding: 3px 10px;
+				border-radius: var(--radius-pill);
+				background: var(--gray-faint);
+				border: 1px solid var(--gray-light);
+				font-size: 12px;
+				color: var(--gray-dark);
+			}
+
+			.status {
+				padding: 3px 10px;
+				border-radius: var(--radius-pill);
+				font-size: 12px;
+				font-weight: 500;
+			}
+
+			.status-raw {
+				background: #fff3cd;
+				color: #7a5800;
+				border: 1px solid #ffe08a;
+			}
+
+			.status-refining {
+				background: #eef2ff;
+				color: #3730a3;
+				border: 1px solid #c7d2fe;
+			}
+
+			.status-building {
+				background: #ecfdf5;
+				color: #065f46;
+				border: 1px solid #a7f3d0;
+			}
+
+			.card-meta {
+				margin-left: auto;
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+
+			.avatars {
+				display: flex;
+				align-items: center;
+			}
+
+			.av {
+				width: 22px;
+				height: 22px;
+				border-radius: 50%;
+				border: 2px solid var(--white);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 9px;
+				font-weight: 600;
+				margin-left: -6px;
+			}
+
+			.av:first-child {
+				margin-left: 0;
+			}
+
+			.av-1 {
+				background: var(--yellow);
+				color: var(--black);
+			}
+
+			.av-2 {
+				background: var(--black);
+				color: var(--white);
+			}
+
+			.av-3 {
+				background: var(--gray-light);
+				color: var(--gray-dark);
+			}
+
+			.meta-txt {
+				font-size: 12px;
+				color: var(--gray-mid);
+				white-space: nowrap;
+			}
+
+			/* ── RIGHT SIDEBAR ── */
+			.sidebar-right {
+				display: flex;
+				flex-direction: column;
+				gap: 16px;
+			}
+
+			.cta-card {
+				background: var(--yellow);
+				border-radius: var(--radius-lg);
+				padding: 18px 16px;
+			}
+
+			.cta-icon {
+				width: 36px;
+				height: 36px;
+				background: var(--black);
+				border-radius: var(--radius-md);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin-bottom: 12px;
+			}
+
+			.cta-icon svg {
+				width: 20px;
+				height: 20px;
+			}
+
+			.cta-heading {
+				font-family: var(--font-display);
+				font-size: 15px;
+				font-weight: 600;
+				color: var(--black);
+				margin-bottom: 6px;
+				line-height: 1.35;
+			}
+
+			.cta-sub {
+				font-size: 12px;
+				color: var(--black-soft);
+				margin-bottom: 14px;
+				line-height: 1.5;
+				opacity: 0.7;
+			}
+
+			.cta-btn {
+				width: 100%;
+				padding: 9px;
+				background: var(--black);
+				color: var(--white);
+				border: none;
+				border-radius: var(--radius-md);
+				font-family: var(--font-body);
+				font-size: 13px;
+				font-weight: 500;
+				cursor: pointer;
+				transition: opacity 0.15s;
+			}
+
+			.cta-btn:hover {
+				opacity: 0.85;
+			}
+
+			.widget {
+				background: var(--white);
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-lg);
+				padding: 16px;
+			}
+
+			.widget-title {
+				font-size: 11px;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				color: var(--gray-mid);
+				margin-bottom: 12px;
+			}
+
+			.topic-row {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 6px 0;
+				border-bottom: 1px solid var(--gray-faint);
+				font-size: 13px;
+			}
+
+			.topic-row:last-child {
+				border-bottom: none;
+			}
+
+			.topic-name {
+				color: var(--black);
+				cursor: pointer;
+				font-weight: 500;
+			}
+
+			.topic-name:hover {
+				color: var(--yellow-dark);
+			}
+
+			.topic-count {
+				font-size: 12px;
+				color: var(--gray-mid);
+			}
+
+			.week-card {
+				background: var(--black);
+				border-radius: var(--radius-lg);
+				padding: 16px;
+			}
+
+			.week-label {
+				font-size: 11px;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				color: var(--yellow);
+				margin-bottom: 8px;
+			}
+
+			.week-title {
+				font-family: var(--font-display);
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--white);
+				line-height: 1.45;
+				margin-bottom: 10px;
+			}
+
+			.week-stat {
+				font-size: 12px;
+				color: var(--gray-mid);
+			}
+
+			.week-stat span {
+				color: var(--yellow);
+				font-weight: 500;
+			}
+
+			/* ── DESIGN TOKENS REFERENCE ── */
+			.tokens-section {
+				max-width: 1080px;
+				margin: 0 auto 40px;
+				padding: 0 24px;
+			}
+
+			.tokens-title {
+				font-family: var(--font-display);
+				font-size: 13px;
+				font-weight: 600;
+				color: var(--gray-mid);
+				letter-spacing: 0.05em;
+				text-transform: uppercase;
+				margin-bottom: 16px;
+				padding-top: 8px;
+				border-top: 1px solid var(--gray-light);
+			}
+
+			.tokens-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+				gap: 10px;
+			}
+
+			.token-swatch {
+				border-radius: var(--radius-md);
+				overflow: hidden;
+				border: 1px solid var(--gray-light);
+			}
+
+			.swatch-color {
+				height: 40px;
+			}
+
+			.swatch-info {
+				background: var(--white);
+				padding: 6px 8px;
+			}
+
+			.swatch-name {
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--black);
+				display: block;
+			}
+
+			.swatch-hex {
+				font-size: 10px;
+				color: var(--gray-mid);
+				font-family: monospace;
+			}
+
+			.type-section {
+				margin-top: 24px;
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+			}
+
+			.type-sample {
+				display: flex;
+				align-items: baseline;
+				gap: 16px;
+				padding: 10px 14px;
+				background: var(--white);
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-md);
+			}
+
+			.type-label {
+				font-size: 11px;
+				color: var(--gray-mid);
+				min-width: 130px;
+				font-family: monospace;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- NAVBAR -->
+		<nav class="navbar">
+			<a class="logo" href="#">
+				<div class="logo-bulb">
+					<svg viewBox="0 0 24 24" fill="none">
+						<path
+							d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z"
+							fill="#111"
+						/>
+						<path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z" fill="#111" />
+					</svg>
+				</div>
+				<span class="logo-text">Idea<span>Share</span></span>
+			</a>
+
+			<div class="nav-search">
+				<input type="text" placeholder="Search ideas..." />
+			</div>
+
+			<div class="nav-right">
+				<button class="btn-ghost">Sign in</button>
+				<button class="btn-primary">
+					<div class="plus">+</div>
+					Post idea
+				</button>
+			</div>
+		</nav>
+
+		<!-- MAIN LAYOUT -->
+		<div class="layout">
+			<!-- LEFT SIDEBAR -->
+			<aside class="sidebar-left">
+				<div class="sbl-section">Discover</div>
+				<a class="sbl-item active" href="#">
+					<div class="sbl-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+						</svg>
+					</div>
+					All ideas
+				</a>
+				<a class="sbl-item" href="#">
+					<div class="sbl-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+							<polyline points="17 6 23 6 23 12" />
+						</svg>
+					</div>
+					Trending
+				</a>
+				<a class="sbl-item" href="#">
+					<div class="sbl-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<circle cx="12" cy="12" r="10" />
+							<polyline points="12 6 12 12 16 14" />
+						</svg>
+					</div>
+					New today
+				</a>
+				<a class="sbl-item" href="#">
+					<div class="sbl-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M8 3h8v2a4 4 0 01-4 4 4 4 0 01-4-4V3z" />
+							<path d="M5 7H3a2 2 0 002 2 2 2 0 002-2H7" />
+							<path d="M17 7h2a2 2 0 01-2 2 2 2 0 01-2-2" />
+							<path d="M8 14h8" />
+							<path d="M12 14v7" />
+						</svg>
+					</div>
+					Being built
+				</a>
+
+				<div class="sbl-section">Topics</div>
+				<a class="sbl-item" href="#">
+					<div class="sbl-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" />
+							<path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
+						</svg>
+					</div>
+					Education
+				</a>
+				<a class="sbl-item" href="#">
+					<div class="sbl-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+						</svg>
+					</div>
+					Health
+				</a>
+				<a class="sbl-item" href="#">
+					<div class="sbl-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<rect x="2" y="3" width="20" height="14" rx="2" />
+							<line x1="8" y1="21" x2="16" y2="21" />
+							<line x1="12" y1="17" x2="12" y2="21" />
+						</svg>
+					</div>
+					Technology
+				</a>
+				<a class="sbl-item" href="#">
+					<div class="sbl-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+							<polyline points="9 22 9 12 15 12 15 22" />
+						</svg>
+					</div>
+					Cities
+				</a>
+				<a class="sbl-item" href="#">
+					<div class="sbl-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<line x1="12" y1="1" x2="12" y2="23" />
+							<path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+						</svg>
+					</div>
+					Economy
+				</a>
+			</aside>
+
+			<!-- FEED -->
+			<main class="feed">
+				<div class="feed-header">
+					<div class="feed-tabs">
+						<button class="ftab active">For you</button>
+						<button class="ftab">Latest</button>
+						<button class="ftab">Most sparked</button>
+					</div>
+					<button class="filter-btn">
+						<svg
+							width="14"
+							height="14"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+						>
+							<line x1="4" y1="6" x2="20" y2="6" />
+							<line x1="8" y1="12" x2="16" y2="12" />
+							<line x1="11" y1="18" x2="13" y2="18" />
+						</svg>
+						Filter
+					</button>
+				</div>
+
+				<div class="dupe-banner">
+					<div class="dupe-bulb">
+						<svg viewBox="0 0 24 24" fill="#111">
+							<path
+								d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z"
+							/>
+							<path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z" />
+						</svg>
+					</div>
+					<span>3 similar ideas already exist — want to refine one instead?</span>
+					<span class="dupe-link">View similar →</span>
+				</div>
+
+				<!-- Card 1 — sparked -->
+				<article class="idea-card">
+					<div class="card-row1">
+						<div class="card-title">
+							A universal exam system independent of any university — certify your skills, study
+							anywhere
+						</div>
+						<div class="spark-btn">
+							<div class="spark-icon sparked">
+								<svg viewBox="0 0 24 24" fill="#111">
+									<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+								</svg>
+							</div>
+							<div class="spark-count">847</div>
+						</div>
+					</div>
+					<p class="card-desc">
+						What if you could study from YouTube, books, or anywhere you want — and just show up to
+						a standardised exam to get certified? No enrollment, no fees, no location barrier.
+					</p>
+					<div class="card-footer">
+						<span class="tag">#education</span>
+						<span class="tag">#credentials</span>
+						<span class="status status-refining">Being refined</span>
+						<div class="card-meta">
+							<div class="avatars">
+								<div class="av av-1">RK</div>
+								<div class="av av-2">SM</div>
+								<div class="av av-3">+4</div>
+							</div>
+							<span class="meta-txt">12 builds</span>
+						</div>
+					</div>
+				</article>
+
+				<!-- Card 2 -->
+				<article class="idea-card">
+					<div class="card-row1">
+						<div class="card-title">
+							Let patients own their medical records — stored on their phone, shared with any doctor
+						</div>
+						<div class="spark-btn">
+							<div class="spark-icon">
+								<svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2">
+									<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+								</svg>
+							</div>
+							<div class="spark-count">512</div>
+						</div>
+					</div>
+					<p class="card-desc">
+						Right now hospitals hold your data hostage. What if every person had a personal health
+						file they control — share it with any doctor, anywhere in the world, instantly.
+					</p>
+					<div class="card-footer">
+						<span class="tag">#health</span>
+						<span class="tag">#data</span>
+						<span class="status status-building">Someone's building it</span>
+						<div class="card-meta">
+							<div class="avatars">
+								<div class="av av-2">TA</div>
+								<div class="av av-1">NI</div>
+							</div>
+							<span class="meta-txt">5 builds</span>
+						</div>
+					</div>
+				</article>
+
+				<!-- Card 3 -->
+				<article class="idea-card">
+					<div class="card-row1">
+						<div class="card-title">
+							Build your own university major — pick courses from different institutions to form a
+							custom degree
+						</div>
+						<div class="spark-btn">
+							<div class="spark-icon">
+								<svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2">
+									<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+								</svg>
+							</div>
+							<div class="spark-count">389</div>
+						</div>
+					</div>
+					<p class="card-desc">
+						Why does a major have to be pre-defined? Let students mix AI ethics from MIT, film
+						theory from NYU, and economics from LSE into a single recognised credential.
+					</p>
+					<div class="card-footer">
+						<span class="tag">#education</span>
+						<span class="tag">#future</span>
+						<span class="status status-raw">Raw idea</span>
+						<div class="card-meta">
+							<div class="avatars">
+								<div class="av av-1">FK</div>
+							</div>
+							<span class="meta-txt">2 builds</span>
+						</div>
+					</div>
+				</article>
+
+				<!-- Card 4 -->
+				<article class="idea-card">
+					<div class="card-row1">
+						<div class="card-title">
+							A neighbourhood app where locals vote on which small businesses get a temporary rent
+							subsidy
+						</div>
+						<div class="spark-btn">
+							<div class="spark-icon">
+								<svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2">
+									<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+								</svg>
+							</div>
+							<div class="spark-count">204</div>
+						</div>
+					</div>
+					<p class="card-desc">
+						High rents kill the best local spots. What if the community could pool a small monthly
+						fund and vote each quarter on which café, bookshop, or repair shop gets supported?
+					</p>
+					<div class="card-footer">
+						<span class="tag">#cities</span>
+						<span class="tag">#economy</span>
+						<span class="status status-raw">Raw idea</span>
+						<div class="card-meta">
+							<div class="avatars">
+								<div class="av av-2">LM</div>
+								<div class="av av-3">+2</div>
+							</div>
+							<span class="meta-txt">3 builds</span>
+						</div>
+					</div>
+				</article>
+			</main>
+
+			<!-- RIGHT SIDEBAR -->
+			<aside class="sidebar-right">
+				<div class="cta-card">
+					<div class="cta-icon">
+						<svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+							<path
+								d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z"
+								fill="#F5C518"
+							/>
+							<path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z" fill="#F5C518" />
+						</svg>
+					</div>
+					<div class="cta-heading">You had a thought today. Don't let it disappear.</div>
+					<div class="cta-sub">Ideas shared here have inspired real projects.</div>
+					<button class="cta-btn">+ Share your idea</button>
+				</div>
+
+				<div class="widget">
+					<div class="widget-title">Trending topics</div>
+					<div class="topic-row">
+						<span class="topic-name">#education</span><span class="topic-count">1.2k ideas</span>
+					</div>
+					<div class="topic-row">
+						<span class="topic-name">#health</span><span class="topic-count">874 ideas</span>
+					</div>
+					<div class="topic-row">
+						<span class="topic-name">#cities</span><span class="topic-count">631 ideas</span>
+					</div>
+					<div class="topic-row">
+						<span class="topic-name">#technology</span><span class="topic-count">590 ideas</span>
+					</div>
+					<div class="topic-row">
+						<span class="topic-name">#economy</span><span class="topic-count">412 ideas</span>
+					</div>
+				</div>
+
+				<div class="week-card">
+					<div class="week-label">This week's top idea</div>
+					<div class="week-title">Universal exam system gains 800+ sparks in 3 days</div>
+					<div class="week-stat"><span>12 people</span> want to build it</div>
+				</div>
+			</aside>
+		</div>
+
+		<!-- DESIGN TOKENS REFERENCE -->
+		<div class="tokens-section">
+			<div class="tokens-title">Design tokens — for Figma reference</div>
+			<div class="tokens-grid">
+				<div class="token-swatch">
+					<div class="swatch-color" style="background: #f5c518"></div>
+					<div class="swatch-info">
+						<span class="swatch-name">Yellow</span><span class="swatch-hex">#F5C518</span>
+					</div>
+				</div>
+				<div class="token-swatch">
+					<div
+						class="swatch-color"
+						style="background: #fff8dc; border-bottom: 1px solid #eee"
+					></div>
+					<div class="swatch-info">
+						<span class="swatch-name">Yellow light</span><span class="swatch-hex">#FFF8DC</span>
+					</div>
+				</div>
+				<div class="token-swatch">
+					<div class="swatch-color" style="background: #ffe066"></div>
+					<div class="swatch-info">
+						<span class="swatch-name">Yellow mid</span><span class="swatch-hex">#FFE066</span>
+					</div>
+				</div>
+				<div class="token-swatch">
+					<div class="swatch-color" style="background: #c49a00"></div>
+					<div class="swatch-info">
+						<span class="swatch-name">Yellow dark</span><span class="swatch-hex">#C49A00</span>
+					</div>
+				</div>
+				<div class="token-swatch">
+					<div class="swatch-color" style="background: #111111"></div>
+					<div class="swatch-info">
+						<span class="swatch-name">Black</span><span class="swatch-hex">#111111</span>
+					</div>
+				</div>
+				<div class="token-swatch">
+					<div class="swatch-color" style="background: #444444"></div>
+					<div class="swatch-info">
+						<span class="swatch-name">Gray dark</span><span class="swatch-hex">#444444</span>
+					</div>
+				</div>
+				<div class="token-swatch">
+					<div class="swatch-color" style="background: #888888"></div>
+					<div class="swatch-info">
+						<span class="swatch-name">Gray mid</span><span class="swatch-hex">#888888</span>
+					</div>
+				</div>
+				<div class="token-swatch">
+					<div class="swatch-color" style="background: #dddddd"></div>
+					<div class="swatch-info">
+						<span class="swatch-name">Gray light</span><span class="swatch-hex">#DDDDDD</span>
+					</div>
+				</div>
+				<div class="token-swatch">
+					<div
+						class="swatch-color"
+						style="background: #f5f5f2; border-bottom: 1px solid #eee"
+					></div>
+					<div class="swatch-info">
+						<span class="swatch-name">Background</span><span class="swatch-hex">#F5F5F2</span>
+					</div>
+				</div>
+				<div class="token-swatch">
+					<div
+						class="swatch-color"
+						style="background: #ffffff; border-bottom: 1px solid #eee"
+					></div>
+					<div class="swatch-info">
+						<span class="swatch-name">White</span><span class="swatch-hex">#FFFFFF</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="type-section">
+				<div class="type-sample">
+					<span class="type-label">Display / 17px 600</span>
+					<span
+						style="
+							font-family: 'Bricolage Grotesque', sans-serif;
+							font-size: 17px;
+							font-weight: 600;
+						"
+						>IdeaShare — share what you think</span
+					>
+				</div>
+				<div class="type-sample">
+					<span class="type-label">Card title / 15px 600</span>
+					<span
+						style="
+							font-family: 'Bricolage Grotesque', sans-serif;
+							font-size: 15px;
+							font-weight: 600;
+						"
+						>A universal exam system for everyone</span
+					>
+				</div>
+				<div class="type-sample">
+					<span class="type-label">Body / 13.5px 400</span>
+					<span style="font-family: 'DM Sans', sans-serif; font-size: 13.5px"
+						>What if you could study from anywhere and just show up to get certified?</span
+					>
+				</div>
+				<div class="type-sample">
+					<span class="type-label">Label / 11px 600 caps</span>
+					<span
+						style="
+							font-family: 'DM Sans', sans-serif;
+							font-size: 11px;
+							font-weight: 600;
+							letter-spacing: 0.08em;
+							text-transform: uppercase;
+						"
+						>Trending topics</span
+					>
+				</div>
+				<div class="type-sample">
+					<span class="type-label">Tag / 12px 400</span>
+					<span
+						style="
+							font-family: 'DM Sans', sans-serif;
+							font-size: 12px;
+							padding: 3px 10px;
+							background: #f5f5f2;
+							border: 1px solid #ddd;
+							border-radius: 999px;
+						"
+						>#education</span
+					>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>
 <style>
-  /* ── RESPONSIVE ── */
+	/* ── RESPONSIVE ── */
 
-  /* Tablet: hide right sidebar, collapse left sidebar */
-  @media (max-width: 860px) {
-    .layout {
-      grid-template-columns: 160px minmax(0, 1fr);
-      padding: 16px 14px;
-      gap: 16px;
-    }
+	/* Tablet: hide right sidebar, collapse left sidebar */
+	@media (max-width: 860px) {
+		.layout {
+			grid-template-columns: 160px minmax(0, 1fr);
+			padding: 16px 14px;
+			gap: 16px;
+		}
 
-    .sidebar-right {
-      display: none;
-    }
+		.sidebar-right {
+			display: none;
+		}
 
-    .navbar {
-      padding: 0 16px;
-    }
+		.navbar {
+			padding: 0 16px;
+		}
 
-    .nav-search {
-      max-width: 200px;
-    }
-  }
+		.nav-search {
+			max-width: 200px;
+		}
+	}
 
-  /* Mobile: single column, bottom nav */
-  @media (max-width: 600px) {
+	/* Mobile: single column, bottom nav */
+	@media (max-width: 600px) {
+		html,
+		body {
+			overflow-x: hidden;
+		}
 
-    html,
-    body {
-      overflow-x: hidden;
-    }
+		.navbar {
+			padding: 0 14px;
+			height: 52px;
+			gap: 8px;
+		}
 
-    .navbar {
-      padding: 0 14px;
-      height: 52px;
-      gap: 8px;
-    }
+		.logo-text {
+			font-size: 15px;
+		}
 
-    .logo-text {
-      font-size: 15px;
-    }
+		.nav-search {
+			display: none;
+		}
 
-    .nav-search {
-      display: none;
-    }
+		.btn-ghost {
+			display: none;
+		}
 
-    .btn-ghost {
-      display: none;
-    }
+		.btn-primary {
+			padding: 6px 12px;
+			font-size: 12px;
+		}
 
-    .btn-primary {
-      padding: 6px 12px;
-      font-size: 12px;
-    }
+		.plus {
+			width: 13px;
+			height: 13px;
+			font-size: 12px;
+		}
 
-    .plus {
-      width: 13px;
-      height: 13px;
-      font-size: 12px;
-    }
+		.layout {
+			grid-template-columns: 1fr;
+			padding: 12px 12px 80px;
+			gap: 12px;
+		}
 
-    .layout {
-      grid-template-columns: 1fr;
-      padding: 12px 12px 80px;
-      gap: 12px;
-    }
+		/* Horizontal scrollable topic chips replace left sidebar */
+		.sidebar-left {
+			display: flex;
+			flex-direction: row;
+			overflow-x: auto;
+			gap: 6px;
+			padding-bottom: 4px;
+			scrollbar-width: none;
+			-ms-overflow-style: none;
+		}
 
-    /* Horizontal scrollable topic chips replace left sidebar */
-    .sidebar-left {
-      display: flex;
-      flex-direction: row;
-      overflow-x: auto;
-      gap: 6px;
-      padding-bottom: 4px;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
+		.sidebar-left::-webkit-scrollbar {
+			display: none;
+		}
 
-    .sidebar-left::-webkit-scrollbar {
-      display: none;
-    }
+		.sbl-section {
+			display: none;
+		}
 
-    .sbl-section {
-      display: none;
-    }
+		.sbl-icon {
+			display: none;
+		}
 
-    .sbl-icon {
-      display: none;
-    }
+		.sbl-item {
+			white-space: nowrap;
+			padding: 6px 14px;
+			border-radius: 999px;
+			border: 1px solid var(--gray-light);
+			background: var(--white);
+			font-size: 12px;
+			flex-shrink: 0;
+		}
 
-    .sbl-item {
-      white-space: nowrap;
-      padding: 6px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--gray-light);
-      background: var(--white);
-      font-size: 12px;
-      flex-shrink: 0;
-    }
+		.sbl-item.active {
+			background: var(--black);
+			color: var(--white);
+			border-color: var(--black);
+		}
 
-    .sbl-item.active {
-      background: var(--black);
-      color: var(--white);
-      border-color: var(--black);
-    }
+		.feed-header {
+			flex-wrap: wrap;
+			gap: 8px;
+		}
 
-    .feed-header {
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+		.feed-tabs {
+			width: 100%;
+		}
 
-    .feed-tabs {
-      width: 100%;
-    }
+		.ftab {
+			flex: 1;
+			text-align: center;
+			font-size: 12px;
+			padding: 5px 8px;
+		}
 
-    .ftab {
-      flex: 1;
-      text-align: center;
-      font-size: 12px;
-      padding: 5px 8px;
-    }
+		.idea-card {
+			padding: 14px 14px;
+		}
 
-    .idea-card {
-      padding: 14px 14px;
-    }
+		.card-title {
+			font-size: 13.5px;
+		}
 
-    .card-title {
-      font-size: 13.5px;
-    }
+		.card-desc {
+			font-size: 12.5px;
+		}
 
-    .card-desc {
-      font-size: 12.5px;
-    }
+		.card-meta {
+			display: none;
+		}
 
-    .card-meta {
-      display: none;
-    }
+		.dupe-banner {
+			font-size: 12px;
+			padding: 9px 12px;
+		}
 
-    .dupe-banner {
-      font-size: 12px;
-      padding: 9px 12px;
-    }
+		/* Bottom navigation bar */
+		.bottom-nav {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background: var(--white);
+			border-top: 1px solid var(--gray-light);
+			display: flex;
+			height: 60px;
+			z-index: 200;
+			padding-bottom: env(safe-area-inset-bottom);
+		}
 
-    /* Bottom navigation bar */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--white);
-      border-top: 1px solid var(--gray-light);
-      display: flex;
-      height: 60px;
-      z-index: 200;
-      padding-bottom: env(safe-area-inset-bottom);
-    }
+		.bnav-item {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 3px;
+			cursor: pointer;
+			font-size: 10px;
+			color: var(--gray-mid);
+			border: none;
+			background: transparent;
+			font-family: var(--font-body);
+		}
 
-    .bnav-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      cursor: pointer;
-      font-size: 10px;
-      color: var(--gray-mid);
-      border: none;
-      background: transparent;
-      font-family: var(--font-body);
-    }
+		.bnav-item.active {
+			color: var(--black);
+		}
 
-    .bnav-item.active {
-      color: var(--black);
-    }
+		.bnav-item svg {
+			width: 20px;
+			height: 20px;
+		}
 
-    .bnav-item svg {
-      width: 20px;
-      height: 20px;
-    }
+		.bnav-post {
+			width: 44px;
+			height: 44px;
+			border-radius: 50%;
+			background: var(--black);
+			border: none;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-top: -16px;
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+			cursor: pointer;
+			flex-shrink: 0;
+			position: relative;
+		}
 
-    .bnav-post {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--black);
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: -16px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-      flex-shrink: 0;
-      position: relative;
-    }
+		.bnav-post-dot {
+			width: 18px;
+			height: 18px;
+			background: var(--yellow);
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 14px;
+			color: var(--black);
+			line-height: 1;
+		}
 
-    .bnav-post-dot {
-      width: 18px;
-      height: 18px;
-      background: var(--yellow);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: var(--black);
-      line-height: 1;
-    }
-
-    /* hide tokens section on mobile */
-    .tokens-section {
-      display: none;
-    }
-  }
+		/* hide tokens section on mobile */
+		.tokens-section {
+			display: none;
+		}
+	}
 </style>
 
 <!-- Bottom nav (mobile only) -->
-<div class="bottom-nav" id="bottom-nav" style="display:none;">
-  <button class="bnav-item active">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-    </svg>
-    Feed
-  </button>
-  <button class="bnav-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="11" cy="11" r="8" />
-      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-    </svg>
-    Explore
-  </button>
-  <button class="bnav-post">
-    <div class="bnav-post-dot">+</div>
-  </button>
-  <button class="bnav-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
-      <path d="M13.73 21a2 2 0 01-3.46 0" />
-    </svg>
-    Alerts
-  </button>
-  <button class="bnav-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
-    Profile
-  </button>
+<div class="bottom-nav" id="bottom-nav" style="display: none">
+	<button class="bnav-item active">
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+		</svg>
+		Feed
+	</button>
+	<button class="bnav-item">
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<circle cx="11" cy="11" r="8" />
+			<line x1="21" y1="21" x2="16.65" y2="16.65" />
+		</svg>
+		Explore
+	</button>
+	<button class="bnav-post">
+		<div class="bnav-post-dot">+</div>
+	</button>
+	<button class="bnav-item">
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+			<path d="M13.73 21a2 2 0 01-3.46 0" />
+		</svg>
+		Alerts
+	</button>
+	<button class="bnav-item">
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+			<circle cx="12" cy="7" r="4" />
+		</svg>
+		Profile
+	</button>
 </div>
 <script>
-  if (window.innerWidth <= 600) document.getElementById('bottom-nav').style.display = 'flex';
-  window.addEventListener('resize', () => {
-    document.getElementById('bottom-nav').style.display = window.innerWidth <= 600 ? 'flex' : 'none';
-  });
+	if (window.innerWidth <= 600) document.getElementById('bottom-nav').style.display = 'flex';
+	window.addEventListener('resize', () => {
+		document.getElementById('bottom-nav').style.display =
+			window.innerWidth <= 600 ? 'flex' : 'none';
+	});
 </script>

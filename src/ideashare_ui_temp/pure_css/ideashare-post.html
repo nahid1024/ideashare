@@ -1,728 +1,1334 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IdeaShare — Post an Idea</title>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --yellow: #F5C518;
-    --yellow-light: #FFF8DC;
-    --yellow-mid: #FFE066;
-    --yellow-dark: #C49A00;
-    --black: #111111;
-    --gray-dark: #444444;
-    --gray-mid: #888888;
-    --gray-light: #DDDDDD;
-    --gray-faint: #F5F5F2;
-    --white: #FFFFFF;
-    --font-display: 'Bricolage Grotesque', sans-serif;
-    --font-body: 'DM Sans', sans-serif;
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 16px;
-    --radius-pill: 999px;
-  }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>IdeaShare — Post an Idea</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--yellow: #f5c518;
+				--yellow-light: #fff8dc;
+				--yellow-mid: #ffe066;
+				--yellow-dark: #c49a00;
+				--black: #111111;
+				--gray-dark: #444444;
+				--gray-mid: #888888;
+				--gray-light: #dddddd;
+				--gray-faint: #f5f5f2;
+				--white: #ffffff;
+				--font-display: 'Bricolage Grotesque', sans-serif;
+				--font-body: 'DM Sans', sans-serif;
+				--radius-sm: 6px;
+				--radius-md: 10px;
+				--radius-lg: 16px;
+				--radius-pill: 999px;
+			}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
 
-  body {
-    font-family: var(--font-body);
-    background: var(--gray-faint);
-    color: var(--black);
-    font-size: 14px;
-    min-height: 100vh;
-  }
+			body {
+				font-family: var(--font-body);
+				background: var(--gray-faint);
+				color: var(--black);
+				font-size: 14px;
+				min-height: 100vh;
+			}
 
-  /* NAVBAR */
-  .navbar {
-    background: var(--white);
-    border-bottom: 1px solid var(--gray-light);
-    height: 54px;
-    display: flex; align-items: center;
-    padding: 0 32px; gap: 14px;
-    position: sticky; top: 0; z-index: 100;
-  }
-  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-  .logo-text { font-family: var(--font-display); font-size: 16px; font-weight: 600; color: var(--black); letter-spacing: -0.3px; }
-  .logo-text span { color: var(--yellow-dark); }
-  .nav-back { display: flex; align-items: center; gap: 5px; font-size: 13px; color: var(--gray-mid); cursor: pointer; border: none; background: transparent; font-family: var(--font-body); transition: color 0.15s; }
-  .nav-back:hover { color: var(--black); }
-  .nav-steps { margin-left: auto; display: flex; align-items: center; gap: 6px; }
-  .step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; transition: all 0.2s; }
-  .step-dot.done { background: var(--yellow); color: var(--black); }
-  .step-dot.active { background: var(--black); color: var(--white); }
-  .step-dot.idle { background: var(--gray-faint); color: var(--gray-mid); border: 1px solid var(--gray-light); }
-  .step-line { width: 24px; height: 2px; background: var(--gray-light); border-radius: 2px; }
-  .step-line.done { background: var(--yellow); }
+			/* NAVBAR */
+			.navbar {
+				background: var(--white);
+				border-bottom: 1px solid var(--gray-light);
+				height: 54px;
+				display: flex;
+				align-items: center;
+				padding: 0 32px;
+				gap: 14px;
+				position: sticky;
+				top: 0;
+				z-index: 100;
+			}
+			.logo {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				text-decoration: none;
+			}
+			.logo-text {
+				font-family: var(--font-display);
+				font-size: 16px;
+				font-weight: 600;
+				color: var(--black);
+				letter-spacing: -0.3px;
+			}
+			.logo-text span {
+				color: var(--yellow-dark);
+			}
+			.nav-back {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				font-size: 13px;
+				color: var(--gray-mid);
+				cursor: pointer;
+				border: none;
+				background: transparent;
+				font-family: var(--font-body);
+				transition: color 0.15s;
+			}
+			.nav-back:hover {
+				color: var(--black);
+			}
+			.nav-steps {
+				margin-left: auto;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+			}
+			.step-dot {
+				width: 28px;
+				height: 28px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 12px;
+				font-weight: 600;
+				transition: all 0.2s;
+			}
+			.step-dot.done {
+				background: var(--yellow);
+				color: var(--black);
+			}
+			.step-dot.active {
+				background: var(--black);
+				color: var(--white);
+			}
+			.step-dot.idle {
+				background: var(--gray-faint);
+				color: var(--gray-mid);
+				border: 1px solid var(--gray-light);
+			}
+			.step-line {
+				width: 24px;
+				height: 2px;
+				background: var(--gray-light);
+				border-radius: 2px;
+			}
+			.step-line.done {
+				background: var(--yellow);
+			}
 
-  /* LAYOUT */
-  .page {
-    max-width: 860px; margin: 0 auto;
-    padding: 36px 24px 60px;
-    display: grid;
-    grid-template-columns: minmax(0,1fr) 240px;
-    gap: 28px;
-    align-items: start;
-  }
+			/* LAYOUT */
+			.page {
+				max-width: 860px;
+				margin: 0 auto;
+				padding: 36px 24px 60px;
+				display: grid;
+				grid-template-columns: minmax(0, 1fr) 240px;
+				gap: 28px;
+				align-items: start;
+			}
 
-  /* FORM COLUMN */
-  .form-col { display: flex; flex-direction: column; gap: 0; }
+			/* FORM COLUMN */
+			.form-col {
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
 
-  .form-header { margin-bottom: 28px; }
-  .form-step-label {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 11px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.08em; color: var(--yellow-dark);
-    background: var(--yellow-light); border: 1px solid var(--yellow-mid);
-    padding: 3px 10px; border-radius: var(--radius-pill);
-    margin-bottom: 10px;
-  }
-  .form-title {
-    font-family: var(--font-display);
-    font-size: 26px; font-weight: 700; color: var(--black);
-    letter-spacing: -0.4px; line-height: 1.25; margin-bottom: 6px;
-  }
-  .form-sub { font-size: 13.5px; color: var(--gray-mid); line-height: 1.6; }
+			.form-header {
+				margin-bottom: 28px;
+			}
+			.form-step-label {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				font-size: 11px;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				color: var(--yellow-dark);
+				background: var(--yellow-light);
+				border: 1px solid var(--yellow-mid);
+				padding: 3px 10px;
+				border-radius: var(--radius-pill);
+				margin-bottom: 10px;
+			}
+			.form-title {
+				font-family: var(--font-display);
+				font-size: 26px;
+				font-weight: 700;
+				color: var(--black);
+				letter-spacing: -0.4px;
+				line-height: 1.25;
+				margin-bottom: 6px;
+			}
+			.form-sub {
+				font-size: 13.5px;
+				color: var(--gray-mid);
+				line-height: 1.6;
+			}
 
-  /* FORM CARD */
-  .form-card {
-    background: var(--white);
-    border: 1px solid var(--gray-light);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
+			/* FORM CARD */
+			.form-card {
+				background: var(--white);
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-lg);
+				overflow: hidden;
+			}
 
-  /* TITLE SECTION — yellow accent top */
-  .field-block {
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--gray-faint);
-    position: relative;
-    transition: background 0.15s;
-  }
-  .field-block:last-child { border-bottom: none; }
-  .field-block.focused { background: #FEFDF7; }
+			/* TITLE SECTION — yellow accent top */
+			.field-block {
+				padding: 20px 24px;
+				border-bottom: 1px solid var(--gray-faint);
+				position: relative;
+				transition: background 0.15s;
+			}
+			.field-block:last-child {
+				border-bottom: none;
+			}
+			.field-block.focused {
+				background: #fefdf7;
+			}
 
-  .field-accent {
-    position: absolute; left: 0; top: 0; bottom: 0;
-    width: 3px; background: transparent; border-radius: 0;
-    transition: background 0.2s;
-  }
-  .field-block.focused .field-accent { background: var(--yellow); }
+			.field-accent {
+				position: absolute;
+				left: 0;
+				top: 0;
+				bottom: 0;
+				width: 3px;
+				background: transparent;
+				border-radius: 0;
+				transition: background 0.2s;
+			}
+			.field-block.focused .field-accent {
+				background: var(--yellow);
+			}
 
-  .field-label {
-    font-size: 11px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--gray-mid); margin-bottom: 8px;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .field-required {
-    width: 5px; height: 5px; border-radius: 50%;
-    background: var(--yellow-dark); display: inline-block;
-  }
-  .field-optional {
-    font-size: 10px; font-weight: 500; color: var(--gray-light);
-    text-transform: none; letter-spacing: 0;
-    background: var(--gray-faint); padding: 1px 6px;
-    border-radius: var(--radius-pill);
-  }
+			.field-label {
+				font-size: 11px;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				color: var(--gray-mid);
+				margin-bottom: 8px;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+			}
+			.field-required {
+				width: 5px;
+				height: 5px;
+				border-radius: 50%;
+				background: var(--yellow-dark);
+				display: inline-block;
+			}
+			.field-optional {
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--gray-light);
+				text-transform: none;
+				letter-spacing: 0;
+				background: var(--gray-faint);
+				padding: 1px 6px;
+				border-radius: var(--radius-pill);
+			}
 
-  .field-input {
-    width: 100%; border: none; outline: none;
-    font-family: var(--font-display);
-    font-size: 18px; font-weight: 600;
-    color: var(--black); background: transparent;
-    line-height: 1.4; resize: none;
-  }
-  .field-input::placeholder { color: var(--gray-light); font-weight: 500; }
+			.field-input {
+				width: 100%;
+				border: none;
+				outline: none;
+				font-family: var(--font-display);
+				font-size: 18px;
+				font-weight: 600;
+				color: var(--black);
+				background: transparent;
+				line-height: 1.4;
+				resize: none;
+			}
+			.field-input::placeholder {
+				color: var(--gray-light);
+				font-weight: 500;
+			}
 
-  .field-textarea {
-    width: 100%; border: none; outline: none;
-    font-family: var(--font-body);
-    font-size: 14px; color: var(--black);
-    background: transparent; line-height: 1.7;
-    resize: none; min-height: 90px;
-  }
-  .field-textarea::placeholder { color: #BBBBBB; }
+			.field-textarea {
+				width: 100%;
+				border: none;
+				outline: none;
+				font-family: var(--font-body);
+				font-size: 14px;
+				color: var(--black);
+				background: transparent;
+				line-height: 1.7;
+				resize: none;
+				min-height: 90px;
+			}
+			.field-textarea::placeholder {
+				color: #bbbbbb;
+			}
 
-  .char-count {
-    display: flex; justify-content: flex-end;
-    font-size: 11px; color: var(--gray-light);
-    margin-top: 6px;
-  }
-  .char-count.warn { color: var(--yellow-dark); }
+			.char-count {
+				display: flex;
+				justify-content: flex-end;
+				font-size: 11px;
+				color: var(--gray-light);
+				margin-top: 6px;
+			}
+			.char-count.warn {
+				color: var(--yellow-dark);
+			}
 
-  /* WHO BENEFITS */
-  .benefit-chips {
-    display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 10px;
-  }
-  .bchip {
-    display: flex; align-items: center; gap: 5px;
-    padding: 6px 12px; border-radius: var(--radius-pill);
-    border: 1px solid var(--gray-light);
-    background: transparent; font-family: var(--font-body);
-    font-size: 12.5px; font-weight: 500; color: var(--gray-dark);
-    cursor: pointer; transition: all 0.15s;
-  }
-  .bchip:hover { border-color: var(--yellow-dark); color: var(--black); }
-  .bchip.selected {
-    background: var(--yellow-light); border-color: var(--yellow);
-    color: var(--black); font-weight: 600;
-  }
-  .bchip-icon { font-size: 14px; }
+			/* WHO BENEFITS */
+			.benefit-chips {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 7px;
+				margin-bottom: 10px;
+			}
+			.bchip {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				padding: 6px 12px;
+				border-radius: var(--radius-pill);
+				border: 1px solid var(--gray-light);
+				background: transparent;
+				font-family: var(--font-body);
+				font-size: 12.5px;
+				font-weight: 500;
+				color: var(--gray-dark);
+				cursor: pointer;
+				transition: all 0.15s;
+			}
+			.bchip:hover {
+				border-color: var(--yellow-dark);
+				color: var(--black);
+			}
+			.bchip.selected {
+				background: var(--yellow-light);
+				border-color: var(--yellow);
+				color: var(--black);
+				font-weight: 600;
+			}
+			.bchip-icon {
+				font-size: 14px;
+			}
 
-  /* TOPICS */
-  .topic-chips {
-    display: flex; flex-wrap: wrap; gap: 7px;
-  }
-  .tchip {
-    padding: 5px 12px; border-radius: var(--radius-pill);
-    border: 1px solid var(--gray-light);
-    background: transparent; font-family: var(--font-body);
-    font-size: 12.5px; font-weight: 500; color: var(--gray-dark);
-    cursor: pointer; transition: all 0.15s;
-  }
-  .tchip:hover { border-color: var(--gray-dark); color: var(--black); }
-  .tchip.selected {
-    background: var(--black); border-color: var(--black);
-    color: var(--white);
-  }
+			/* TOPICS */
+			.topic-chips {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 7px;
+			}
+			.tchip {
+				padding: 5px 12px;
+				border-radius: var(--radius-pill);
+				border: 1px solid var(--gray-light);
+				background: transparent;
+				font-family: var(--font-body);
+				font-size: 12.5px;
+				font-weight: 500;
+				color: var(--gray-dark);
+				cursor: pointer;
+				transition: all 0.15s;
+			}
+			.tchip:hover {
+				border-color: var(--gray-dark);
+				color: var(--black);
+			}
+			.tchip.selected {
+				background: var(--black);
+				border-color: var(--black);
+				color: var(--white);
+			}
 
-  /* ANON TOGGLE */
-  .anon-row {
-    display: flex; align-items: center; gap: 12px;
-  }
-  .toggle-wrap {
-    position: relative; width: 40px; height: 22px; cursor: pointer;
-  }
-  .toggle-wrap input { opacity: 0; width: 0; height: 0; position: absolute; }
-  .toggle-track {
-    position: absolute; inset: 0;
-    background: var(--gray-light); border-radius: var(--radius-pill);
-    transition: background 0.2s;
-  }
-  .toggle-wrap input:checked + .toggle-track { background: var(--yellow); }
-  .toggle-thumb {
-    position: absolute; top: 3px; left: 3px;
-    width: 16px; height: 16px; border-radius: 50%;
-    background: var(--white); box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    transition: left 0.2s;
-  }
-  .toggle-wrap input:checked ~ .toggle-thumb { left: 21px; }
-  .anon-text { font-size: 13.5px; color: var(--black); font-weight: 500; }
-  .anon-sub { font-size: 12px; color: var(--gray-mid); margin-top: 2px; }
+			/* ANON TOGGLE */
+			.anon-row {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+			.toggle-wrap {
+				position: relative;
+				width: 40px;
+				height: 22px;
+				cursor: pointer;
+			}
+			.toggle-wrap input {
+				opacity: 0;
+				width: 0;
+				height: 0;
+				position: absolute;
+			}
+			.toggle-track {
+				position: absolute;
+				inset: 0;
+				background: var(--gray-light);
+				border-radius: var(--radius-pill);
+				transition: background 0.2s;
+			}
+			.toggle-wrap input:checked + .toggle-track {
+				background: var(--yellow);
+			}
+			.toggle-thumb {
+				position: absolute;
+				top: 3px;
+				left: 3px;
+				width: 16px;
+				height: 16px;
+				border-radius: 50%;
+				background: var(--white);
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+				transition: left 0.2s;
+			}
+			.toggle-wrap input:checked ~ .toggle-thumb {
+				left: 21px;
+			}
+			.anon-text {
+				font-size: 13.5px;
+				color: var(--black);
+				font-weight: 500;
+			}
+			.anon-sub {
+				font-size: 12px;
+				color: var(--gray-mid);
+				margin-top: 2px;
+			}
 
-  /* DUPE WARNING */
-  .dupe-warning {
-    background: var(--yellow-light);
-    border: 1px solid var(--yellow-mid);
-    border-radius: var(--radius-md);
-    padding: 12px 16px;
-    display: flex; gap: 12px; align-items: flex-start;
-    margin-top: 14px;
-  }
-  .dupe-bulb {
-    width: 24px; height: 24px; border-radius: 50%;
-    background: var(--yellow); display: flex;
-    align-items: center; justify-content: center;
-    flex-shrink: 0; margin-top: 1px; font-size: 12px;
-  }
-  .dupe-text { font-size: 13px; color: var(--black); line-height: 1.55; }
-  .dupe-link { font-weight: 600; cursor: pointer; text-decoration: underline; }
-  .dupe-dismiss {
-    margin-left: auto; font-size: 12px; color: var(--gray-mid);
-    cursor: pointer; border: none; background: transparent;
-    font-family: var(--font-body); flex-shrink: 0;
-    padding: 2px 4px;
-  }
+			/* DUPE WARNING */
+			.dupe-warning {
+				background: var(--yellow-light);
+				border: 1px solid var(--yellow-mid);
+				border-radius: var(--radius-md);
+				padding: 12px 16px;
+				display: flex;
+				gap: 12px;
+				align-items: flex-start;
+				margin-top: 14px;
+			}
+			.dupe-bulb {
+				width: 24px;
+				height: 24px;
+				border-radius: 50%;
+				background: var(--yellow);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+				margin-top: 1px;
+				font-size: 12px;
+			}
+			.dupe-text {
+				font-size: 13px;
+				color: var(--black);
+				line-height: 1.55;
+			}
+			.dupe-link {
+				font-weight: 600;
+				cursor: pointer;
+				text-decoration: underline;
+			}
+			.dupe-dismiss {
+				margin-left: auto;
+				font-size: 12px;
+				color: var(--gray-mid);
+				cursor: pointer;
+				border: none;
+				background: transparent;
+				font-family: var(--font-body);
+				flex-shrink: 0;
+				padding: 2px 4px;
+			}
 
-  /* SUBMIT BAR */
-  .submit-bar {
-    display: flex; align-items: center; gap: 10px; margin-top: 20px;
-  }
-  .btn-submit {
-    display: flex; align-items: center; gap: 8px;
-    padding: 11px 28px; border: none;
-    border-radius: var(--radius-pill); background: var(--black);
-    font-family: var(--font-body); font-size: 14px; font-weight: 600;
-    color: var(--white); cursor: pointer; transition: opacity 0.15s;
-  }
-  .btn-submit:hover { opacity: 0.85; }
-  .submit-spark {
-    width: 20px; height: 20px; background: var(--yellow);
-    border-radius: 50%; display: flex; align-items: center;
-    justify-content: center; font-size: 12px;
-  }
-  .btn-draft {
-    padding: 11px 20px; border: 1px solid var(--gray-light);
-    border-radius: var(--radius-pill); background: transparent;
-    font-family: var(--font-body); font-size: 13px; font-weight: 500;
-    color: var(--gray-dark); cursor: pointer; transition: border-color 0.15s;
-  }
-  .btn-draft:hover { border-color: var(--black); color: var(--black); }
-  .submit-note { font-size: 12px; color: var(--gray-mid); }
+			/* SUBMIT BAR */
+			.submit-bar {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				margin-top: 20px;
+			}
+			.btn-submit {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				padding: 11px 28px;
+				border: none;
+				border-radius: var(--radius-pill);
+				background: var(--black);
+				font-family: var(--font-body);
+				font-size: 14px;
+				font-weight: 600;
+				color: var(--white);
+				cursor: pointer;
+				transition: opacity 0.15s;
+			}
+			.btn-submit:hover {
+				opacity: 0.85;
+			}
+			.submit-spark {
+				width: 20px;
+				height: 20px;
+				background: var(--yellow);
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 12px;
+			}
+			.btn-draft {
+				padding: 11px 20px;
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-pill);
+				background: transparent;
+				font-family: var(--font-body);
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--gray-dark);
+				cursor: pointer;
+				transition: border-color 0.15s;
+			}
+			.btn-draft:hover {
+				border-color: var(--black);
+				color: var(--black);
+			}
+			.submit-note {
+				font-size: 12px;
+				color: var(--gray-mid);
+			}
 
-  /* PREVIEW CARD (right col) */
-  .preview-col { display: flex; flex-direction: column; gap: 14px; }
+			/* PREVIEW CARD (right col) */
+			.preview-col {
+				display: flex;
+				flex-direction: column;
+				gap: 14px;
+			}
 
-  .preview-label {
-    font-size: 11px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.08em; color: var(--gray-mid);
-  }
+			.preview-label {
+				font-size: 11px;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				color: var(--gray-mid);
+			}
 
-  .preview-card {
-    background: var(--white); border: 1px solid var(--gray-light);
-    border-radius: var(--radius-lg); overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-  }
+			.preview-card {
+				background: var(--white);
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-lg);
+				overflow: hidden;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+			}
 
-  .preview-hero {
-    background: var(--yellow); padding: 16px;
-  }
+			.preview-hero {
+				background: var(--yellow);
+				padding: 16px;
+			}
 
-  .preview-title {
-    font-family: var(--font-display);
-    font-size: 13.5px; font-weight: 700;
-    color: var(--black); line-height: 1.4;
-  }
+			.preview-title {
+				font-family: var(--font-display);
+				font-size: 13.5px;
+				font-weight: 700;
+				color: var(--black);
+				line-height: 1.4;
+			}
 
-  .preview-body { padding: 12px 16px; }
-  .preview-desc {
-    font-size: 12px; color: var(--gray-dark);
-    line-height: 1.6; margin-bottom: 10px;
-  }
+			.preview-body {
+				padding: 12px 16px;
+			}
+			.preview-desc {
+				font-size: 12px;
+				color: var(--gray-dark);
+				line-height: 1.6;
+				margin-bottom: 10px;
+			}
 
-  .preview-footer {
-    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-  }
-  .ptag {
-    padding: 2px 8px; border-radius: var(--radius-pill);
-    background: var(--gray-faint); border: 1px solid var(--gray-light);
-    font-size: 11px; color: var(--gray-dark);
-  }
-  .pstatus {
-    padding: 2px 8px; border-radius: var(--radius-pill);
-    font-size: 11px; font-weight: 600;
-    background: #FFF3CD; color: #7A5800; border: 1px solid #FFE08A;
-  }
-  .pspark {
-    margin-left: auto; font-size: 12px; font-weight: 600; color: var(--gray-mid);
-  }
+			.preview-footer {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				flex-wrap: wrap;
+			}
+			.ptag {
+				padding: 2px 8px;
+				border-radius: var(--radius-pill);
+				background: var(--gray-faint);
+				border: 1px solid var(--gray-light);
+				font-size: 11px;
+				color: var(--gray-dark);
+			}
+			.pstatus {
+				padding: 2px 8px;
+				border-radius: var(--radius-pill);
+				font-size: 11px;
+				font-weight: 600;
+				background: #fff3cd;
+				color: #7a5800;
+				border: 1px solid #ffe08a;
+			}
+			.pspark {
+				margin-left: auto;
+				font-size: 12px;
+				font-weight: 600;
+				color: var(--gray-mid);
+			}
 
-  /* TIPS WIDGET */
-  .tips-card {
-    background: var(--black); border-radius: var(--radius-lg); padding: 16px;
-  }
-  .tips-title {
-    font-size: 11px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.08em; color: var(--yellow); margin-bottom: 12px;
-  }
-  .tip-row {
-    display: flex; gap: 10px; margin-bottom: 10px;
-    align-items: flex-start;
-  }
-  .tip-row:last-child { margin-bottom: 0; }
-  .tip-num {
-    width: 18px; height: 18px; border-radius: 50%;
-    background: var(--yellow); color: var(--black);
-    font-size: 10px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; margin-top: 1px;
-  }
-  .tip-text { font-size: 12px; color: #AAAAAA; line-height: 1.55; }
-  .tip-text strong { color: var(--white); }
+			/* TIPS WIDGET */
+			.tips-card {
+				background: var(--black);
+				border-radius: var(--radius-lg);
+				padding: 16px;
+			}
+			.tips-title {
+				font-size: 11px;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				color: var(--yellow);
+				margin-bottom: 12px;
+			}
+			.tip-row {
+				display: flex;
+				gap: 10px;
+				margin-bottom: 10px;
+				align-items: flex-start;
+			}
+			.tip-row:last-child {
+				margin-bottom: 0;
+			}
+			.tip-num {
+				width: 18px;
+				height: 18px;
+				border-radius: 50%;
+				background: var(--yellow);
+				color: var(--black);
+				font-size: 10px;
+				font-weight: 700;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+				margin-top: 1px;
+			}
+			.tip-text {
+				font-size: 12px;
+				color: #aaaaaa;
+				line-height: 1.55;
+			}
+			.tip-text strong {
+				color: var(--white);
+			}
 
-  /* similar ideas mini list */
-  .similar-mini {
-    background: var(--white); border: 1px solid var(--gray-light);
-    border-radius: var(--radius-lg); padding: 14px;
-  }
-  .sim-title {
-    font-size: 11px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.08em; color: var(--gray-mid); margin-bottom: 10px;
-  }
-  .sim-item {
-    padding: 7px 0; border-bottom: 1px solid var(--gray-faint);
-    cursor: pointer;
-  }
-  .sim-item:last-child { border-bottom: none; }
-  .sim-item-title {
-    font-size: 12.5px; color: var(--black); line-height: 1.4;
-    font-weight: 500; margin-bottom: 3px;
-  }
-  .sim-item-title:hover { color: var(--yellow-dark); }
-  .sim-sparks { font-size: 11px; color: var(--gray-mid); }
-  .sim-sparks span { color: var(--yellow-dark); font-weight: 500; }
-  .sim-cta {
-    margin-top: 10px; font-size: 12px; color: var(--gray-mid);
-    text-align: center;
-  }
-  .sim-cta a { color: var(--black); font-weight: 500; cursor: pointer; }
-</style>
-</head>
-<body>
+			/* similar ideas mini list */
+			.similar-mini {
+				background: var(--white);
+				border: 1px solid var(--gray-light);
+				border-radius: var(--radius-lg);
+				padding: 14px;
+			}
+			.sim-title {
+				font-size: 11px;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				color: var(--gray-mid);
+				margin-bottom: 10px;
+			}
+			.sim-item {
+				padding: 7px 0;
+				border-bottom: 1px solid var(--gray-faint);
+				cursor: pointer;
+			}
+			.sim-item:last-child {
+				border-bottom: none;
+			}
+			.sim-item-title {
+				font-size: 12.5px;
+				color: var(--black);
+				line-height: 1.4;
+				font-weight: 500;
+				margin-bottom: 3px;
+			}
+			.sim-item-title:hover {
+				color: var(--yellow-dark);
+			}
+			.sim-sparks {
+				font-size: 11px;
+				color: var(--gray-mid);
+			}
+			.sim-sparks span {
+				color: var(--yellow-dark);
+				font-weight: 500;
+			}
+			.sim-cta {
+				margin-top: 10px;
+				font-size: 12px;
+				color: var(--gray-mid);
+				text-align: center;
+			}
+			.sim-cta a {
+				color: var(--black);
+				font-weight: 500;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- NAVBAR -->
+		<nav class="navbar">
+			<a class="logo" href="#">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="28" height="28">
+					<path
+						d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z"
+						fill="#F5C518"
+					/>
+					<ellipse
+						cx="38"
+						cy="26"
+						rx="7"
+						ry="10"
+						fill="#FFF8DC"
+						opacity="0.7"
+						transform="rotate(-20 38 26)"
+					/>
+					<rect x="39" y="83" width="22" height="5" rx="2.5" fill="#C49A00" />
+					<rect x="40.5" y="90" width="19" height="5" rx="2.5" fill="#C49A00" opacity="0.7" />
+					<rect x="43" y="97" width="14" height="4" rx="2" fill="#C49A00" opacity="0.45" />
+					<path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="#111111" />
+				</svg>
+				<span class="logo-text">Idea<span>Share</span></span>
+			</a>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <a class="logo" href="#">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="28" height="28">
-      <path d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z" fill="#F5C518"/>
-      <ellipse cx="38" cy="26" rx="7" ry="10" fill="#FFF8DC" opacity="0.7" transform="rotate(-20 38 26)"/>
-      <rect x="39" y="83" width="22" height="5" rx="2.5" fill="#C49A00"/>
-      <rect x="40.5" y="90" width="19" height="5" rx="2.5" fill="#C49A00" opacity="0.7"/>
-      <rect x="43" y="97" width="14" height="4" rx="2" fill="#C49A00" opacity="0.45"/>
-      <path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="#111111"/>
-    </svg>
-    <span class="logo-text">Idea<span>Share</span></span>
-  </a>
+			<button class="nav-back">
+				<svg
+					width="14"
+					height="14"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<polyline points="15 18 9 12 15 6" />
+				</svg>
+				Back to feed
+			</button>
 
-  <button class="nav-back">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    Back to feed
-  </button>
+			<!-- Step indicator -->
+			<div class="nav-steps">
+				<div class="step-dot done">✓</div>
+				<div class="step-line done"></div>
+				<div class="step-dot active">2</div>
+				<div class="step-line"></div>
+				<div class="step-dot idle">3</div>
+			</div>
+		</nav>
 
-  <!-- Step indicator -->
-  <div class="nav-steps">
-    <div class="step-dot done">✓</div>
-    <div class="step-line done"></div>
-    <div class="step-dot active">2</div>
-    <div class="step-line"></div>
-    <div class="step-dot idle">3</div>
-  </div>
-</nav>
+		<!-- PAGE -->
+		<div class="page">
+			<!-- FORM -->
+			<div class="form-col">
+				<div class="form-header">
+					<div class="form-step-label">💡 Step 2 of 3 — The idea</div>
+					<h1 class="form-title">What's the idea?</h1>
+					<p class="form-sub">
+						Write it like you'd explain it to a friend. No need to be formal — just be clear.
+					</p>
+				</div>
 
-<!-- PAGE -->
-<div class="page">
+				<div class="form-card">
+					<!-- Title field -->
+					<div class="field-block focused" id="block-title">
+						<div class="field-accent"></div>
+						<div class="field-label">
+							<div class="field-required"></div>
+							Idea title
+						</div>
+						<textarea
+							class="field-input"
+							rows="2"
+							placeholder="e.g. A universal exam system where you study anywhere and just show up to get certified"
+							id="title-input"
+							oninput="updatePreview()"
+						>
+A universal exam system independent of any university — certify your skills, study anywhere</textarea
+						>
+						<div class="char-count" id="title-count">89 / 120</div>
+					</div>
 
-  <!-- FORM -->
-  <div class="form-col">
+					<!-- Description field -->
+					<div class="field-block" id="block-desc">
+						<div class="field-accent"></div>
+						<div class="field-label">
+							<div class="field-required"></div>
+							Describe the idea
+						</div>
+						<textarea
+							class="field-textarea"
+							rows="4"
+							placeholder="What exactly would this look like? How would it work? Even a rough picture is great."
+							id="desc-input"
+							oninput="updatePreview()"
+						>
+What if you could study from YouTube, books, or anywhere you want — and just show up to a standardised exam to get certified? No enrollment, no tuition fees, no geographic restriction. Your knowledge is what gets tested, not where you sat.</textarea
+						>
+					</div>
 
-    <div class="form-header">
-      <div class="form-step-label">💡 Step 2 of 3 — The idea</div>
-      <h1 class="form-title">What's the idea?</h1>
-      <p class="form-sub">Write it like you'd explain it to a friend. No need to be formal — just be clear.</p>
-    </div>
+					<!-- Problem field -->
+					<div class="field-block" id="block-problem">
+						<div class="field-accent"></div>
+						<div class="field-label">
+							<div class="field-required"></div>
+							What problem does this solve?
+						</div>
+						<textarea
+							class="field-textarea"
+							rows="2"
+							placeholder="e.g. University is too expensive and location-dependent for most people in the world."
+							id="problem-input"
+						>
+University degrees are expensive and location-dependent, but skills are what actually matter. Millions of people have the ability but not the access.</textarea
+						>
+					</div>
 
-    <div class="form-card">
+					<!-- Who benefits -->
+					<div class="field-block" id="block-who">
+						<div class="field-accent"></div>
+						<div class="field-label">
+							<div class="field-required"></div>
+							Who would benefit?
+							<span class="field-optional">Pick all that apply</span>
+						</div>
+						<div class="benefit-chips">
+							<button class="bchip selected" onclick="toggleChip(this)">
+								<span class="bchip-icon">🎓</span> Students
+							</button>
+							<button class="bchip selected" onclick="toggleChip(this)">
+								<span class="bchip-icon">💼</span> Working adults
+							</button>
+							<button class="bchip" onclick="toggleChip(this)">
+								<span class="bchip-icon">🏢</span> Employers
+							</button>
+							<button class="bchip selected" onclick="toggleChip(this)">
+								<span class="bchip-icon">🌍</span> Developing countries
+							</button>
+							<button class="bchip" onclick="toggleChip(this)">
+								<span class="bchip-icon">🏛️</span> Governments
+							</button>
+							<button class="bchip" onclick="toggleChip(this)">
+								<span class="bchip-icon">🔬</span> Researchers
+							</button>
+							<button class="bchip" onclick="toggleChip(this)">
+								<span class="bchip-icon">👩‍💻</span> Developers
+							</button>
+							<button class="bchip" onclick="toggleChip(this)">
+								<span class="bchip-icon">🌱</span> Everyone
+							</button>
+						</div>
+					</div>
 
-      <!-- Title field -->
-      <div class="field-block focused" id="block-title">
-        <div class="field-accent"></div>
-        <div class="field-label">
-          <div class="field-required"></div>
-          Idea title
-        </div>
-        <textarea class="field-input" rows="2"
-          placeholder="e.g. A universal exam system where you study anywhere and just show up to get certified"
-          id="title-input" oninput="updatePreview()"
-        >A universal exam system independent of any university — certify your skills, study anywhere</textarea>
-        <div class="char-count" id="title-count">89 / 120</div>
-      </div>
+					<!-- Topic tags -->
+					<div class="field-block" id="block-topic">
+						<div class="field-accent"></div>
+						<div class="field-label">
+							Topic
+							<span class="field-optional">Pick up to 2</span>
+						</div>
+						<div class="topic-chips">
+							<button class="tchip selected" onclick="toggleTopic(this)">#education</button>
+							<button class="tchip selected" onclick="toggleTopic(this)">#credentials</button>
+							<button class="tchip" onclick="toggleTopic(this)">#health</button>
+							<button class="tchip" onclick="toggleTopic(this)">#technology</button>
+							<button class="tchip" onclick="toggleTopic(this)">#cities</button>
+							<button class="tchip" onclick="toggleTopic(this)">#economy</button>
+							<button class="tchip" onclick="toggleTopic(this)">#environment</button>
+							<button class="tchip" onclick="toggleTopic(this)">#governance</button>
+						</div>
+					</div>
 
-      <!-- Description field -->
-      <div class="field-block" id="block-desc">
-        <div class="field-accent"></div>
-        <div class="field-label">
-          <div class="field-required"></div>
-          Describe the idea
-        </div>
-        <textarea class="field-textarea" rows="4"
-          placeholder="What exactly would this look like? How would it work? Even a rough picture is great."
-          id="desc-input" oninput="updatePreview()"
-        >What if you could study from YouTube, books, or anywhere you want — and just show up to a standardised exam to get certified? No enrollment, no tuition fees, no geographic restriction. Your knowledge is what gets tested, not where you sat.</textarea>
-      </div>
+					<!-- Anonymous toggle -->
+					<div class="field-block" id="block-anon">
+						<div class="field-accent"></div>
+						<div class="field-label">
+							Post anonymously
+							<span class="field-optional">optional</span>
+						</div>
+						<div class="anon-row">
+							<label class="toggle-wrap">
+								<input type="checkbox" id="anon-toggle" />
+								<div class="toggle-track"></div>
+								<div class="toggle-thumb"></div>
+							</label>
+							<div>
+								<div class="anon-text">Hide my name on this idea</div>
+								<div class="anon-sub">
+									Your contribution is still recorded — you'll get credit if it gets built.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-      <!-- Problem field -->
-      <div class="field-block" id="block-problem">
-        <div class="field-accent"></div>
-        <div class="field-label">
-          <div class="field-required"></div>
-          What problem does this solve?
-        </div>
-        <textarea class="field-textarea" rows="2"
-          placeholder="e.g. University is too expensive and location-dependent for most people in the world."
-          id="problem-input"
-        >University degrees are expensive and location-dependent, but skills are what actually matter. Millions of people have the ability but not the access.</textarea>
-      </div>
+				<!-- Dupe warning -->
+				<div class="dupe-warning" id="dupe-warning">
+					<div class="dupe-bulb">💡</div>
+					<div class="dupe-text">
+						<strong>3 similar ideas already exist.</strong> Want to refine one instead of posting a
+						new one? <br /><span class="dupe-link">View similar ideas →</span>
+					</div>
+					<button
+						class="dupe-dismiss"
+						onclick="document.getElementById('dupe-warning').style.display = 'none'"
+					>
+						✕
+					</button>
+				</div>
 
-      <!-- Who benefits -->
-      <div class="field-block" id="block-who">
-        <div class="field-accent"></div>
-        <div class="field-label">
-          <div class="field-required"></div>
-          Who would benefit?
-          <span class="field-optional">Pick all that apply</span>
-        </div>
-        <div class="benefit-chips">
-          <button class="bchip selected" onclick="toggleChip(this)"><span class="bchip-icon">🎓</span> Students</button>
-          <button class="bchip selected" onclick="toggleChip(this)"><span class="bchip-icon">💼</span> Working adults</button>
-          <button class="bchip" onclick="toggleChip(this)"><span class="bchip-icon">🏢</span> Employers</button>
-          <button class="bchip selected" onclick="toggleChip(this)"><span class="bchip-icon">🌍</span> Developing countries</button>
-          <button class="bchip" onclick="toggleChip(this)"><span class="bchip-icon">🏛️</span> Governments</button>
-          <button class="bchip" onclick="toggleChip(this)"><span class="bchip-icon">🔬</span> Researchers</button>
-          <button class="bchip" onclick="toggleChip(this)"><span class="bchip-icon">👩‍💻</span> Developers</button>
-          <button class="bchip" onclick="toggleChip(this)"><span class="bchip-icon">🌱</span> Everyone</button>
-        </div>
-      </div>
+				<!-- Submit bar -->
+				<div class="submit-bar">
+					<button class="btn-submit">
+						<div class="submit-spark">⚡</div>
+						Publish idea
+					</button>
+					<button class="btn-draft">Save as draft</button>
+					<span class="submit-note">Your idea will be visible to everyone</span>
+				</div>
+			</div>
 
-      <!-- Topic tags -->
-      <div class="field-block" id="block-topic">
-        <div class="field-accent"></div>
-        <div class="field-label">
-          Topic
-          <span class="field-optional">Pick up to 2</span>
-        </div>
-        <div class="topic-chips">
-          <button class="tchip selected" onclick="toggleTopic(this)">#education</button>
-          <button class="tchip selected" onclick="toggleTopic(this)">#credentials</button>
-          <button class="tchip" onclick="toggleTopic(this)">#health</button>
-          <button class="tchip" onclick="toggleTopic(this)">#technology</button>
-          <button class="tchip" onclick="toggleTopic(this)">#cities</button>
-          <button class="tchip" onclick="toggleTopic(this)">#economy</button>
-          <button class="tchip" onclick="toggleTopic(this)">#environment</button>
-          <button class="tchip" onclick="toggleTopic(this)">#governance</button>
-        </div>
-      </div>
+			<!-- RIGHT COLUMN -->
+			<div class="preview-col">
+				<div class="preview-label">Live preview</div>
 
-      <!-- Anonymous toggle -->
-      <div class="field-block" id="block-anon">
-        <div class="field-accent"></div>
-        <div class="field-label">
-          Post anonymously
-          <span class="field-optional">optional</span>
-        </div>
-        <div class="anon-row">
-          <label class="toggle-wrap">
-            <input type="checkbox" id="anon-toggle">
-            <div class="toggle-track"></div>
-            <div class="toggle-thumb"></div>
-          </label>
-          <div>
-            <div class="anon-text">Hide my name on this idea</div>
-            <div class="anon-sub">Your contribution is still recorded — you'll get credit if it gets built.</div>
-          </div>
-        </div>
-      </div>
+				<div class="preview-card" id="preview-card">
+					<div class="preview-hero">
+						<div class="preview-title" id="preview-title">
+							A universal exam system independent of any university — certify your skills, study
+							anywhere
+						</div>
+					</div>
+					<div class="preview-body">
+						<div class="preview-desc" id="preview-desc">
+							What if you could study from YouTube, books, or anywhere — and just show up to get
+							certified? No enrollment, no fees, no geographic restriction.
+						</div>
+						<div class="preview-footer">
+							<span class="ptag">#education</span>
+							<span class="ptag">#credentials</span>
+							<span class="pstatus">Raw idea</span>
+							<span class="pspark">⚡ 0</span>
+						</div>
+					</div>
+				</div>
 
-    </div>
+				<div class="tips-card">
+					<div class="tips-title">Tips for a great idea</div>
+					<div class="tip-row">
+						<div class="tip-num">1</div>
+						<div class="tip-text">
+							<strong>Lead with the problem,</strong> not the solution. "Millions can't afford
+							university" is more compelling than "free exams".
+						</div>
+					</div>
+					<div class="tip-row">
+						<div class="tip-num">2</div>
+						<div class="tip-text">
+							<strong>Be specific</strong> about who benefits. "Students in rural areas" gets more
+							traction than "everyone".
+						</div>
+					</div>
+					<div class="tip-row">
+						<div class="tip-num">3</div>
+						<div class="tip-text">
+							<strong>Raw ideas are welcome.</strong> You don't need to have it all figured out —
+							the community will help refine it.
+						</div>
+					</div>
+				</div>
 
-    <!-- Dupe warning -->
-    <div class="dupe-warning" id="dupe-warning">
-      <div class="dupe-bulb">💡</div>
-      <div class="dupe-text">
-        <strong>3 similar ideas already exist.</strong> Want to refine one instead of posting a new one?
-        <br><span class="dupe-link">View similar ideas →</span>
-      </div>
-      <button class="dupe-dismiss" onclick="document.getElementById('dupe-warning').style.display='none'">✕</button>
-    </div>
+				<div class="similar-mini">
+					<div class="sim-title">Similar ideas already posted</div>
+					<div class="sim-item">
+						<div class="sim-item-title">
+							Build your own university major from multiple institutions
+						</div>
+						<div class="sim-sparks"><span>389 ⚡</span> · 2 builds</div>
+					</div>
+					<div class="sim-item">
+						<div class="sim-item-title">Employer-run certification to replace degrees</div>
+						<div class="sim-sparks"><span>198 ⚡</span> · 1 build</div>
+					</div>
+					<div class="sim-cta">Want to <a>build on one of these</a> instead?</div>
+				</div>
+			</div>
+		</div>
 
-    <!-- Submit bar -->
-    <div class="submit-bar">
-      <button class="btn-submit">
-        <div class="submit-spark">⚡</div>
-        Publish idea
-      </button>
-      <button class="btn-draft">Save as draft</button>
-      <span class="submit-note">Your idea will be visible to everyone</span>
-    </div>
+		<script>
+			// Focus accent animation
+			document.querySelectorAll('.field-block').forEach((block) => {
+				const inputs = block.querySelectorAll('input, textarea');
+				inputs.forEach((input) => {
+					input.addEventListener('focus', () => {
+						document.querySelectorAll('.field-block').forEach((b) => b.classList.remove('focused'));
+						block.classList.add('focused');
+					});
+				});
+			});
 
-  </div>
+			// Chip toggles
+			function toggleChip(el) {
+				el.classList.toggle('selected');
+			}
 
-  <!-- RIGHT COLUMN -->
-  <div class="preview-col">
+			function toggleTopic(el) {
+				const selected = document.querySelectorAll('.tchip.selected');
+				if (!el.classList.contains('selected') && selected.length >= 2) return;
+				el.classList.toggle('selected');
+			}
 
-    <div class="preview-label">Live preview</div>
-
-    <div class="preview-card" id="preview-card">
-      <div class="preview-hero">
-        <div class="preview-title" id="preview-title">
-          A universal exam system independent of any university — certify your skills, study anywhere
-        </div>
-      </div>
-      <div class="preview-body">
-        <div class="preview-desc" id="preview-desc">
-          What if you could study from YouTube, books, or anywhere — and just show up to get certified? No enrollment, no fees, no geographic restriction.
-        </div>
-        <div class="preview-footer">
-          <span class="ptag">#education</span>
-          <span class="ptag">#credentials</span>
-          <span class="pstatus">Raw idea</span>
-          <span class="pspark">⚡ 0</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="tips-card">
-      <div class="tips-title">Tips for a great idea</div>
-      <div class="tip-row">
-        <div class="tip-num">1</div>
-        <div class="tip-text"><strong>Lead with the problem,</strong> not the solution. "Millions can't afford university" is more compelling than "free exams".</div>
-      </div>
-      <div class="tip-row">
-        <div class="tip-num">2</div>
-        <div class="tip-text"><strong>Be specific</strong> about who benefits. "Students in rural areas" gets more traction than "everyone".</div>
-      </div>
-      <div class="tip-row">
-        <div class="tip-num">3</div>
-        <div class="tip-text"><strong>Raw ideas are welcome.</strong> You don't need to have it all figured out — the community will help refine it.</div>
-      </div>
-    </div>
-
-    <div class="similar-mini">
-      <div class="sim-title">Similar ideas already posted</div>
-      <div class="sim-item">
-        <div class="sim-item-title">Build your own university major from multiple institutions</div>
-        <div class="sim-sparks"><span>389 ⚡</span> · 2 builds</div>
-      </div>
-      <div class="sim-item">
-        <div class="sim-item-title">Employer-run certification to replace degrees</div>
-        <div class="sim-sparks"><span>198 ⚡</span> · 1 build</div>
-      </div>
-      <div class="sim-cta">Want to <a>build on one of these</a> instead?</div>
-    </div>
-
-  </div>
-</div>
-
-<script>
-  // Focus accent animation
-  document.querySelectorAll('.field-block').forEach(block => {
-    const inputs = block.querySelectorAll('input, textarea');
-    inputs.forEach(input => {
-      input.addEventListener('focus', () => {
-        document.querySelectorAll('.field-block').forEach(b => b.classList.remove('focused'));
-        block.classList.add('focused');
-      });
-    });
-  });
-
-  // Chip toggles
-  function toggleChip(el) {
-    el.classList.toggle('selected');
-  }
-
-  function toggleTopic(el) {
-    const selected = document.querySelectorAll('.tchip.selected');
-    if (!el.classList.contains('selected') && selected.length >= 2) return;
-    el.classList.toggle('selected');
-  }
-
-  // Live preview update
-  function updatePreview() {
-    const title = document.getElementById('title-input').value;
-    const desc = document.getElementById('desc-input').value;
-    const count = title.length;
-    const countEl = document.getElementById('title-count');
-    countEl.textContent = count + ' / 120';
-    countEl.className = 'char-count' + (count > 100 ? ' warn' : '');
-    document.getElementById('preview-title').textContent = title || 'Your idea title will appear here...';
-    document.getElementById('preview-desc').textContent = desc.substring(0, 120) + (desc.length > 120 ? '...' : '') || 'Your description will appear here...';
-  }
-</script>
-</body>
+			// Live preview update
+			function updatePreview() {
+				const title = document.getElementById('title-input').value;
+				const desc = document.getElementById('desc-input').value;
+				const count = title.length;
+				const countEl = document.getElementById('title-count');
+				countEl.textContent = count + ' / 120';
+				countEl.className = 'char-count' + (count > 100 ? ' warn' : '');
+				document.getElementById('preview-title').textContent =
+					title || 'Your idea title will appear here...';
+				document.getElementById('preview-desc').textContent =
+					desc.substring(0, 120) + (desc.length > 120 ? '...' : '') ||
+					'Your description will appear here...';
+			}
+		</script>
+	</body>
 </html>
 <style>
-/* ── RESPONSIVE ── */
-@media (max-width: 760px) {
-  .page { grid-template-columns: 1fr; padding: 20px 16px 80px; }
-  .preview-col { display: none; }
-}
+	/* ── RESPONSIVE ── */
+	@media (max-width: 760px) {
+		.page {
+			grid-template-columns: 1fr;
+			padding: 20px 16px 80px;
+		}
+		.preview-col {
+			display: none;
+		}
+	}
 
-@media (max-width: 600px) {
-  html, body { overflow-x: hidden; }
+	@media (max-width: 600px) {
+		html,
+		body {
+			overflow-x: hidden;
+		}
 
-  .navbar { padding: 0 14px; height: 50px; gap: 8px; }
-  .logo-text { font-size: 14px; }
-  .nav-back { font-size: 12px; }
-  .btn-ghost { display: none; }
-  .btn-primary { padding: 5px 12px; font-size: 12px; }
+		.navbar {
+			padding: 0 14px;
+			height: 50px;
+			gap: 8px;
+		}
+		.logo-text {
+			font-size: 14px;
+		}
+		.nav-back {
+			font-size: 12px;
+		}
+		.btn-ghost {
+			display: none;
+		}
+		.btn-primary {
+			padding: 5px 12px;
+			font-size: 12px;
+		}
 
-  .page { grid-template-columns: 1fr; padding: 14px 12px 80px; gap: 14px; }
-  .preview-col { display: none; }
+		.page {
+			grid-template-columns: 1fr;
+			padding: 14px 12px 80px;
+			gap: 14px;
+		}
+		.preview-col {
+			display: none;
+		}
 
-  .form-title { font-size: 20px; }
-  .form-sub { font-size: 12.5px; }
-  .form-header { margin-bottom: 16px; }
+		.form-title {
+			font-size: 20px;
+		}
+		.form-sub {
+			font-size: 12.5px;
+		}
+		.form-header {
+			margin-bottom: 16px;
+		}
 
-  .field-block { padding: 14px 16px; }
-  .field-input { font-size: 15px; }
-  .field-textarea { font-size: 13px; }
+		.field-block {
+			padding: 14px 16px;
+		}
+		.field-input {
+			font-size: 15px;
+		}
+		.field-textarea {
+			font-size: 13px;
+		}
 
-  .benefit-chips { gap: 6px; }
-  .bchip { font-size: 12px; padding: 5px 10px; }
+		.benefit-chips {
+			gap: 6px;
+		}
+		.bchip {
+			font-size: 12px;
+			padding: 5px 10px;
+		}
 
-  .topic-chips { gap: 6px; }
-  .tchip { font-size: 12px; padding: 4px 10px; }
+		.topic-chips {
+			gap: 6px;
+		}
+		.tchip {
+			font-size: 12px;
+			padding: 4px 10px;
+		}
 
-  .submit-bar { flex-wrap: wrap; }
-  .btn-submit { flex: 1; justify-content: center; }
-  .btn-draft { flex: 1; }
-  .submit-note { width: 100%; text-align: center; }
+		.submit-bar {
+			flex-wrap: wrap;
+		}
+		.btn-submit {
+			flex: 1;
+			justify-content: center;
+		}
+		.btn-draft {
+			flex: 1;
+		}
+		.submit-note {
+			width: 100%;
+			text-align: center;
+		}
 
-  /* Floating preview pill at bottom */
-  .preview-pill {
-    display: flex !important;
-    position: fixed; bottom: 68px; left: 12px; right: 12px;
-    background: var(--white); border: 1px solid var(--yellow);
-    border-radius: var(--radius-lg); padding: 10px 14px;
-    align-items: center; gap: 10px; z-index: 150;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-  }
-  .pp-icon { width: 28px; height: 28px; background: var(--yellow); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; }
-  .pp-text { font-size: 12px; color: var(--gray-dark); line-height: 1.4; flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-  .pp-spark { font-size: 12px; font-weight: 600; color: var(--gray-mid); }
+		/* Floating preview pill at bottom */
+		.preview-pill {
+			display: flex !important;
+			position: fixed;
+			bottom: 68px;
+			left: 12px;
+			right: 12px;
+			background: var(--white);
+			border: 1px solid var(--yellow);
+			border-radius: var(--radius-lg);
+			padding: 10px 14px;
+			align-items: center;
+			gap: 10px;
+			z-index: 150;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+		}
+		.pp-icon {
+			width: 28px;
+			height: 28px;
+			background: var(--yellow);
+			border-radius: 8px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+			font-size: 14px;
+		}
+		.pp-text {
+			font-size: 12px;
+			color: var(--gray-dark);
+			line-height: 1.4;
+			flex: 1;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+		.pp-spark {
+			font-size: 12px;
+			font-weight: 600;
+			color: var(--gray-mid);
+		}
 
-  /* Bottom nav */
-  .bottom-nav {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: var(--white); border-top: 1px solid var(--gray-light);
-    display: flex; height: 58px; z-index: 200;
-  }
-}
+		/* Bottom nav */
+		.bottom-nav {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background: var(--white);
+			border-top: 1px solid var(--gray-light);
+			display: flex;
+			height: 58px;
+			z-index: 200;
+		}
+	}
 </style>
 
 <!-- Mobile preview pill -->
-<div class="preview-pill" id="pp" style="display:none;">
-  <div class="pp-icon">💡</div>
-  <div class="pp-text" id="pp-text">Your idea title will appear here...</div>
-  <div class="pp-spark">⚡ 0</div>
+<div class="preview-pill" id="pp" style="display: none">
+	<div class="pp-icon">💡</div>
+	<div class="pp-text" id="pp-text">Your idea title will appear here...</div>
+	<div class="pp-spark">⚡ 0</div>
 </div>
 
 <!-- Bottom nav -->
-<div id="bnav2" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #DDD; height:58px; z-index:200; flex-direction:row;">
-  <button style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:#888;border:none;background:transparent;font-family:inherit;">
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Feed
-  </button>
-  <button style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:#888;border:none;background:transparent;font-family:inherit;">
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Explore
-  </button>
-  <button style="width:42px;height:42px;border-radius:50%;background:#F5C518;border:none;display:flex;align-items:center;justify-content:center;margin-top:-14px;cursor:pointer;box-shadow:0 4px 14px rgba(245,197,24,0.4);flex-shrink:0;align-self:center;">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="#111"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-  </button>
-  <button style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:#888;border:none;background:transparent;font-family:inherit;">
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>Alerts
-  </button>
-  <button style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:#888;border:none;background:transparent;font-family:inherit;">
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
-  </button>
+<div
+	id="bnav2"
+	style="
+		display: none;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: #fff;
+		border-top: 1px solid #ddd;
+		height: 58px;
+		z-index: 200;
+		flex-direction: row;
+	"
+>
+	<button
+		style="
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 3px;
+			font-size: 10px;
+			color: #888;
+			border: none;
+			background: transparent;
+			font-family: inherit;
+		"
+	>
+		<svg
+			width="19"
+			height="19"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg
+		>Feed
+	</button>
+	<button
+		style="
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 3px;
+			font-size: 10px;
+			color: #888;
+			border: none;
+			background: transparent;
+			font-family: inherit;
+		"
+	>
+		<svg
+			width="19"
+			height="19"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<circle cx="11" cy="11" r="8" />
+			<line x1="21" y1="21" x2="16.65" y2="16.65" /></svg
+		>Explore
+	</button>
+	<button
+		style="
+			width: 42px;
+			height: 42px;
+			border-radius: 50%;
+			background: #f5c518;
+			border: none;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-top: -14px;
+			cursor: pointer;
+			box-shadow: 0 4px 14px rgba(245, 197, 24, 0.4);
+			flex-shrink: 0;
+			align-self: center;
+		"
+	>
+		<svg width="18" height="18" viewBox="0 0 24 24" fill="#111">
+			<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+		</svg>
+	</button>
+	<button
+		style="
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 3px;
+			font-size: 10px;
+			color: #888;
+			border: none;
+			background: transparent;
+			font-family: inherit;
+		"
+	>
+		<svg
+			width="19"
+			height="19"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" /></svg
+		>Alerts
+	</button>
+	<button
+		style="
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 3px;
+			font-size: 10px;
+			color: #888;
+			border: none;
+			background: transparent;
+			font-family: inherit;
+		"
+	>
+		<svg
+			width="19"
+			height="19"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+			<circle cx="12" cy="7" r="4" /></svg
+		>Profile
+	</button>
 </div>
 
 <script>
-  const isMobile = () => window.innerWidth <= 600;
-  function syncMobile() {
-    document.getElementById('bnav2').style.display = isMobile() ? 'flex' : 'none';
-    document.getElementById('pp').style.display = isMobile() ? 'flex' : 'none';
-  }
-  syncMobile();
-  window.addEventListener('resize', syncMobile);
+	const isMobile = () => window.innerWidth <= 600;
+	function syncMobile() {
+		document.getElementById('bnav2').style.display = isMobile() ? 'flex' : 'none';
+		document.getElementById('pp').style.display = isMobile() ? 'flex' : 'none';
+	}
+	syncMobile();
+	window.addEventListener('resize', syncMobile);
 
-  // sync preview pill with title input
-  const orig = window.updatePreview;
-  window.updatePreview = function() {
-    if (orig) orig();
-    const t = document.getElementById('title-input')?.value;
-    const pp = document.getElementById('pp-text');
-    if (pp && t) pp.textContent = t.substring(0, 60) + (t.length > 60 ? '...' : '');
-  };
+	// sync preview pill with title input
+	const orig = window.updatePreview;
+	window.updatePreview = function () {
+		if (orig) orig();
+		const t = document.getElementById('title-input')?.value;
+		const pp = document.getElementById('pp-text');
+		if (pp && t) pp.textContent = t.substring(0, 60) + (t.length > 60 ? '...' : '');
+	};
 </script>

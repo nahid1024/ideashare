@@ -5,8 +5,6 @@
 	import PlusIcon from 'phosphor-svelte/lib/PlusIcon';
 	let { hasBackButton } = $props();
 	const data = await sessionData();
-
-	console.log(data.userId);
 </script>
 
 <nav

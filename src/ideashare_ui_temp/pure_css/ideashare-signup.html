@@ -1,880 +1,1337 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IdeaShare — Join the conversation</title>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --yellow: #F5C518;
-    --yellow-light: #FFF8DC;
-    --yellow-mid: #FFE066;
-    --yellow-dark: #C49A00;
-    --black: #111111;
-    --black-soft: #1C1C1C;
-    --gray-dark: #444;
-    --gray-mid: #888;
-    --gray-light: #DDD;
-    --gray-faint: #F5F5F2;
-    --white: #FFFFFF;
-    --font-display: 'Bricolage Grotesque', sans-serif;
-    --font-body: 'DM Sans', sans-serif;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html, body { height: 100%; overflow: hidden; }
-
-  body {
-    font-family: var(--font-body);
-    display: flex;
-    background: var(--black);
-  }
-
-  /* ── LEFT PANEL ── */
-  .left {
-    width: 52%;
-    background: var(--black);
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    padding: 36px 40px;
-  }
-
-  /* subtle dot-grid background */
-  .left::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle, rgba(245,197,24,0.12) 1px, transparent 1px);
-    background-size: 28px 28px;
-    pointer-events: none;
-  }
-
-  /* yellow glow blob */
-  .left::after {
-    content: '';
-    position: absolute;
-    width: 500px; height: 500px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(245,197,24,0.18) 0%, transparent 70%);
-    top: -100px; left: -100px;
-    pointer-events: none;
-    animation: pulse 6s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.7; }
-  }
-
-  .left-logo {
-    display: flex; align-items: center; gap: 9px;
-    position: relative; z-index: 2; margin-bottom: 48px;
-  }
-
-  .left-logo-text {
-    font-family: var(--font-display);
-    font-size: 18px; font-weight: 700;
-    color: var(--white); letter-spacing: -0.3px;
-  }
-  .left-logo-text span { color: var(--yellow); }
-
-  .left-headline {
-    position: relative; z-index: 2;
-    margin-bottom: 40px;
-  }
-
-  .left-headline h2 {
-    font-family: var(--font-display);
-    font-size: 36px; font-weight: 800;
-    color: var(--white); line-height: 1.2;
-    letter-spacing: -0.8px;
-  }
-
-  .left-headline h2 em {
-    font-style: normal;
-    color: var(--yellow);
-    position: relative;
-  }
-
-  .left-headline h2 em::after {
-    content: '';
-    position: absolute;
-    bottom: -2px; left: 0; right: 0;
-    height: 3px;
-    background: var(--yellow);
-    border-radius: 2px;
-    opacity: 0.4;
-  }
-
-  .left-sub {
-    font-size: 14px; color: rgba(255,255,255,0.5);
-    margin-top: 12px; line-height: 1.65;
-    max-width: 340px;
-  }
-
-  /* floating idea cards */
-  .cards-stage {
-    position: relative; z-index: 2;
-    flex: 1;
-    overflow: hidden;
-  }
-
-  .idea-float {
-    position: absolute;
-    background: var(--black-soft);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 14px;
-    padding: 14px 16px;
-    width: 300px;
-    animation: floatUp linear infinite;
-    opacity: 0;
-  }
-
-  .idea-float:nth-child(1) { left: 0; animation-duration: 14s; animation-delay: 0s; }
-  .idea-float:nth-child(2) { left: 50px; animation-duration: 18s; animation-delay: -6s; }
-  .idea-float:nth-child(3) { left: 20px; animation-duration: 16s; animation-delay: -11s; }
-  .idea-float:nth-child(4) { left: 60px; animation-duration: 20s; animation-delay: -3s; }
-  .idea-float:nth-child(5) { left: 10px; animation-duration: 15s; animation-delay: -9s; }
-
-  @keyframes floatUp {
-    0%   { transform: translateY(340px); opacity: 0; }
-    8%   { opacity: 1; }
-    85%  { opacity: 1; }
-    100% { transform: translateY(-120px); opacity: 0; }
-  }
-
-  .ifc-tag {
-    font-size: 10px; font-weight: 600;
-    padding: 2px 8px; border-radius: 999px;
-    background: rgba(245,197,24,0.15);
-    color: var(--yellow);
-    display: inline-block; margin-bottom: 8px;
-  }
-
-  .ifc-title {
-    font-family: var(--font-display);
-    font-size: 13px; font-weight: 600;
-    color: var(--white); line-height: 1.45;
-    margin-bottom: 10px;
-  }
-
-  .ifc-footer {
-    display: flex; align-items: center; gap: 8px;
-  }
-
-  .ifc-av {
-    width: 20px; height: 20px; border-radius: 50%;
-    font-size: 9px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  .ifc-name { font-size: 11px; color: rgba(255,255,255,0.4); }
-  .ifc-spark { margin-left: auto; font-size: 11px; color: var(--yellow); font-weight: 600; }
-
-  /* bottom stats */
-  .left-stats {
-    position: relative; z-index: 2;
-    display: flex; gap: 28px; margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.07);
-  }
-
-  .stat-item { }
-  .stat-num {
-    font-family: var(--font-display);
-    font-size: 22px; font-weight: 800;
-    color: var(--yellow); letter-spacing: -0.5px;
-  }
-  .stat-lbl { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
-
-  /* ── RIGHT PANEL ── */
-  .right {
-    width: 48%;
-    background: var(--white);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 48px 52px;
-    position: relative;
-    overflow-y: auto;
-  }
-
-  /* steps at top */
-  .steps {
-    display: flex; gap: 6px;
-    margin-bottom: 36px;
-  }
-
-  .step {
-    flex: 1; height: 3px; border-radius: 2px;
-    background: var(--gray-light); transition: background 0.3s;
-  }
-  .step.done { background: var(--yellow); }
-  .step.active { background: var(--black); }
-
-  /* step screens */
-  .screen { display: none; animation: fadeIn 0.3s ease; }
-  .screen.visible { display: block; }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .screen-eyebrow {
-    font-size: 11px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--yellow-dark);
-    background: var(--yellow-light); border: 1px solid var(--yellow-mid);
-    display: inline-block; padding: 3px 10px;
-    border-radius: 999px; margin-bottom: 12px;
-  }
-
-  .screen-title {
-    font-family: var(--font-display);
-    font-size: 28px; font-weight: 800;
-    color: var(--black); line-height: 1.2;
-    letter-spacing: -0.5px; margin-bottom: 6px;
-  }
-
-  .screen-sub {
-    font-size: 13.5px; color: var(--gray-mid);
-    line-height: 1.6; margin-bottom: 28px;
-  }
-
-  /* form fields */
-  .field { margin-bottom: 16px; }
-
-  .field-label {
-    font-size: 12px; font-weight: 600;
-    color: var(--black); margin-bottom: 6px;
-    display: block;
-  }
-
-  .field-input {
-    width: 100%; height: 46px;
-    border: 1.5px solid var(--gray-light);
-    border-radius: 10px; padding: 0 14px;
-    font-family: var(--font-body);
-    font-size: 14px; color: var(--black);
-    background: var(--gray-faint);
-    outline: none; transition: border-color 0.15s, background 0.15s;
-  }
-
-  .field-input:focus {
-    border-color: var(--yellow);
-    background: var(--white);
-    box-shadow: 0 0 0 3px var(--yellow-light);
-  }
-
-  .field-input::placeholder { color: #BBBBBB; }
-
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-  /* social login */
-  .social-btns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-
-  .social-btn {
-    width: 100%; height: 46px;
-    border: 1.5px solid var(--gray-light);
-    border-radius: 10px; background: var(--white);
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    font-family: var(--font-body); font-size: 13.5px; font-weight: 500;
-    color: var(--black); cursor: pointer;
-    transition: border-color 0.15s, box-shadow 0.15s;
-  }
-  .social-btn:hover { border-color: var(--gray-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-  .social-icon { width: 18px; height: 18px; }
-
-  .divider {
-    display: flex; align-items: center; gap: 12px;
-    margin: 18px 0; color: var(--gray-light);
-    font-size: 12px; color: var(--gray-mid);
-  }
-  .divider::before, .divider::after {
-    content: ''; flex: 1; height: 1px; background: var(--gray-light);
-  }
-
-  /* topic picker (step 2) */
-  .topic-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 8px; margin-bottom: 24px;
-  }
-
-  .topic-tile {
-    padding: 14px 16px;
-    border: 1.5px solid var(--gray-light);
-    border-radius: 12px; background: var(--white);
-    cursor: pointer; transition: all 0.15s;
-    display: flex; align-items: center; gap: 10px;
-  }
-
-  .topic-tile:hover { border-color: var(--yellow-dark); }
-
-  .topic-tile.selected {
-    border-color: var(--yellow);
-    background: var(--yellow-light);
-  }
-
-  .topic-tile.selected .topic-check { opacity: 1; }
-
-  .topic-emoji { font-size: 20px; }
-  .topic-name { font-size: 13px; font-weight: 500; color: var(--black); }
-  .topic-count { font-size: 11px; color: var(--gray-mid); margin-top: 1px; }
-
-  .topic-check {
-    margin-left: auto; width: 18px; height: 18px;
-    border-radius: 50%; background: var(--yellow);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; opacity: 0; transition: opacity 0.15s;
-    flex-shrink: 0;
-  }
-
-  /* idea type picker (step 3) */
-  .type-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
-
-  .type-tile {
-    padding: 14px 16px;
-    border: 1.5px solid var(--gray-light);
-    border-radius: 12px; background: var(--white);
-    cursor: pointer; transition: all 0.15s;
-    display: flex; align-items: center; gap: 12px;
-  }
-
-  .type-tile:hover { border-color: var(--gray-dark); }
-  .type-tile.selected { border-color: var(--black); background: var(--black); }
-  .type-tile.selected .type-name { color: var(--white); }
-  .type-tile.selected .type-desc { color: rgba(255,255,255,0.5); }
-  .type-tile.selected .type-icon-wrap { background: var(--yellow); }
-
-  .type-icon-wrap {
-    width: 36px; height: 36px; border-radius: 10px;
-    background: var(--gray-faint);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
-    transition: background 0.15s;
-  }
-
-  .type-name { font-size: 13.5px; font-weight: 600; color: var(--black); transition: color 0.15s; }
-  .type-desc { font-size: 12px; color: var(--gray-mid); margin-top: 2px; transition: color 0.15s; }
-
-  /* CTA button */
-  .btn-next {
-    width: 100%; height: 48px;
-    border: none; border-radius: 999px;
-    background: var(--black); color: var(--white);
-    font-family: var(--font-body); font-size: 14px; font-weight: 600;
-    cursor: pointer; display: flex; align-items: center;
-    justify-content: center; gap: 8px;
-    transition: opacity 0.15s, transform 0.1s;
-    margin-bottom: 14px;
-  }
-
-  .btn-next:hover { opacity: 0.88; }
-  .btn-next:active { transform: scale(0.99); }
-
-  .btn-next .btn-spark {
-    width: 20px; height: 20px; border-radius: 50%;
-    background: var(--yellow); color: var(--black);
-    font-size: 11px; display: flex;
-    align-items: center; justify-content: center;
-  }
-
-  .skip-link {
-    text-align: center; font-size: 12.5px; color: var(--gray-mid);
-    cursor: pointer;
-  }
-  .skip-link a { color: var(--black); font-weight: 500; cursor: pointer; }
-
-  /* success screen */
-  .success-bulb {
-    width: 72px; height: 72px;
-    background: var(--yellow); border-radius: 20px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 36px; margin-bottom: 20px;
-    box-shadow: 0 8px 32px rgba(245,197,24,0.35);
-    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  @keyframes popIn {
-    from { transform: scale(0.5); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-
-  .confetti {
-    position: absolute; pointer-events: none;
-    top: 0; left: 0; right: 0; bottom: 0; overflow: hidden;
-  }
-
-  .conf-piece {
-    position: absolute;
-    width: 8px; height: 8px;
-    border-radius: 2px;
-    animation: confettiFall linear forwards;
-    opacity: 0;
-  }
-
-  @keyframes confettiFall {
-    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(600px) rotate(720deg); opacity: 0; }
-  }
-
-  .already-have {
-    margin-top: 24px; text-align: center;
-    font-size: 13px; color: var(--gray-mid);
-  }
-  .already-have a { color: var(--black); font-weight: 600; cursor: pointer; text-decoration: none; }
-  .already-have a:hover { text-decoration: underline; }
-
-  /* password strength */
-  .pwd-strength { display: flex; gap: 4px; margin-top: 6px; }
-  .pwd-bar { flex: 1; height: 3px; border-radius: 2px; background: var(--gray-light); transition: background 0.3s; }
-  .pwd-bar.weak { background: #EF4444; }
-  .pwd-bar.fair { background: var(--yellow); }
-  .pwd-bar.strong { background: #22C55E; }
-  .pwd-hint { font-size: 11px; color: var(--gray-mid); margin-top: 4px; }
-</style>
-</head>
-<body>
-
-<!-- LEFT PANEL -->
-<div class="left">
-  <div class="left-logo">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="30" height="30">
-      <path d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z" fill="#F5C518"/>
-      <ellipse cx="38" cy="26" rx="7" ry="10" fill="#FFF8DC" opacity="0.7" transform="rotate(-20 38 26)"/>
-      <rect x="39" y="83" width="22" height="5" rx="2.5" fill="#C49A00"/>
-      <rect x="40.5" y="90" width="19" height="5" rx="2.5" fill="#C49A00" opacity="0.7"/>
-      <path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="#111111"/>
-    </svg>
-    <span class="left-logo-text">Idea<span>Share</span></span>
-  </div>
-
-  <div class="left-headline">
-    <h2>Where good ideas<br>find <em>their people</em></h2>
-    <p class="left-sub">A place to drop the thought before it disappears. Share it, refine it, build it — together.</p>
-  </div>
-
-  <div class="cards-stage">
-    <div class="idea-float">
-      <div class="ifc-tag">#education</div>
-      <div class="ifc-title">A universal exam that certifies your skills — no university required</div>
-      <div class="ifc-footer">
-        <div class="ifc-av" style="background:#F5C518;color:#111">RK</div>
-        <div class="ifc-name">Rafiq K.</div>
-        <div class="ifc-spark">⚡ 847</div>
-      </div>
-    </div>
-    <div class="idea-float">
-      <div class="ifc-tag">#health</div>
-      <div class="ifc-title">Let patients own their medical records — shared with any doctor, anywhere</div>
-      <div class="ifc-footer">
-        <div class="ifc-av" style="background:#22C55E;color:#fff">TA</div>
-        <div class="ifc-name">Tolu A.</div>
-        <div class="ifc-spark">⚡ 512</div>
-      </div>
-    </div>
-    <div class="idea-float">
-      <div class="ifc-tag">#cities</div>
-      <div class="ifc-title">Neighbourhoods vote on which small businesses get rent subsidies each quarter</div>
-      <div class="ifc-footer">
-        <div class="ifc-av" style="background:#6366F1;color:#fff">LM</div>
-        <div class="ifc-name">Lena M.</div>
-        <div class="ifc-spark">⚡ 389</div>
-      </div>
-    </div>
-    <div class="idea-float">
-      <div class="ifc-tag">#economy</div>
-      <div class="ifc-title">A global skills passport replacing the traditional CV once and for all</div>
-      <div class="ifc-footer">
-        <div class="ifc-av" style="background:#F97316;color:#fff">NI</div>
-        <div class="ifc-name">Nadia I.</div>
-        <div class="ifc-spark">⚡ 271</div>
-      </div>
-    </div>
-    <div class="idea-float">
-      <div class="ifc-tag">#technology</div>
-      <div class="ifc-title">Open-source AI trained only on public domain works — no copyright risk</div>
-      <div class="ifc-footer">
-        <div class="ifc-av" style="background:#EC4899;color:#fff">PO</div>
-        <div class="ifc-name">Paulo O.</div>
-        <div class="ifc-spark">⚡ 634</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="left-stats">
-    <div class="stat-item">
-      <div class="stat-num">24k+</div>
-      <div class="stat-lbl">Ideas shared</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">8.3k</div>
-      <div class="stat-lbl">Being built</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">142</div>
-      <div class="stat-lbl">Countries</div>
-    </div>
-  </div>
-</div>
-
-<!-- RIGHT PANEL -->
-<div class="right" id="right-panel">
-
-  <!-- progress steps -->
-  <div class="steps">
-    <div class="step active" id="s1"></div>
-    <div class="step" id="s2"></div>
-    <div class="step" id="s3"></div>
-  </div>
-
-  <!-- SCREEN 1: Create account -->
-  <div class="screen visible" id="screen1">
-    <div class="screen-eyebrow">Step 1 of 3</div>
-    <h1 class="screen-title">Create your account</h1>
-    <p class="screen-sub">Your ideas deserve a home. Takes 30 seconds.</p>
-
-    <div class="social-btns">
-      <button class="social-btn" onclick="goTo(2)">
-        <svg class="social-icon" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-        Continue with Google
-      </button>
-      <button class="social-btn" onclick="goTo(2)">
-        <svg class="social-icon" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        Continue with Facebook
-      </button>
-    </div>
-
-    <div class="divider">or sign up with email</div>
-
-    <div class="field-row">
-      <div class="field">
-        <label class="field-label">First name</label>
-        <input type="text" class="field-input" placeholder="Rafiq">
-      </div>
-      <div class="field">
-        <label class="field-label">Last name</label>
-        <input type="text" class="field-input" placeholder="Karim">
-      </div>
-    </div>
-
-    <div class="field">
-      <label class="field-label">Email address</label>
-      <input type="email" class="field-input" placeholder="you@example.com">
-    </div>
-
-    <div class="field">
-      <label class="field-label">Password</label>
-      <input type="password" class="field-input" placeholder="Min. 8 characters" id="pwd-input" oninput="checkPwd(this.value)">
-      <div class="pwd-strength">
-        <div class="pwd-bar" id="pb1"></div>
-        <div class="pwd-bar" id="pb2"></div>
-        <div class="pwd-bar" id="pb3"></div>
-      </div>
-      <div class="pwd-hint" id="pwd-hint">Use a mix of letters, numbers, and symbols</div>
-    </div>
-
-    <button class="btn-next" onclick="goTo(2)">
-      <div class="btn-spark">⚡</div>
-      Create account
-    </button>
-
-    <div class="already-have">Already have an account? <a>Sign in</a></div>
-  </div>
-
-  <!-- SCREEN 2: Pick interests -->
-  <div class="screen" id="screen2">
-    <div class="screen-eyebrow">Step 2 of 3</div>
-    <h1 class="screen-title">What sparks your interest?</h1>
-    <p class="screen-sub">We'll show you ideas in the topics you care about. Pick as many as you like.</p>
-
-    <div class="topic-grid">
-      <div class="topic-tile selected" onclick="toggleTile(this)">
-        <div class="topic-emoji">📚</div>
-        <div>
-          <div class="topic-name">Education</div>
-          <div class="topic-count">1.2k ideas</div>
-        </div>
-        <div class="topic-check">✓</div>
-      </div>
-      <div class="topic-tile selected" onclick="toggleTile(this)">
-        <div class="topic-emoji">❤️</div>
-        <div>
-          <div class="topic-name">Health</div>
-          <div class="topic-count">874 ideas</div>
-        </div>
-        <div class="topic-check">✓</div>
-      </div>
-      <div class="topic-tile" onclick="toggleTile(this)">
-        <div class="topic-emoji">💻</div>
-        <div>
-          <div class="topic-name">Technology</div>
-          <div class="topic-count">590 ideas</div>
-        </div>
-        <div class="topic-check">✓</div>
-      </div>
-      <div class="topic-tile selected" onclick="toggleTile(this)">
-        <div class="topic-emoji">🏙️</div>
-        <div>
-          <div class="topic-name">Cities</div>
-          <div class="topic-count">631 ideas</div>
-        </div>
-        <div class="topic-check">✓</div>
-      </div>
-      <div class="topic-tile" onclick="toggleTile(this)">
-        <div class="topic-emoji">💰</div>
-        <div>
-          <div class="topic-name">Economy</div>
-          <div class="topic-count">412 ideas</div>
-        </div>
-        <div class="topic-check">✓</div>
-      </div>
-      <div class="topic-tile" onclick="toggleTile(this)">
-        <div class="topic-emoji">🌱</div>
-        <div>
-          <div class="topic-name">Environment</div>
-          <div class="topic-count">328 ideas</div>
-        </div>
-        <div class="topic-check">✓</div>
-      </div>
-      <div class="topic-tile" onclick="toggleTile(this)">
-        <div class="topic-emoji">🏛️</div>
-        <div>
-          <div class="topic-name">Governance</div>
-          <div class="topic-count">219 ideas</div>
-        </div>
-        <div class="topic-check">✓</div>
-      </div>
-      <div class="topic-tile" onclick="toggleTile(this)">
-        <div class="topic-emoji">🎨</div>
-        <div>
-          <div class="topic-name">Arts & Culture</div>
-          <div class="topic-count">187 ideas</div>
-        </div>
-        <div class="topic-check">✓</div>
-      </div>
-    </div>
-
-    <button class="btn-next" onclick="goTo(3)">
-      <div class="btn-spark">→</div>
-      Continue
-    </button>
-    <div class="skip-link"><a onclick="goTo(3)">Skip for now</a></div>
-  </div>
-
-  <!-- SCREEN 3: How do you want to participate -->
-  <div class="screen" id="screen3">
-    <div class="screen-eyebrow">Step 3 of 3</div>
-    <h1 class="screen-title">How do you see yourself here?</h1>
-    <p class="screen-sub">Helps us show you the right ideas. You can always change this later.</p>
-
-    <div class="type-list">
-      <div class="type-tile selected" onclick="selectType(this)">
-        <div class="type-icon-wrap">💡</div>
-        <div>
-          <div class="type-name">Idea sharer</div>
-          <div class="type-desc">I have thoughts I want the world to hear</div>
-        </div>
-      </div>
-      <div class="type-tile" onclick="selectType(this)">
-        <div class="type-icon-wrap">🔧</div>
-        <div>
-          <div class="type-name">Builder</div>
-          <div class="type-desc">I want to help turn good ideas into real things</div>
-        </div>
-      </div>
-      <div class="type-tile" onclick="selectType(this)">
-        <div class="type-icon-wrap">🔍</div>
-        <div>
-          <div class="type-name">Refiner</div>
-          <div class="type-desc">I love poking holes in ideas and making them better</div>
-        </div>
-      </div>
-      <div class="type-tile" onclick="selectType(this)">
-        <div class="type-icon-wrap">👀</div>
-        <div>
-          <div class="type-name">Explorer</div>
-          <div class="type-desc">Just here to see what people are thinking</div>
-        </div>
-      </div>
-    </div>
-
-    <button class="btn-next" onclick="goTo(4)">
-      <div class="btn-spark">⚡</div>
-      Go to IdeaShare
-    </button>
-  </div>
-
-  <!-- SCREEN 4: Success -->
-  <div class="screen" id="screen4">
-    <div class="confetti" id="confetti"></div>
-    <div class="success-bulb">💡</div>
-    <h1 class="screen-title">You're in!</h1>
-    <p class="screen-sub" style="margin-bottom:24px;">Welcome to IdeaShare. Your first idea is waiting to be shared — what are you thinking about today?</p>
-
-    <button class="btn-next" style="margin-bottom:10px;" onclick="window.location.href='#'">
-      <div class="btn-spark">⚡</div>
-      Post my first idea
-    </button>
-    <button class="btn-next" style="background:var(--gray-faint);color:var(--black);" onclick="window.location.href='#'">
-      Explore the feed
-    </button>
-  </div>
-
-</div>
-
-<script>
-  function goTo(step) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
-    document.getElementById('screen' + step).classList.add('visible');
-
-    const lines = [document.getElementById('s1'), document.getElementById('s2'), document.getElementById('s3')];
-    lines.forEach((l, i) => {
-      l.className = 'step';
-      if (i + 1 < step) l.classList.add('done');
-      else if (i + 1 === step) l.classList.add('active');
-    });
-
-    if (step === 4) spawnConfetti();
-  }
-
-  function toggleTile(el) { el.classList.toggle('selected'); }
-
-  function selectType(el) {
-    document.querySelectorAll('.type-tile').forEach(t => t.classList.remove('selected'));
-    el.classList.add('selected');
-  }
-
-  function checkPwd(val) {
-    const bars = [document.getElementById('pb1'), document.getElementById('pb2'), document.getElementById('pb3')];
-    const hint = document.getElementById('pwd-hint');
-    bars.forEach(b => b.className = 'pwd-bar');
-    if (val.length === 0) { hint.textContent = 'Use a mix of letters, numbers, and symbols'; return; }
-    if (val.length < 6) {
-      bars[0].classList.add('weak');
-      hint.textContent = 'Too short';
-    } else if (val.length < 10 || !/[0-9]/.test(val)) {
-      bars[0].classList.add('fair'); bars[1].classList.add('fair');
-      hint.textContent = 'Getting there — add numbers or symbols';
-    } else {
-      bars.forEach(b => b.classList.add('strong'));
-      hint.textContent = '✓ Strong password';
-    }
-  }
-
-  function spawnConfetti() {
-    const container = document.getElementById('confetti');
-    container.innerHTML = '';
-    const colors = ['#F5C518', '#111111', '#FFE066', '#C49A00', '#FFFFFF'];
-    for (let i = 0; i < 40; i++) {
-      const piece = document.createElement('div');
-      piece.className = 'conf-piece';
-      piece.style.left = Math.random() * 100 + '%';
-      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.animationDuration = (2 + Math.random() * 2) + 's';
-      piece.style.animationDelay = (Math.random() * 1) + 's';
-      piece.style.width = piece.style.height = (6 + Math.random() * 6) + 'px';
-      container.appendChild(piece);
-    }
-  }
-</script>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>IdeaShare — Join the conversation</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--yellow: #f5c518;
+				--yellow-light: #fff8dc;
+				--yellow-mid: #ffe066;
+				--yellow-dark: #c49a00;
+				--black: #111111;
+				--black-soft: #1c1c1c;
+				--gray-dark: #444;
+				--gray-mid: #888;
+				--gray-light: #ddd;
+				--gray-faint: #f5f5f2;
+				--white: #ffffff;
+				--font-display: 'Bricolage Grotesque', sans-serif;
+				--font-body: 'DM Sans', sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			html,
+			body {
+				height: 100%;
+				overflow: hidden;
+			}
+
+			body {
+				font-family: var(--font-body);
+				display: flex;
+				background: var(--black);
+			}
+
+			/* ── LEFT PANEL ── */
+			.left {
+				width: 52%;
+				background: var(--black);
+				position: relative;
+				overflow: hidden;
+				display: flex;
+				flex-direction: column;
+				padding: 36px 40px;
+			}
+
+			/* subtle dot-grid background */
+			.left::before {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background-image: radial-gradient(circle, rgba(245, 197, 24, 0.12) 1px, transparent 1px);
+				background-size: 28px 28px;
+				pointer-events: none;
+			}
+
+			/* yellow glow blob */
+			.left::after {
+				content: '';
+				position: absolute;
+				width: 500px;
+				height: 500px;
+				border-radius: 50%;
+				background: radial-gradient(circle, rgba(245, 197, 24, 0.18) 0%, transparent 70%);
+				top: -100px;
+				left: -100px;
+				pointer-events: none;
+				animation: pulse 6s ease-in-out infinite;
+			}
+
+			@keyframes pulse {
+				0%,
+				100% {
+					transform: scale(1);
+					opacity: 1;
+				}
+				50% {
+					transform: scale(1.1);
+					opacity: 0.7;
+				}
+			}
+
+			.left-logo {
+				display: flex;
+				align-items: center;
+				gap: 9px;
+				position: relative;
+				z-index: 2;
+				margin-bottom: 48px;
+			}
+
+			.left-logo-text {
+				font-family: var(--font-display);
+				font-size: 18px;
+				font-weight: 700;
+				color: var(--white);
+				letter-spacing: -0.3px;
+			}
+			.left-logo-text span {
+				color: var(--yellow);
+			}
+
+			.left-headline {
+				position: relative;
+				z-index: 2;
+				margin-bottom: 40px;
+			}
+
+			.left-headline h2 {
+				font-family: var(--font-display);
+				font-size: 36px;
+				font-weight: 800;
+				color: var(--white);
+				line-height: 1.2;
+				letter-spacing: -0.8px;
+			}
+
+			.left-headline h2 em {
+				font-style: normal;
+				color: var(--yellow);
+				position: relative;
+			}
+
+			.left-headline h2 em::after {
+				content: '';
+				position: absolute;
+				bottom: -2px;
+				left: 0;
+				right: 0;
+				height: 3px;
+				background: var(--yellow);
+				border-radius: 2px;
+				opacity: 0.4;
+			}
+
+			.left-sub {
+				font-size: 14px;
+				color: rgba(255, 255, 255, 0.5);
+				margin-top: 12px;
+				line-height: 1.65;
+				max-width: 340px;
+			}
+
+			/* floating idea cards */
+			.cards-stage {
+				position: relative;
+				z-index: 2;
+				flex: 1;
+				overflow: hidden;
+			}
+
+			.idea-float {
+				position: absolute;
+				background: var(--black-soft);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 14px;
+				padding: 14px 16px;
+				width: 300px;
+				animation: floatUp linear infinite;
+				opacity: 0;
+			}
+
+			.idea-float:nth-child(1) {
+				left: 0;
+				animation-duration: 14s;
+				animation-delay: 0s;
+			}
+			.idea-float:nth-child(2) {
+				left: 50px;
+				animation-duration: 18s;
+				animation-delay: -6s;
+			}
+			.idea-float:nth-child(3) {
+				left: 20px;
+				animation-duration: 16s;
+				animation-delay: -11s;
+			}
+			.idea-float:nth-child(4) {
+				left: 60px;
+				animation-duration: 20s;
+				animation-delay: -3s;
+			}
+			.idea-float:nth-child(5) {
+				left: 10px;
+				animation-duration: 15s;
+				animation-delay: -9s;
+			}
+
+			@keyframes floatUp {
+				0% {
+					transform: translateY(340px);
+					opacity: 0;
+				}
+				8% {
+					opacity: 1;
+				}
+				85% {
+					opacity: 1;
+				}
+				100% {
+					transform: translateY(-120px);
+					opacity: 0;
+				}
+			}
+
+			.ifc-tag {
+				font-size: 10px;
+				font-weight: 600;
+				padding: 2px 8px;
+				border-radius: 999px;
+				background: rgba(245, 197, 24, 0.15);
+				color: var(--yellow);
+				display: inline-block;
+				margin-bottom: 8px;
+			}
+
+			.ifc-title {
+				font-family: var(--font-display);
+				font-size: 13px;
+				font-weight: 600;
+				color: var(--white);
+				line-height: 1.45;
+				margin-bottom: 10px;
+			}
+
+			.ifc-footer {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+
+			.ifc-av {
+				width: 20px;
+				height: 20px;
+				border-radius: 50%;
+				font-size: 9px;
+				font-weight: 700;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.ifc-name {
+				font-size: 11px;
+				color: rgba(255, 255, 255, 0.4);
+			}
+			.ifc-spark {
+				margin-left: auto;
+				font-size: 11px;
+				color: var(--yellow);
+				font-weight: 600;
+			}
+
+			/* bottom stats */
+			.left-stats {
+				position: relative;
+				z-index: 2;
+				display: flex;
+				gap: 28px;
+				margin-top: 24px;
+				padding-top: 20px;
+				border-top: 1px solid rgba(255, 255, 255, 0.07);
+			}
+
+			.stat-item {
+			}
+			.stat-num {
+				font-family: var(--font-display);
+				font-size: 22px;
+				font-weight: 800;
+				color: var(--yellow);
+				letter-spacing: -0.5px;
+			}
+			.stat-lbl {
+				font-size: 11px;
+				color: rgba(255, 255, 255, 0.4);
+				margin-top: 2px;
+			}
+
+			/* ── RIGHT PANEL ── */
+			.right {
+				width: 48%;
+				background: var(--white);
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				padding: 48px 52px;
+				position: relative;
+				overflow-y: auto;
+			}
+
+			/* steps at top */
+			.steps {
+				display: flex;
+				gap: 6px;
+				margin-bottom: 36px;
+			}
+
+			.step {
+				flex: 1;
+				height: 3px;
+				border-radius: 2px;
+				background: var(--gray-light);
+				transition: background 0.3s;
+			}
+			.step.done {
+				background: var(--yellow);
+			}
+			.step.active {
+				background: var(--black);
+			}
+
+			/* step screens */
+			.screen {
+				display: none;
+				animation: fadeIn 0.3s ease;
+			}
+			.screen.visible {
+				display: block;
+			}
+
+			@keyframes fadeIn {
+				from {
+					opacity: 0;
+					transform: translateY(8px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			.screen-eyebrow {
+				font-size: 11px;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				color: var(--yellow-dark);
+				background: var(--yellow-light);
+				border: 1px solid var(--yellow-mid);
+				display: inline-block;
+				padding: 3px 10px;
+				border-radius: 999px;
+				margin-bottom: 12px;
+			}
+
+			.screen-title {
+				font-family: var(--font-display);
+				font-size: 28px;
+				font-weight: 800;
+				color: var(--black);
+				line-height: 1.2;
+				letter-spacing: -0.5px;
+				margin-bottom: 6px;
+			}
+
+			.screen-sub {
+				font-size: 13.5px;
+				color: var(--gray-mid);
+				line-height: 1.6;
+				margin-bottom: 28px;
+			}
+
+			/* form fields */
+			.field {
+				margin-bottom: 16px;
+			}
+
+			.field-label {
+				font-size: 12px;
+				font-weight: 600;
+				color: var(--black);
+				margin-bottom: 6px;
+				display: block;
+			}
+
+			.field-input {
+				width: 100%;
+				height: 46px;
+				border: 1.5px solid var(--gray-light);
+				border-radius: 10px;
+				padding: 0 14px;
+				font-family: var(--font-body);
+				font-size: 14px;
+				color: var(--black);
+				background: var(--gray-faint);
+				outline: none;
+				transition:
+					border-color 0.15s,
+					background 0.15s;
+			}
+
+			.field-input:focus {
+				border-color: var(--yellow);
+				background: var(--white);
+				box-shadow: 0 0 0 3px var(--yellow-light);
+			}
+
+			.field-input::placeholder {
+				color: #bbbbbb;
+			}
+
+			.field-row {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 12px;
+			}
+
+			/* social login */
+			.social-btns {
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+				margin-bottom: 20px;
+			}
+
+			.social-btn {
+				width: 100%;
+				height: 46px;
+				border: 1.5px solid var(--gray-light);
+				border-radius: 10px;
+				background: var(--white);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 10px;
+				font-family: var(--font-body);
+				font-size: 13.5px;
+				font-weight: 500;
+				color: var(--black);
+				cursor: pointer;
+				transition:
+					border-color 0.15s,
+					box-shadow 0.15s;
+			}
+			.social-btn:hover {
+				border-color: var(--gray-dark);
+				box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+			}
+			.social-icon {
+				width: 18px;
+				height: 18px;
+			}
+
+			.divider {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				margin: 18px 0;
+				color: var(--gray-light);
+				font-size: 12px;
+				color: var(--gray-mid);
+			}
+			.divider::before,
+			.divider::after {
+				content: '';
+				flex: 1;
+				height: 1px;
+				background: var(--gray-light);
+			}
+
+			/* topic picker (step 2) */
+			.topic-grid {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 8px;
+				margin-bottom: 24px;
+			}
+
+			.topic-tile {
+				padding: 14px 16px;
+				border: 1.5px solid var(--gray-light);
+				border-radius: 12px;
+				background: var(--white);
+				cursor: pointer;
+				transition: all 0.15s;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+			.topic-tile:hover {
+				border-color: var(--yellow-dark);
+			}
+
+			.topic-tile.selected {
+				border-color: var(--yellow);
+				background: var(--yellow-light);
+			}
+
+			.topic-tile.selected .topic-check {
+				opacity: 1;
+			}
+
+			.topic-emoji {
+				font-size: 20px;
+			}
+			.topic-name {
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--black);
+			}
+			.topic-count {
+				font-size: 11px;
+				color: var(--gray-mid);
+				margin-top: 1px;
+			}
+
+			.topic-check {
+				margin-left: auto;
+				width: 18px;
+				height: 18px;
+				border-radius: 50%;
+				background: var(--yellow);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 10px;
+				opacity: 0;
+				transition: opacity 0.15s;
+				flex-shrink: 0;
+			}
+
+			/* idea type picker (step 3) */
+			.type-list {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+				margin-bottom: 24px;
+			}
+
+			.type-tile {
+				padding: 14px 16px;
+				border: 1.5px solid var(--gray-light);
+				border-radius: 12px;
+				background: var(--white);
+				cursor: pointer;
+				transition: all 0.15s;
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+
+			.type-tile:hover {
+				border-color: var(--gray-dark);
+			}
+			.type-tile.selected {
+				border-color: var(--black);
+				background: var(--black);
+			}
+			.type-tile.selected .type-name {
+				color: var(--white);
+			}
+			.type-tile.selected .type-desc {
+				color: rgba(255, 255, 255, 0.5);
+			}
+			.type-tile.selected .type-icon-wrap {
+				background: var(--yellow);
+			}
+
+			.type-icon-wrap {
+				width: 36px;
+				height: 36px;
+				border-radius: 10px;
+				background: var(--gray-faint);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 18px;
+				flex-shrink: 0;
+				transition: background 0.15s;
+			}
+
+			.type-name {
+				font-size: 13.5px;
+				font-weight: 600;
+				color: var(--black);
+				transition: color 0.15s;
+			}
+			.type-desc {
+				font-size: 12px;
+				color: var(--gray-mid);
+				margin-top: 2px;
+				transition: color 0.15s;
+			}
+
+			/* CTA button */
+			.btn-next {
+				width: 100%;
+				height: 48px;
+				border: none;
+				border-radius: 999px;
+				background: var(--black);
+				color: var(--white);
+				font-family: var(--font-body);
+				font-size: 14px;
+				font-weight: 600;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 8px;
+				transition:
+					opacity 0.15s,
+					transform 0.1s;
+				margin-bottom: 14px;
+			}
+
+			.btn-next:hover {
+				opacity: 0.88;
+			}
+			.btn-next:active {
+				transform: scale(0.99);
+			}
+
+			.btn-next .btn-spark {
+				width: 20px;
+				height: 20px;
+				border-radius: 50%;
+				background: var(--yellow);
+				color: var(--black);
+				font-size: 11px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.skip-link {
+				text-align: center;
+				font-size: 12.5px;
+				color: var(--gray-mid);
+				cursor: pointer;
+			}
+			.skip-link a {
+				color: var(--black);
+				font-weight: 500;
+				cursor: pointer;
+			}
+
+			/* success screen */
+			.success-bulb {
+				width: 72px;
+				height: 72px;
+				background: var(--yellow);
+				border-radius: 20px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 36px;
+				margin-bottom: 20px;
+				box-shadow: 0 8px 32px rgba(245, 197, 24, 0.35);
+				animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+			}
+
+			@keyframes popIn {
+				from {
+					transform: scale(0.5);
+					opacity: 0;
+				}
+				to {
+					transform: scale(1);
+					opacity: 1;
+				}
+			}
+
+			.confetti {
+				position: absolute;
+				pointer-events: none;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				overflow: hidden;
+			}
+
+			.conf-piece {
+				position: absolute;
+				width: 8px;
+				height: 8px;
+				border-radius: 2px;
+				animation: confettiFall linear forwards;
+				opacity: 0;
+			}
+
+			@keyframes confettiFall {
+				0% {
+					transform: translateY(-20px) rotate(0deg);
+					opacity: 1;
+				}
+				100% {
+					transform: translateY(600px) rotate(720deg);
+					opacity: 0;
+				}
+			}
+
+			.already-have {
+				margin-top: 24px;
+				text-align: center;
+				font-size: 13px;
+				color: var(--gray-mid);
+			}
+			.already-have a {
+				color: var(--black);
+				font-weight: 600;
+				cursor: pointer;
+				text-decoration: none;
+			}
+			.already-have a:hover {
+				text-decoration: underline;
+			}
+
+			/* password strength */
+			.pwd-strength {
+				display: flex;
+				gap: 4px;
+				margin-top: 6px;
+			}
+			.pwd-bar {
+				flex: 1;
+				height: 3px;
+				border-radius: 2px;
+				background: var(--gray-light);
+				transition: background 0.3s;
+			}
+			.pwd-bar.weak {
+				background: #ef4444;
+			}
+			.pwd-bar.fair {
+				background: var(--yellow);
+			}
+			.pwd-bar.strong {
+				background: #22c55e;
+			}
+			.pwd-hint {
+				font-size: 11px;
+				color: var(--gray-mid);
+				margin-top: 4px;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- LEFT PANEL -->
+		<div class="left">
+			<div class="left-logo">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="30" height="30">
+					<path
+						d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z"
+						fill="#F5C518"
+					/>
+					<ellipse
+						cx="38"
+						cy="26"
+						rx="7"
+						ry="10"
+						fill="#FFF8DC"
+						opacity="0.7"
+						transform="rotate(-20 38 26)"
+					/>
+					<rect x="39" y="83" width="22" height="5" rx="2.5" fill="#C49A00" />
+					<rect x="40.5" y="90" width="19" height="5" rx="2.5" fill="#C49A00" opacity="0.7" />
+					<path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="#111111" />
+				</svg>
+				<span class="left-logo-text">Idea<span>Share</span></span>
+			</div>
+
+			<div class="left-headline">
+				<h2>Where good ideas<br />find <em>their people</em></h2>
+				<p class="left-sub">
+					A place to drop the thought before it disappears. Share it, refine it, build it —
+					together.
+				</p>
+			</div>
+
+			<div class="cards-stage">
+				<div class="idea-float">
+					<div class="ifc-tag">#education</div>
+					<div class="ifc-title">
+						A universal exam that certifies your skills — no university required
+					</div>
+					<div class="ifc-footer">
+						<div class="ifc-av" style="background: #f5c518; color: #111">RK</div>
+						<div class="ifc-name">Rafiq K.</div>
+						<div class="ifc-spark">⚡ 847</div>
+					</div>
+				</div>
+				<div class="idea-float">
+					<div class="ifc-tag">#health</div>
+					<div class="ifc-title">
+						Let patients own their medical records — shared with any doctor, anywhere
+					</div>
+					<div class="ifc-footer">
+						<div class="ifc-av" style="background: #22c55e; color: #fff">TA</div>
+						<div class="ifc-name">Tolu A.</div>
+						<div class="ifc-spark">⚡ 512</div>
+					</div>
+				</div>
+				<div class="idea-float">
+					<div class="ifc-tag">#cities</div>
+					<div class="ifc-title">
+						Neighbourhoods vote on which small businesses get rent subsidies each quarter
+					</div>
+					<div class="ifc-footer">
+						<div class="ifc-av" style="background: #6366f1; color: #fff">LM</div>
+						<div class="ifc-name">Lena M.</div>
+						<div class="ifc-spark">⚡ 389</div>
+					</div>
+				</div>
+				<div class="idea-float">
+					<div class="ifc-tag">#economy</div>
+					<div class="ifc-title">
+						A global skills passport replacing the traditional CV once and for all
+					</div>
+					<div class="ifc-footer">
+						<div class="ifc-av" style="background: #f97316; color: #fff">NI</div>
+						<div class="ifc-name">Nadia I.</div>
+						<div class="ifc-spark">⚡ 271</div>
+					</div>
+				</div>
+				<div class="idea-float">
+					<div class="ifc-tag">#technology</div>
+					<div class="ifc-title">
+						Open-source AI trained only on public domain works — no copyright risk
+					</div>
+					<div class="ifc-footer">
+						<div class="ifc-av" style="background: #ec4899; color: #fff">PO</div>
+						<div class="ifc-name">Paulo O.</div>
+						<div class="ifc-spark">⚡ 634</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="left-stats">
+				<div class="stat-item">
+					<div class="stat-num">24k+</div>
+					<div class="stat-lbl">Ideas shared</div>
+				</div>
+				<div class="stat-item">
+					<div class="stat-num">8.3k</div>
+					<div class="stat-lbl">Being built</div>
+				</div>
+				<div class="stat-item">
+					<div class="stat-num">142</div>
+					<div class="stat-lbl">Countries</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- RIGHT PANEL -->
+		<div class="right" id="right-panel">
+			<!-- progress steps -->
+			<div class="steps">
+				<div class="step active" id="s1"></div>
+				<div class="step" id="s2"></div>
+				<div class="step" id="s3"></div>
+			</div>
+
+			<!-- SCREEN 1: Create account -->
+			<div class="screen visible" id="screen1">
+				<div class="screen-eyebrow">Step 1 of 3</div>
+				<h1 class="screen-title">Create your account</h1>
+				<p class="screen-sub">Your ideas deserve a home. Takes 30 seconds.</p>
+
+				<div class="social-btns">
+					<button class="social-btn" onclick="goTo(2)">
+						<svg class="social-icon" viewBox="0 0 24 24">
+							<path
+								d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+								fill="#4285F4"
+							/>
+							<path
+								d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+								fill="#34A853"
+							/>
+							<path
+								d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+								fill="#FBBC05"
+							/>
+							<path
+								d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+								fill="#EA4335"
+							/>
+						</svg>
+						Continue with Google
+					</button>
+					<button class="social-btn" onclick="goTo(2)">
+						<svg class="social-icon" viewBox="0 0 24 24" fill="#1877F2">
+							<path
+								d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+							/>
+						</svg>
+						Continue with Facebook
+					</button>
+				</div>
+
+				<div class="divider">or sign up with email</div>
+
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">First name</label>
+						<input type="text" class="field-input" placeholder="Rafiq" />
+					</div>
+					<div class="field">
+						<label class="field-label">Last name</label>
+						<input type="text" class="field-input" placeholder="Karim" />
+					</div>
+				</div>
+
+				<div class="field">
+					<label class="field-label">Email address</label>
+					<input type="email" class="field-input" placeholder="you@example.com" />
+				</div>
+
+				<div class="field">
+					<label class="field-label">Password</label>
+					<input
+						type="password"
+						class="field-input"
+						placeholder="Min. 8 characters"
+						id="pwd-input"
+						oninput="checkPwd(this.value)"
+					/>
+					<div class="pwd-strength">
+						<div class="pwd-bar" id="pb1"></div>
+						<div class="pwd-bar" id="pb2"></div>
+						<div class="pwd-bar" id="pb3"></div>
+					</div>
+					<div class="pwd-hint" id="pwd-hint">Use a mix of letters, numbers, and symbols</div>
+				</div>
+
+				<button class="btn-next" onclick="goTo(2)">
+					<div class="btn-spark">⚡</div>
+					Create account
+				</button>
+
+				<div class="already-have">Already have an account? <a>Sign in</a></div>
+			</div>
+
+			<!-- SCREEN 2: Pick interests -->
+			<div class="screen" id="screen2">
+				<div class="screen-eyebrow">Step 2 of 3</div>
+				<h1 class="screen-title">What sparks your interest?</h1>
+				<p class="screen-sub">
+					We'll show you ideas in the topics you care about. Pick as many as you like.
+				</p>
+
+				<div class="topic-grid">
+					<div class="topic-tile selected" onclick="toggleTile(this)">
+						<div class="topic-emoji">📚</div>
+						<div>
+							<div class="topic-name">Education</div>
+							<div class="topic-count">1.2k ideas</div>
+						</div>
+						<div class="topic-check">✓</div>
+					</div>
+					<div class="topic-tile selected" onclick="toggleTile(this)">
+						<div class="topic-emoji">❤️</div>
+						<div>
+							<div class="topic-name">Health</div>
+							<div class="topic-count">874 ideas</div>
+						</div>
+						<div class="topic-check">✓</div>
+					</div>
+					<div class="topic-tile" onclick="toggleTile(this)">
+						<div class="topic-emoji">💻</div>
+						<div>
+							<div class="topic-name">Technology</div>
+							<div class="topic-count">590 ideas</div>
+						</div>
+						<div class="topic-check">✓</div>
+					</div>
+					<div class="topic-tile selected" onclick="toggleTile(this)">
+						<div class="topic-emoji">🏙️</div>
+						<div>
+							<div class="topic-name">Cities</div>
+							<div class="topic-count">631 ideas</div>
+						</div>
+						<div class="topic-check">✓</div>
+					</div>
+					<div class="topic-tile" onclick="toggleTile(this)">
+						<div class="topic-emoji">💰</div>
+						<div>
+							<div class="topic-name">Economy</div>
+							<div class="topic-count">412 ideas</div>
+						</div>
+						<div class="topic-check">✓</div>
+					</div>
+					<div class="topic-tile" onclick="toggleTile(this)">
+						<div class="topic-emoji">🌱</div>
+						<div>
+							<div class="topic-name">Environment</div>
+							<div class="topic-count">328 ideas</div>
+						</div>
+						<div class="topic-check">✓</div>
+					</div>
+					<div class="topic-tile" onclick="toggleTile(this)">
+						<div class="topic-emoji">🏛️</div>
+						<div>
+							<div class="topic-name">Governance</div>
+							<div class="topic-count">219 ideas</div>
+						</div>
+						<div class="topic-check">✓</div>
+					</div>
+					<div class="topic-tile" onclick="toggleTile(this)">
+						<div class="topic-emoji">🎨</div>
+						<div>
+							<div class="topic-name">Arts & Culture</div>
+							<div class="topic-count">187 ideas</div>
+						</div>
+						<div class="topic-check">✓</div>
+					</div>
+				</div>
+
+				<button class="btn-next" onclick="goTo(3)">
+					<div class="btn-spark">→</div>
+					Continue
+				</button>
+				<div class="skip-link"><a onclick="goTo(3)">Skip for now</a></div>
+			</div>
+
+			<!-- SCREEN 3: How do you want to participate -->
+			<div class="screen" id="screen3">
+				<div class="screen-eyebrow">Step 3 of 3</div>
+				<h1 class="screen-title">How do you see yourself here?</h1>
+				<p class="screen-sub">
+					Helps us show you the right ideas. You can always change this later.
+				</p>
+
+				<div class="type-list">
+					<div class="type-tile selected" onclick="selectType(this)">
+						<div class="type-icon-wrap">💡</div>
+						<div>
+							<div class="type-name">Idea sharer</div>
+							<div class="type-desc">I have thoughts I want the world to hear</div>
+						</div>
+					</div>
+					<div class="type-tile" onclick="selectType(this)">
+						<div class="type-icon-wrap">🔧</div>
+						<div>
+							<div class="type-name">Builder</div>
+							<div class="type-desc">I want to help turn good ideas into real things</div>
+						</div>
+					</div>
+					<div class="type-tile" onclick="selectType(this)">
+						<div class="type-icon-wrap">🔍</div>
+						<div>
+							<div class="type-name">Refiner</div>
+							<div class="type-desc">I love poking holes in ideas and making them better</div>
+						</div>
+					</div>
+					<div class="type-tile" onclick="selectType(this)">
+						<div class="type-icon-wrap">👀</div>
+						<div>
+							<div class="type-name">Explorer</div>
+							<div class="type-desc">Just here to see what people are thinking</div>
+						</div>
+					</div>
+				</div>
+
+				<button class="btn-next" onclick="goTo(4)">
+					<div class="btn-spark">⚡</div>
+					Go to IdeaShare
+				</button>
+			</div>
+
+			<!-- SCREEN 4: Success -->
+			<div class="screen" id="screen4">
+				<div class="confetti" id="confetti"></div>
+				<div class="success-bulb">💡</div>
+				<h1 class="screen-title">You're in!</h1>
+				<p class="screen-sub" style="margin-bottom: 24px">
+					Welcome to IdeaShare. Your first idea is waiting to be shared — what are you thinking
+					about today?
+				</p>
+
+				<button class="btn-next" style="margin-bottom: 10px" onclick="window.location.href = '#'">
+					<div class="btn-spark">⚡</div>
+					Post my first idea
+				</button>
+				<button
+					class="btn-next"
+					style="background: var(--gray-faint); color: var(--black)"
+					onclick="window.location.href = '#'"
+				>
+					Explore the feed
+				</button>
+			</div>
+		</div>
+
+		<script>
+			function goTo(step) {
+				document.querySelectorAll('.screen').forEach((s) => s.classList.remove('visible'));
+				document.getElementById('screen' + step).classList.add('visible');
+
+				const lines = [
+					document.getElementById('s1'),
+					document.getElementById('s2'),
+					document.getElementById('s3')
+				];
+				lines.forEach((l, i) => {
+					l.className = 'step';
+					if (i + 1 < step) l.classList.add('done');
+					else if (i + 1 === step) l.classList.add('active');
+				});
+
+				if (step === 4) spawnConfetti();
+			}
+
+			function toggleTile(el) {
+				el.classList.toggle('selected');
+			}
+
+			function selectType(el) {
+				document.querySelectorAll('.type-tile').forEach((t) => t.classList.remove('selected'));
+				el.classList.add('selected');
+			}
+
+			function checkPwd(val) {
+				const bars = [
+					document.getElementById('pb1'),
+					document.getElementById('pb2'),
+					document.getElementById('pb3')
+				];
+				const hint = document.getElementById('pwd-hint');
+				bars.forEach((b) => (b.className = 'pwd-bar'));
+				if (val.length === 0) {
+					hint.textContent = 'Use a mix of letters, numbers, and symbols';
+					return;
+				}
+				if (val.length < 6) {
+					bars[0].classList.add('weak');
+					hint.textContent = 'Too short';
+				} else if (val.length < 10 || !/[0-9]/.test(val)) {
+					bars[0].classList.add('fair');
+					bars[1].classList.add('fair');
+					hint.textContent = 'Getting there — add numbers or symbols';
+				} else {
+					bars.forEach((b) => b.classList.add('strong'));
+					hint.textContent = '✓ Strong password';
+				}
+			}
+
+			function spawnConfetti() {
+				const container = document.getElementById('confetti');
+				container.innerHTML = '';
+				const colors = ['#F5C518', '#111111', '#FFE066', '#C49A00', '#FFFFFF'];
+				for (let i = 0; i < 40; i++) {
+					const piece = document.createElement('div');
+					piece.className = 'conf-piece';
+					piece.style.left = Math.random() * 100 + '%';
+					piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+					piece.style.animationDuration = 2 + Math.random() * 2 + 's';
+					piece.style.animationDelay = Math.random() * 1 + 's';
+					piece.style.width = piece.style.height = 6 + Math.random() * 6 + 'px';
+					container.appendChild(piece);
+				}
+			}
+		</script>
+	</body>
 </html>
 <style>
-/* ── RESPONSIVE ── */
+	/* ── RESPONSIVE ── */
 
-/* Tablet: smaller left panel */
-@media (max-width: 860px) {
-  .left { width: 44%; padding: 28px 24px; }
-  .right { width: 56%; padding: 36px 36px; }
-  .left-headline h2 { font-size: 28px; }
-}
+	/* Tablet: smaller left panel */
+	@media (max-width: 860px) {
+		.left {
+			width: 44%;
+			padding: 28px 24px;
+		}
+		.right {
+			width: 56%;
+			padding: 36px 36px;
+		}
+		.left-headline h2 {
+			font-size: 28px;
+		}
+	}
 
-/* Mobile: hide left panel entirely, full-width form */
-@media (max-width: 640px) {
-  html, body { overflow: auto; height: auto; }
+	/* Mobile: hide left panel entirely, full-width form */
+	@media (max-width: 640px) {
+		html,
+		body {
+			overflow: auto;
+			height: auto;
+		}
 
-  body { flex-direction: column; background: var(--white); }
+		body {
+			flex-direction: column;
+			background: var(--white);
+		}
 
-  .left {
-    display: none;
-  }
+		.left {
+			display: none;
+		}
 
-  .right {
-    width: 100%;
-    min-height: 100vh;
-    padding: 28px 20px 40px;
-    justify-content: flex-start;
-  }
+		.right {
+			width: 100%;
+			min-height: 100vh;
+			padding: 28px 20px 40px;
+			justify-content: flex-start;
+		}
 
-  /* Mobile logo at top of right panel */
-  .right::before {
-    content: '';
-    display: block;
-  }
+		/* Mobile logo at top of right panel */
+		.right::before {
+			content: '';
+			display: block;
+		}
 
-  .mobile-top {
-    display: flex !important;
-    align-items: center; justify-content: space-between;
-    margin-bottom: 28px;
-  }
-  .mobile-logo {
-    display: flex; align-items: center; gap: 8px;
-  }
-  .mobile-logo-text {
-    font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: 17px; font-weight: 700; color: var(--black);
-    letter-spacing: -0.3px;
-  }
-  .mobile-logo-text span { color: var(--yellow-dark); }
-  .mobile-signin {
-    font-size: 13px; color: var(--black); font-weight: 500;
-    cursor: pointer; text-decoration: underline;
-  }
+		.mobile-top {
+			display: flex !important;
+			align-items: center;
+			justify-content: space-between;
+			margin-bottom: 28px;
+		}
+		.mobile-logo {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+		.mobile-logo-text {
+			font-family: 'Bricolage Grotesque', sans-serif;
+			font-size: 17px;
+			font-weight: 700;
+			color: var(--black);
+			letter-spacing: -0.3px;
+		}
+		.mobile-logo-text span {
+			color: var(--yellow-dark);
+		}
+		.mobile-signin {
+			font-size: 13px;
+			color: var(--black);
+			font-weight: 500;
+			cursor: pointer;
+			text-decoration: underline;
+		}
 
-  .steps { margin-bottom: 24px; }
-  .screen-title { font-size: 22px; }
-  .screen-sub { font-size: 13px; margin-bottom: 20px; }
+		.steps {
+			margin-bottom: 24px;
+		}
+		.screen-title {
+			font-size: 22px;
+		}
+		.screen-sub {
+			font-size: 13px;
+			margin-bottom: 20px;
+		}
 
-  .social-btns { gap: 8px; margin-bottom: 14px; }
-  .social-btn { height: 44px; font-size: 13px; }
+		.social-btns {
+			gap: 8px;
+			margin-bottom: 14px;
+		}
+		.social-btn {
+			height: 44px;
+			font-size: 13px;
+		}
 
-  .field-row { grid-template-columns: 1fr; gap: 0; }
-  .field-input { height: 44px; font-size: 14px; }
+		.field-row {
+			grid-template-columns: 1fr;
+			gap: 0;
+		}
+		.field-input {
+			height: 44px;
+			font-size: 14px;
+		}
 
-  .topic-grid { grid-template-columns: 1fr 1fr; gap: 7px; }
-  .topic-tile { padding: 10px 12px; }
-  .topic-emoji { font-size: 17px; }
-  .topic-name { font-size: 12px; }
-  .topic-count { font-size: 10px; }
+		.topic-grid {
+			grid-template-columns: 1fr 1fr;
+			gap: 7px;
+		}
+		.topic-tile {
+			padding: 10px 12px;
+		}
+		.topic-emoji {
+			font-size: 17px;
+		}
+		.topic-name {
+			font-size: 12px;
+		}
+		.topic-count {
+			font-size: 10px;
+		}
 
-  .type-list { gap: 7px; }
-  .type-tile { padding: 12px 14px; }
-  .type-icon-wrap { width: 32px; height: 32px; font-size: 16px; }
-  .type-name { font-size: 13px; }
-  .type-desc { font-size: 11.5px; }
+		.type-list {
+			gap: 7px;
+		}
+		.type-tile {
+			padding: 12px 14px;
+		}
+		.type-icon-wrap {
+			width: 32px;
+			height: 32px;
+			font-size: 16px;
+		}
+		.type-name {
+			font-size: 13px;
+		}
+		.type-desc {
+			font-size: 11.5px;
+		}
 
-  .btn-next { height: 48px; font-size: 14px; }
+		.btn-next {
+			height: 48px;
+			font-size: 14px;
+		}
 
-  /* Success screen */
-  .success-bulb { width: 60px; height: 60px; font-size: 30px; border-radius: 16px; }
-}
+		/* Success screen */
+		.success-bulb {
+			width: 60px;
+			height: 60px;
+			font-size: 30px;
+			border-radius: 16px;
+		}
+	}
 </style>
 
 <!-- Mobile top bar (shown only on mobile) -->
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  if (window.innerWidth <= 640) {
-    const rp = document.getElementById('right-panel');
-    const topBar = document.createElement('div');
-    topBar.className = 'mobile-top';
-    topBar.style.display = 'none';
-    topBar.innerHTML = `
+	document.addEventListener('DOMContentLoaded', () => {
+		if (window.innerWidth <= 640) {
+			const rp = document.getElementById('right-panel');
+			const topBar = document.createElement('div');
+			topBar.className = 'mobile-top';
+			topBar.style.display = 'none';
+			topBar.innerHTML = `
       <div class="mobile-logo">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="28" height="28">
           <path d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z" fill="#F5C518"/>
@@ -886,8 +1343,8 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <span class="mobile-signin">Sign in</span>
     `;
-    rp.insertBefore(topBar, rp.firstChild);
-    topBar.style.display = 'flex';
-  }
-});
+			rp.insertBefore(topBar, rp.firstChild);
+			topBar.style.display = 'flex';
+		}
+	});
 </script>

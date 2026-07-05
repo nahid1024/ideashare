@@ -1,18 +1,31 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import Navbar from '$lib/components/Navbar.svelte';
-	import { createPost } from './page.remote';
+	import { createPost } from '$lib/remotes/page.remote';
+	import { postSchema } from '$lib/validation_schema';
+	import LightningIcon from 'phosphor-svelte/lib/LightningIcon';
+	import { Combobox } from 'bits-ui';
+
+	const MAXTOPICS = 2;
 	let title = $state('');
 	let description = $state('');
 	let solvedProblem = $state('');
-	let selectedChips = $state(['Students', 'Working adults', 'Developing countries']);
-	let selectedTopics = $state(['#education', '#credentials']);
+	let selectedChips = $state<string[]>([]);
+	let selectedTopics = $state<string[]>([]);
 	let focusedBlock = $state('title');
-	let showDupeWarning = $state(true);
+	let showDupeWarning = $state(false);
+	let tagOpen = $state(false);
+	let whoOpen = $state(false);
 
-	//const session = await sessionData();
+	let tagInput = $state('');
+	let tagInputRef = $state<HTMLInputElement | null>(null);
 
-	//console.log(session.userId);
+	let whoInput = $state('');
+	let whoInputRef = $state<HTMLInputElement | null>(null);
+
+	const isValid = $derived(
+		postSchema.pick({ title: true, description: true }).safeParse({ title, description }).success
+	);
 
 	const whoChips = [
 		{ name: 'Students', emoji: '🎓' },
@@ -35,34 +48,74 @@
 		'#environment',
 		'#governance'
 	];
+	let errors = $state({
+		title: '',
+		description: ''
+	});
 
-	function toggleChip(chipName: string) {
-		if (selectedChips.includes(chipName)) {
-			selectedChips = selectedChips.filter((c) => c !== chipName);
-		} else {
-			selectedChips = [...selectedChips, chipName];
+	const filteredTopics = $derived(
+		topicsList.filter(
+			(topic) =>
+				topic.toLowerCase().includes(tagInput.toLowerCase()) && !selectedTopics.includes(topic)
+		)
+	);
+
+	const filteredWhoChips = $derived(
+		whoChips.filter(
+			(chip) =>
+				chip.name.toLowerCase().includes(whoInput.toLowerCase()) &&
+				!selectedChips.includes(chip.name)
+		)
+	);
+
+	function validate(field: string) {
+		if (field === 'title') {
+			const titleResult = postSchema.shape.title.safeParse(title);
+			errors.title = titleResult.success ? '' : titleResult.error.issues[0].message;
+		}
+		if (field === 'desc') {
+			const descResult = postSchema.shape.description.safeParse(description);
+			errors.description = descResult.success ? '' : descResult.error.issues[0].message;
 		}
 	}
 
-	function toggleTopic(topicName: string) {
-		if (selectedTopics.includes(topicName)) {
-			selectedTopics = selectedTopics.filter((t) => t !== topicName);
-		} else if (selectedTopics.length < 2) {
-			selectedTopics = [...selectedTopics, topicName];
+	function addWhoChip(chipName: string) {
+		const trimmed = chipName.trim();
+		if (!trimmed) return;
+		const match = whoChips.find((c) => c.name.toLowerCase() === trimmed.toLowerCase());
+		const finalName = match ? match.name : trimmed;
+		if (!selectedChips.includes(finalName)) {
+			selectedChips = [...selectedChips, finalName];
 		}
+		whoInput = '';
 	}
 
-	// async function createPost() {
-	// 	const post = await db.insert(posts).values([
-	// 		{
-	// 			title: title,
-	// 			description: description,
-	// 			solvedProblems: solvedProblem,
-	// 			isAnonymous: isAnonymous,
-	// 			authorId: session.userId
-	// 		}
-	// 	]);
-	// }
+	function removeWhoChip(chipName: string) {
+		selectedChips = selectedChips.filter((c) => c !== chipName);
+	}
+
+	function addTopic(topicName: string) {
+		if (selectedTopics.length >= 2) return;
+		let formatted = topicName.trim();
+		if (!formatted) return;
+		if (!formatted.startsWith('#')) {
+			formatted = '#' + formatted;
+		}
+		formatted =
+			'#' +
+			formatted
+				.slice(1)
+				.toLowerCase()
+				.replace(/[^a-z0-9_-]/g, '');
+		if (formatted.length > 1 && !selectedTopics.includes(formatted)) {
+			selectedTopics = [...selectedTopics, formatted];
+		}
+		tagInput = '';
+	}
+
+	function removeTopic(topicName: string) {
+		selectedTopics = selectedTopics.filter((t) => t !== topicName);
+	}
 </script>
 
 <svelte:head>
@@ -84,22 +137,23 @@
 			>
 				What's the idea?
 			</h1>
+
 			<p class="text-[13.5px] leading-[1.6] text-foreground-muted">
 				Write it like you'd explain it to a friend. No need to be formal — just be clear.
 			</p>
 		</div>
 
-		<div class="overflow-hidden rounded-2xl border border-border bg-background">
+		<div class="rounded-2xl border border-border bg-background">
 			<!-- Title field -->
 			<div
 				id="block-title"
-				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
+				class="field-block relative rounded-t-2xl border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
 				'title'
 					? 'bg-yellow-50'
 					: ''}"
 			>
 				<div
-					class="field-accent absolute top-0 bottom-0 left-0 w-0.75 rounded-none transition-colors {focusedBlock ===
+					class="field-accent absolute top-0 bottom-0 left-0 w-0.75 rounded-tl-2xl transition-colors {focusedBlock ===
 					'title'
 						? 'bg-accent'
 						: 'bg-transparent'}"
@@ -114,18 +168,27 @@
 					id="title-input"
 					rows="2"
 					bind:value={title}
+					oninput={() => validate('title')}
 					onfocus={() => (focusedBlock = 'title')}
 					{...createPost.fields.title.as('text')}
 					class="w-full resize-none border-none bg-transparent font-display text-[18px] leading-[1.4] font-semibold text-foreground outline-none placeholder:font-medium placeholder:text-foreground-disabled"
 					placeholder="e.g. A universal exam system where you study anywhere and just show up to get certified"
 				></textarea>
-				<div
-					id="title-count"
-					class="mt-1.25 flex justify-end text-[11px] {title.length > 100
-						? 'text-yellow-500'
-						: 'text-foreground-disabled'}"
-				>
-					{title.length} / 120
+
+				<div class="flex">
+					{#if errors.title}
+						<div class="mt-1.25 mr-auto flex text-[11px]">
+							<p class="text-[11px] text-red-400">{errors.title}</p>
+						</div>
+					{/if}
+					<div
+						id="title-count"
+						class="mt-1.25 ml-auto text-[11px] {title.length > 100
+							? 'text-yellow-500'
+							: 'text-foreground-disabled'}"
+					>
+						{title.length} / 120
+					</div>
 				</div>
 			</div>
 
@@ -153,11 +216,17 @@
 					id="desc-input"
 					rows="4"
 					bind:value={description}
+					oninput={() => validate('desc')}
 					{...createPost.fields.description.as('text')}
 					onfocus={() => (focusedBlock = 'desc')}
 					class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
 					placeholder="What exactly would this look like? How would it work? Even a rough picture is great."
 				></textarea>
+				{#if errors.description}
+					<div class="mt-1.25 mr-auto flex text-[11px]">
+						<p class="text-[11px] text-red-400">{errors.description}</p>
+					</div>
+				{/if}
 			</div>
 
 			<!-- Problem field -->
@@ -195,7 +264,10 @@
 			<div
 				id="block-who"
 				role="presentation"
-				onclick={() => (focusedBlock = 'who')}
+				onclick={() => {
+					focusedBlock = 'who';
+					whoInputRef?.focus();
+				}}
 				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
 				'who'
 					? 'bg-yellow-50'
@@ -217,20 +289,80 @@
 						>Pick all that apply</span
 					>
 				</div>
-				<div class="mb-2.5 flex flex-wrap gap-1.75">
-					{#each whoChips as chip (chip)}
-						{@const isSelected = selectedChips.includes(chip.name)}
-						<button
-							type="button"
-							class="chip flex cursor-pointer items-center gap-1 rounded-full border px-2.5 py-1.5 font-[inherit] text-[12.5px] transition-colors {isSelected
-								? 'border-accent bg-yellow-100 font-semibold text-foreground'
-								: 'border-border bg-transparent font-medium text-foreground-secondary hover:border-yellow-500 hover:text-foreground'}"
-							onclick={() => toggleChip(chip.name)}
+				<div
+					class="relative flex min-h-[46px] w-full flex-wrap items-center gap-1.75 rounded-lg p-2.5 transition-colors focus-within:border-foreground-muted"
+				>
+					{#each selectedChips as chipName (chipName)}
+						{@const matchingPredefined = whoChips.find((c) => c.name === chipName)}
+						{@const emoji = matchingPredefined?.emoji || '🌱'}
+						<span
+							class="inline-flex items-center gap-1 rounded-full border border-accent bg-yellow-100 px-2.5 py-1 text-[12.5px] font-semibold text-foreground transition-colors"
 						>
-							<span>{chip.emoji}</span>
-							{chip.name}
-						</button>
+							<span>{emoji}</span>
+							{chipName}
+							<button
+								type="button"
+								class="ml-1 inline-flex h-3.5 w-3.5 cursor-pointer items-center justify-center rounded-full text-foreground/50 hover:bg-yellow-200 hover:text-foreground"
+								onclick={(e) => {
+									e.stopPropagation();
+									removeWhoChip(chipName);
+								}}
+							>
+								✕
+							</button>
+						</span>
 					{/each}
+					<Combobox.Root
+						type="single"
+						value={whoInput}
+						bind:open={whoOpen}
+						onValueChange={(v) => {
+							if (v) {
+								addWhoChip(v);
+								if (whoInputRef) whoInputRef.value = '';
+							}
+						}}
+						onOpenChangeComplete={(open) => {
+							if (!open) {
+								if (whoInputRef) whoInputRef.value = '';
+							}
+						}}
+					>
+						<Combobox.Input
+							type="text"
+							bind:ref={whoInputRef}
+							oninput={(e) => (whoInput = e.currentTarget.value)}
+							onclick={() => {
+								whoOpen = true;
+							}}
+							placeholder="Type or select who benefits..."
+							class="min-w-[120px] flex-grow border-none bg-transparent p-1 text-[13.5px] text-foreground outline-none placeholder:text-foreground-disabled"
+						/>
+						<Combobox.Trigger />
+
+						<Combobox.Portal>
+							<Combobox.Content
+								align="start"
+								class="w-[235px] rounded-md border border-border bg-background p-2 shadow-md outline-hidden focus-visible:outline-hidden"
+							>
+								<Combobox.Viewport class="max-h-[200px] min-h-[100px] overflow-y-auto">
+									{#each filteredWhoChips as chip (chip.name)}
+										<Combobox.Item
+											class="flex w-full cursor-pointer items-center gap-2 rounded-sm px-4 py-3 text-left text-[13px] font-medium text-foreground transition-colors hover:bg-background-muted focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
+											value={chip.name}
+										>
+											<span>{chip.emoji}</span>
+											{chip.name}
+										</Combobox.Item>
+									{:else}
+										<div class="px-5 py-6 text-sm text-muted-foreground">
+											No results found, try again.
+										</div>
+									{/each}
+								</Combobox.Viewport>
+							</Combobox.Content>
+						</Combobox.Portal>
+					</Combobox.Root>
 				</div>
 			</div>
 
@@ -238,7 +370,10 @@
 			<div
 				id="block-topic"
 				role="presentation"
-				onclick={() => (focusedBlock = 'topic')}
+				onclick={() => {
+					focusedBlock = 'topic';
+					tagInputRef?.focus();
+				}}
 				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
 				'topic'
 					? 'bg-yellow-50'
@@ -259,24 +394,86 @@
 						>Pick up to 2</span
 					>
 				</div>
-				<div class="flex flex-wrap gap-1.75">
-					{#each topicsList as topic (topic)}
-						{@const isSelected = selectedTopics.includes(topic)}
-						<button
-							type="button"
-							class="chip cursor-pointer rounded-full border px-2.5 py-1.5 font-[inherit] text-[12.5px] font-medium transition-colors {isSelected
-								? 'border-foreground bg-foreground text-foreground-inverted'
-								: 'border-border bg-transparent text-foreground-secondary hover:border-foreground hover:text-foreground'}"
-							onclick={() => toggleTopic(topic)}
+				<div
+					class="relative flex min-h-[46px] w-full flex-wrap items-center gap-1.75 rounded-lg p-2.5 transition-colors focus-within:border-foreground-muted"
+				>
+					{#each selectedTopics as topic (topic)}
+						<span
+							class="inline-flex items-center gap-1 rounded-full border border-foreground bg-foreground px-2.5 py-1 text-[12.5px] font-semibold text-foreground-inverted transition-colors"
 						>
 							{topic}
-						</button>
+							<button
+								type="button"
+								class="ml-1 inline-flex h-3.5 w-3.5 cursor-pointer items-center justify-center rounded-full text-foreground-inverted/70 hover:bg-white/20 hover:text-white"
+								onclick={(e) => {
+									e.stopPropagation();
+									removeTopic(topic);
+								}}
+							>
+								✕
+							</button>
+						</span>
 					{/each}
+
+					<Combobox.Root
+						type="single"
+						value={tagInput}
+						bind:open={tagOpen}
+						onValueChange={(v) => {
+							if (v) {
+								addTopic(v);
+								if (tagInputRef) tagInputRef.value = '';
+							}
+						}}
+						onOpenChangeComplete={(open) => {
+							if (!open) {
+								if (tagInputRef) tagInputRef.value = '';
+							}
+						}}
+					>
+						{#if selectedTopics.length === MAXTOPICS}
+							<div class="text-sm text-foreground-disabled">Max input</div>
+						{:else}
+							<Combobox.Input
+								type="text"
+								bind:ref={tagInputRef}
+								oninput={(e) => (tagInput = e.currentTarget.value)}
+								onclick={() => {
+									tagOpen = true;
+								}}
+								placeholder="Type or select who benefits..."
+								class="min-w-[120px] flex-grow border-none bg-transparent p-1 text-[13.5px] text-foreground outline-none placeholder:text-foreground-disabled"
+							/>
+						{/if}
+						<Combobox.Trigger />
+
+						<Combobox.Portal>
+							<Combobox.Content
+								align="start"
+								class="w-[235px] rounded-md border border-border bg-background p-2 shadow-md outline-hidden focus-visible:outline-hidden"
+							>
+								<Combobox.Viewport class="max-h-[200px] min-h-[100px] overflow-y-auto">
+									{#each filteredTopics as chip (chip)}
+										<Combobox.Item
+											class="flex w-full cursor-pointer items-center gap-2 rounded-sm px-4 py-3 text-left text-[13px] font-medium text-foreground transition-colors hover:bg-background-muted focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
+											value={chip}
+										>
+											{chip}
+										</Combobox.Item>
+									{:else}
+										<div class="px-5 py-6 text-sm text-muted-foreground">
+											No results found, try again.
+										</div>
+									{/each}
+								</Combobox.Viewport>
+							</Combobox.Content>
+						</Combobox.Portal>
+					</Combobox.Root>
 				</div>
 			</div>
 
 			<!-- Anonymous toggle -->
-			<div class="relative p-[20px_24px]">
+			<div class="relative rounded-b-2xl p-[20px_24px]">
 				<div
 					class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
 				>
@@ -337,17 +534,19 @@
 		<!-- Submit bar -->
 		<div class="mt-5 flex flex-wrap items-center gap-2.5">
 			<button
-				class="flex cursor-pointer items-center gap-2 rounded-full border-none bg-primary px-7 py-2.75 font-[inherit] text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-85"
+				class="flex cursor-pointer items-center gap-2 rounded-full border-none bg-primary px-7 py-2.75 font-[inherit] text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-85 disabled:bg-border-strong disabled:text-foreground-disabled"
 				type="submit"
 				name="intent"
 				value="publish"
+				disabled={!isValid}
 			>
 				Publish idea
 			</button>
 			<button
-				class="cursor-pointer rounded-full border border-border bg-transparent px-5 py-2.75 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground"
+				class="cursor-pointer rounded-full border border-border bg-transparent px-5 py-2.75 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground disabled:border-border disabled:text-foreground-disabled"
 				type="submit"
 				name="intent"
+				disabled={!isValid}
 				value="draft">Save as draft</button
 			>
 			<span class="text-[12px] text-foreground-muted">Your idea will be visible to everyone</span>
@@ -387,11 +586,12 @@
 							>{topic}</span
 						>
 					{/each}
-					<span
-						class="rounded-full border border-warning-border bg-warning-background px-2 py-[2px] text-[11px] font-semibold text-warning-foreground"
-						>Raw idea</span
-					>
-					<span class="ml-auto text-[12px] font-semibold text-foreground-muted">⚡ 0</span>
+				</div>
+				<div
+					class="ml-auto flex items-center justify-end text-[12px] font-semibold text-foreground-muted"
+				>
+					<LightningIcon weight="fill" class="text-accent" />
+					<div>0</div>
 				</div>
 			</div>
 		</div>
