@@ -10,7 +10,7 @@ export async function POST(event) {
 	const body = await event.request.json();
 
 	const data = postSchema.parse({ ...body });
-	await CreatePost({...data}, user.id);
+	const postId = await CreatePost({ ...data }, user.id);
 
-	return json({ success: true });
+	return json({ postId: postId, success: true });
 }

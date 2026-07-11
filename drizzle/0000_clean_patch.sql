@@ -56,8 +56,6 @@ CREATE TABLE "posts" (
 	"title" varchar NOT NULL,
 	"description" text,
 	"solvedProblems" text,
-	"benefitWho" text,
-	"topic" text,
 	"isAnonymous" boolean DEFAULT false NOT NULL,
 	"isPublished" boolean DEFAULT false NOT NULL,
 	"authorId" text,
@@ -71,7 +69,7 @@ CREATE TABLE "media" (
 	"postId" uuid
 );
 --> statement-breakpoint
-CREATE TABLE "post_tags" (
+CREATE TABLE "post_topics" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"postId" uuid,
 	"tagId" uuid
@@ -104,17 +102,28 @@ CREATE TABLE "sparked" (
 	CONSTRAINT "sparked_userId_postId_unique" UNIQUE("userId","postId")
 );
 --> statement-breakpoint
-CREATE TABLE "tags" (
+CREATE TABLE "topics" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" varchar NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "who_benefits" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"postId" uuid,
+	"tagId" uuid
+);
+--> statement-breakpoint
+CREATE TABLE "whoBenefitsList" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"name" text NOT NULL
 );
 --> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "posts" ADD CONSTRAINT "posts_authorId_user_id_fk" FOREIGN KEY ("authorId") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "media" ADD CONSTRAINT "media_postId_posts_id_fk" FOREIGN KEY ("postId") REFERENCES "public"."posts"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "post_tags" ADD CONSTRAINT "post_tags_postId_posts_id_fk" FOREIGN KEY ("postId") REFERENCES "public"."posts"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "post_tags" ADD CONSTRAINT "post_tags_tagId_tags_id_fk" FOREIGN KEY ("tagId") REFERENCES "public"."tags"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "post_topics" ADD CONSTRAINT "post_topics_postId_posts_id_fk" FOREIGN KEY ("postId") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "post_topics" ADD CONSTRAINT "post_topics_tagId_topics_id_fk" FOREIGN KEY ("tagId") REFERENCES "public"."topics"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "refinements" ADD CONSTRAINT "refinements_postId_posts_id_fk" FOREIGN KEY ("postId") REFERENCES "public"."posts"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "refinements" ADD CONSTRAINT "refinements_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "refinements" ADD CONSTRAINT "refinements_parentRefinementId_refinements_id_fk" FOREIGN KEY ("parentRefinementId") REFERENCES "public"."refinements"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
@@ -122,6 +131,11 @@ ALTER TABLE "shares" ADD CONSTRAINT "shares_postId_posts_id_fk" FOREIGN KEY ("po
 ALTER TABLE "shares" ADD CONSTRAINT "shares_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "sparked" ADD CONSTRAINT "sparked_postId_posts_id_fk" FOREIGN KEY ("postId") REFERENCES "public"."posts"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "sparked" ADD CONSTRAINT "sparked_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "who_benefits" ADD CONSTRAINT "who_benefits_postId_posts_id_fk" FOREIGN KEY ("postId") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "who_benefits" ADD CONSTRAINT "who_benefits_tagId_whoBenefitsList_id_fk" FOREIGN KEY ("tagId") REFERENCES "public"."whoBenefitsList"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "account_userId_idx" ON "account" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "session_userId_idx" ON "session" USING btree ("user_id");--> statement-breakpoint
-CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");
+CREATE INDEX "user_email_index" ON "user" USING btree ("email");--> statement-breakpoint
+CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");--> statement-breakpoint
+CREATE INDEX "topics_name_index" ON "topics" USING btree ("name");--> statement-breakpoint
+CREATE INDEX "whoBenefitsList_name_index" ON "whoBenefitsList" USING btree ("name");

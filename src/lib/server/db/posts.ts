@@ -4,7 +4,7 @@ import { relations } from 'drizzle-orm';
 import { shares } from './share';
 import { media } from './media';
 import { sparked } from './sparked';
-import { postTags } from './postTags';
+import { postTopics } from './postTopics';
 import { refinements } from './refinements';
 import { refinementVotes } from './refinementVotes';
 
@@ -13,8 +13,6 @@ export const posts = pgTable('posts', {
 	title: varchar('title').notNull(),
 	description: text('description'),
 	solvedProblems: text('solvedProblems'),
-	benefitWho: text('benefitWho'),
-	topic: text('topic'),
 	isAnonymous: boolean('isAnonymous').notNull().default(false),
 	isPublished: boolean('isPublished').notNull().default(false),
 	authorId: text('authorId').references(() => user.id),
@@ -33,7 +31,7 @@ export const postRelations = relations(posts, (rel) => ({
 	share: rel.many(shares),
 	media: rel.many(media),
 	sparked: rel.many(sparked),
-	postTag: rel.many(postTags),
+	postTopics: rel.many(postTopics),
 	refinements: rel.many(refinements),
 	votes: rel.many(refinementVotes)
 }));

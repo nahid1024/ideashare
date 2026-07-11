@@ -13,15 +13,26 @@ export const signupSchema = z
 		path: ['confirm_password']
 	});
 
+export const tagSchema = z.object({
+	tagId: z.string().nonempty(),
+	postId: z.string().nonempty()
+});
+
+export const topicSchema = z.object({
+	name: z.string(),
+	id: z.string()
+});
+
+export const whoBenefitsSchema = z.object({
+	name: z.string(),
+	id: z.string()
+});
 export const postSchema = z.object({
 	title: z.string().nonempty('Title is required').max(120, 'Title cannot exceed 120 characters'),
 	description: z.string().nonempty('Description is requred'),
 	solvedProblem: z.string().nullable(),
 	isAnonymous: z.boolean().default(false),
-	intent: z.enum(['draft', 'publish']).default('publish')
-});
-
-export const tagSchema = z.object({
-	tagId: z.string().nonempty(),
-	postId: z.string().nonempty()
+	intent: z.enum(['draft', 'publish']).default('publish'),
+	topics: topicSchema.array(),
+	whoBenefits: whoBenefitsSchema.array()
 });

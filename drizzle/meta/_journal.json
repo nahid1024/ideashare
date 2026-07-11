@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1783017812983,
-      "tag": "0000_curly_ted_forrester",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1783153222985,
-      "tag": "0001_fearless_mordo",
+      "when": 1783779063957,
+      "tag": "0000_clean_patch",
       "breakpoints": true
     }
   ]

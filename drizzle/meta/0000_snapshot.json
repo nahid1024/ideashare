@@ -1,5 +1,5 @@
 {
-  "id": "cd163504-edb1-4685-9e58-c78376a87111",
+  "id": "4ba725ab-9c9e-46e3-9f70-787695e6347a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -307,7 +307,23 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_email_index": {
+          "name": "user_email_index",
+          "columns": [
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
@@ -419,18 +435,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "benefitWho": {
-          "name": "benefitWho",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "topic": {
-          "name": "topic",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "isAnonymous": {
           "name": "isAnonymous",
           "type": "boolean",
@@ -534,8 +538,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.post_tags": {
-      "name": "post_tags",
+    "public.post_topics": {
+      "name": "post_topics",
       "schema": "",
       "columns": {
         "id": {
@@ -560,9 +564,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "post_tags_postId_posts_id_fk": {
-          "name": "post_tags_postId_posts_id_fk",
-          "tableFrom": "post_tags",
+        "post_topics_postId_posts_id_fk": {
+          "name": "post_topics_postId_posts_id_fk",
+          "tableFrom": "post_topics",
           "tableTo": "posts",
           "columnsFrom": [
             "postId"
@@ -570,20 +574,20 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "post_tags_tagId_tags_id_fk": {
-          "name": "post_tags_tagId_tags_id_fk",
-          "tableFrom": "post_tags",
-          "tableTo": "tags",
+        "post_topics_tagId_topics_id_fk": {
+          "name": "post_topics_tagId_topics_id_fk",
+          "tableFrom": "post_topics",
+          "tableTo": "topics",
           "columnsFrom": [
             "tagId"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -845,8 +849,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.tags": {
-      "name": "tags",
+    "public.topics": {
+      "name": "topics",
       "schema": "",
       "columns": {
         "id": {
@@ -863,7 +867,124 @@
           "notNull": true
         }
       },
+      "indexes": {
+        "topics_name_index": {
+          "name": "topics_name_index",
+          "columns": [
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.who_benefits": {
+      "name": "who_benefits",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "postId": {
+          "name": "postId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tagId": {
+          "name": "tagId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
       "indexes": {},
+      "foreignKeys": {
+        "who_benefits_postId_posts_id_fk": {
+          "name": "who_benefits_postId_posts_id_fk",
+          "tableFrom": "who_benefits",
+          "tableTo": "posts",
+          "columnsFrom": [
+            "postId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "who_benefits_tagId_whoBenefitsList_id_fk": {
+          "name": "who_benefits_tagId_whoBenefitsList_id_fk",
+          "tableFrom": "who_benefits",
+          "tableTo": "whoBenefitsList",
+          "columnsFrom": [
+            "tagId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.whoBenefitsList": {
+      "name": "whoBenefitsList",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "whoBenefitsList_name_index": {
+          "name": "whoBenefitsList_name_index",
+          "columns": [
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},

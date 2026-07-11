@@ -1,22 +1,27 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import Navbar from '$lib/components/Navbar.svelte';
-	import { postSchema } from '$lib/validation_schema';
+	import { postSchema, topicSchema, whoBenefitsSchema } from '$lib/validation_schema';
 	import LightningIcon from 'phosphor-svelte/lib/LightningIcon';
 	import { Combobox } from 'bits-ui';
 	import CircleNotchIcon from 'phosphor-svelte/lib/CircleNotchIcon';
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 	import { sleep } from '$lib/utils.js';
+	import z from 'zod';
 
-	const MAXTOPICS = 2;
+	const MAXTOPICS = 5;
+	type Topics = z.infer<typeof topicSchema>;
+	type whoBenefits = z.infer<typeof whoBenefitsSchema>;
+
 	let title = $state('');
 	let description = $state('');
 	let solvedProblem = $state('');
 	let isAnonymous = $state(false);
 	let isLoading = $state({ intent: '', state: false });
-	let selectedChips = $state<string[]>([]);
-	let selectedTopics = $state<string[]>([]);
+	let postId = $state('');
+	let selectedChips = $state<whoBenefits[]>([]);
+	let selectedTopics = $state<Topics[]>([]);
 	let focusedBlock = $state('title');
 	let showDupeWarning = $state(false);
 	let tagOpen = $state(false);
@@ -25,6 +30,11 @@
 	let tagInputRef = $state<HTMLInputElement | null>(null);
 	let whoInput = $state('');
 	let whoInputRef = $state<HTMLInputElement | null>(null);
+
+	const { data } = $props();
+
+	const topicsList = data.topics;
+	const whoChips = data.whoBenefitsList;
 
 	const isValid = $derived(
 		postSchema.pick({ title: true, description: true }).safeParse({ title, description }).success
@@ -46,32 +56,11 @@
 		}
 	}
 
-	const whoChips = [
-		{ name: 'Students', emoji: '🎓' },
-		{ name: 'Working adults', emoji: '💼' },
-		{ name: 'Employers', emoji: '🏢' },
-		{ name: 'Developing countries', emoji: '🌍' },
-		{ name: 'Governments', emoji: '🏛️' },
-		{ name: 'Researchers', emoji: '🔬' },
-		{ name: 'Developers', emoji: '👩‍💻' },
-		{ name: 'Everyone', emoji: '🌱' }
-	];
-
-	const topicsList = [
-		'#education',
-		'#credentials',
-		'#health',
-		'#technology',
-		'#cities',
-		'#economy',
-		'#environment',
-		'#governance'
-	];
-
 	const filteredTopics = $derived(
 		topicsList.filter(
 			(topic) =>
-				topic.toLowerCase().includes(tagInput.toLowerCase()) && !selectedTopics.includes(topic)
+				topic.name.toLowerCase().includes(tagInput.toLowerCase()) &&
+				!selectedTopics.some((t) => t.name === topic.name)
 		)
 	);
 
@@ -79,46 +68,36 @@
 		whoChips.filter(
 			(chip) =>
 				chip.name.toLowerCase().includes(whoInput.toLowerCase()) &&
-				!selectedChips.includes(chip.name)
+				!selectedChips.some((t) => t.name === chip.name)
 		)
 	);
 
-	function addWhoChip(chipName: string) {
-		const trimmed = chipName.trim();
-		if (!trimmed) return;
-		const match = whoChips.find((c) => c.name.toLowerCase() === trimmed.toLowerCase());
-		const finalName = match ? match.name : trimmed;
-		if (!selectedChips.includes(finalName)) {
-			selectedChips = [...selectedChips, finalName];
-		}
-		whoInput = '';
-	}
+	function addWhoChip(id: string) {
+		const whoChip = whoChips.find((c) => c.id === id);
+		if (!whoChip) return;
 
-	function removeWhoChip(chipName: string) {
-		selectedChips = selectedChips.filter((c) => c !== chipName);
-	}
-
-	function addTopic(topicName: string) {
-		if (selectedTopics.length >= 2) return;
-		let formatted = topicName.trim();
-		if (!formatted) return;
-		if (!formatted.startsWith('#')) {
-			formatted = '#' + formatted;
-		}
-		formatted =
-			'#' +
-			formatted
-				.slice(1)
-				.toLowerCase()
-				.replace(/[^a-z0-9_-]/g, '');
-		if (formatted.length > 1 && !selectedTopics.includes(formatted)) {
-			selectedTopics = [...selectedTopics, formatted];
+		if (!selectedChips.some((c) => c.id === whoChip.id)) {
+			selectedChips = [...selectedChips, whoChip];
 		}
 		tagInput = '';
 	}
 
-	function removeTopic(topicName: string) {
-		selectedTopics = selectedTopics.filter((t) => t !== topicName);
+	function removeWhoChip(topicId: string) {
+		selectedChips = selectedChips.filter((c) => c.id !== topicId);
+	}
+
+	function addTopic(id: string) {
+		const topic = topicsList.find((t) => t.id === id);
+		if (!topic) return;
+
+		if (!selectedTopics.some((t) => t.id === topic.id)) {
+			selectedTopics = [...selectedTopics, topic];
+		}
+		tagInput = '';
+	}
+
+	function removeTopic(topicId: string) {
+		selectedTopics = selectedTopics.filter((t) => t.id !== topicId);
 	}
 
 	async function submit(intent: string) {
@@ -135,12 +114,16 @@
 					description: description,
 					solvedProblem: solvedProblem,
 					isAnonymous: isAnonymous,
-					intent: intent
+					intent: intent,
+					topics: selectedTopics,
+					whoBenefits: selectedChips
 				})
 			});
 			if (!res.ok) {
 				toast.error('Something went wrong');
 			}
+			const data = await res.json();
+			postId = data.postId;
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -148,7 +131,7 @@
 			isLoading.state = false;
 			toast.success('Idea Posted!');
 			await sleep(1000);
-			goto(resolve('/post/1'));
+			goto(resolve(`/post/${postId}`));
 		}
 	}
 </script>
@@ -328,19 +311,16 @@
 					class="relative flex min-h-11.5 w-full flex-wrap items-center gap-1.75 rounded-lg p-2.5 transition-colors focus-within:border-foreground-muted"
 				>
 					{#each selectedChips as chipName (chipName)}
-						{@const matchingPredefined = whoChips.find((c) => c.name === chipName)}
-						{@const emoji = matchingPredefined?.emoji || '🌱'}
 						<span
 							class="inline-flex items-center gap-1 rounded-full border border-accent bg-yellow-100 px-2.5 py-1 text-[12.5px] font-semibold text-foreground transition-colors"
 						>
-							<span>{emoji}</span>
-							{chipName}
+							{chipName.name}
 							<button
 								type="button"
 								class="ml-1 inline-flex h-3.5 w-3.5 cursor-pointer items-center justify-center rounded-full text-foreground/50 hover:bg-yellow-200 hover:text-foreground"
 								onclick={(e) => {
 									e.stopPropagation();
-									removeWhoChip(chipName);
+									removeWhoChip(chipName.id);
 								}}
 							>
 								✕
@@ -371,22 +351,21 @@
 								whoOpen = true;
 							}}
 							placeholder="Type or select who benefits..."
-							class="min-w-[120px] flex-grow border-none bg-transparent p-1 text-[13.5px] text-foreground outline-none placeholder:text-foreground-disabled"
+							class="min-w-30 grow border-none bg-transparent p-1 text-[13.5px] text-foreground outline-none placeholder:text-foreground-disabled"
 						/>
 						<Combobox.Trigger />
 
 						<Combobox.Portal>
 							<Combobox.Content
 								align="start"
-								class="w-[235px] rounded-md border border-border bg-background p-2 shadow-md outline-hidden focus-visible:outline-hidden"
+								class="w-58.75 rounded-md border border-border bg-background p-2 shadow-md outline-hidden focus-visible:outline-hidden"
 							>
-								<Combobox.Viewport class="max-h-[200px] min-h-[100px] overflow-y-auto">
+								<Combobox.Viewport class="max-h-50hmin-h-25flow-y-auto">
 									{#each filteredWhoChips as chip (chip.name)}
 										<Combobox.Item
 											class="flex w-full cursor-pointer items-center gap-2 rounded-sm px-4 py-3 text-left text-[13px] font-medium text-foreground transition-colors hover:bg-background-muted focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
-											value={chip.name}
+											value={chip.id}
 										>
-											<span>{chip.emoji}</span>
 											{chip.name}
 										</Combobox.Item>
 									{:else}
@@ -426,28 +405,30 @@
 					Topic
 					<span
 						class="rounded-full bg-background-muted px-1.5 py-px text-[10px] font-medium tracking-normal text-foreground-disabled normal-case"
-						>Pick up to 2</span
+						>Pick up to {MAXTOPICS}</span
 					>
 				</div>
 				<div
-					class="relative flex min-h-[46px] w-full flex-wrap items-center gap-1.75 rounded-lg p-2.5 transition-colors focus-within:border-foreground-muted"
+					class="min-h-11.5-full relative flex flex-wrap items-center gap-1.75 rounded-lg p-2.5 transition-colors focus-within:border-foreground-muted"
 				>
 					{#each selectedTopics as topic (topic)}
-						<span
-							class="inline-flex items-center gap-1 rounded-full border border-foreground bg-foreground px-2.5 py-1 text-[12.5px] font-semibold text-foreground-inverted transition-colors"
-						>
-							{topic}
-							<button
-								type="button"
-								class="ml-1 inline-flex h-3.5 w-3.5 cursor-pointer items-center justify-center rounded-full text-foreground-inverted/70 hover:bg-white/20 hover:text-white"
-								onclick={(e) => {
-									e.stopPropagation();
-									removeTopic(topic);
-								}}
+						{#if topic.name}
+							<span
+								class="inline-flex items-center gap-1 rounded-full border border-foreground bg-foreground px-2.5 py-1 text-[12.5px] font-semibold text-foreground-inverted transition-colors"
 							>
-								✕
-							</button>
-						</span>
+								#{topic.name}
+								<button
+									type="button"
+									class="ml-1 inline-flex h-3.5 w-3.5 cursor-pointer items-center justify-center rounded-full text-foreground-inverted/70 hover:bg-white/20 hover:text-white"
+									onclick={(e) => {
+										e.stopPropagation();
+										removeTopic(topic.id);
+									}}
+								>
+									✕
+								</button>
+							</span>
+						{/if}
 					{/each}
 
 					<Combobox.Root
@@ -477,7 +458,7 @@
 									tagOpen = true;
 								}}
 								placeholder="Type or select who benefits..."
-								class="min-w-[120px] flex-grow border-none bg-transparent p-1 text-[13.5px] text-foreground outline-none placeholder:text-foreground-disabled"
+								class="min-w-30 grow border-none bg-transparent p-1 text-[13.5px] text-foreground outline-none placeholder:text-foreground-disabled"
 							/>
 						{/if}
 						<Combobox.Trigger />
@@ -485,15 +466,15 @@
 						<Combobox.Portal>
 							<Combobox.Content
 								align="start"
-								class="w-[235px] rounded-md border border-border bg-background p-2 shadow-md outline-hidden focus-visible:outline-hidden"
+								class="w-40 rounded-md border border-border bg-background p-2 shadow-md outline-hidden focus-visible:outline-hidden"
 							>
-								<Combobox.Viewport class="max-h-[200px] min-h-[100px] overflow-y-auto">
+								<Combobox.Viewport class="max-h-50 min-h-25 overflow-y-auto">
 									{#each filteredTopics as chip (chip)}
 										<Combobox.Item
 											class="flex w-full cursor-pointer items-center gap-2 rounded-sm px-4 py-3 text-left text-[13px] font-medium text-foreground transition-colors hover:bg-background-muted focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
-											value={chip}
+											value={chip.id}
 										>
-											{chip}
+											#{chip.name}
 										</Combobox.Item>
 									{:else}
 										<div class="px-5 py-6 text-sm text-muted-foreground">
@@ -620,20 +601,19 @@
 				</div>
 			</div>
 			<div class="p-3 px-4">
-				<div
-					id="preview-desc"
-					class="mb-[10px] text-[12px] leading-[1.6] text-foreground-secondary"
-				>
+				<div id="preview-desc" class="mb-2.5 text-[12px] leading-[1.6] text-foreground-secondary">
 					{description
 						? description.substring(0, 120) + (description.length > 120 ? '...' : '')
 						: 'Your description will appear here...'}
 				</div>
 				<div class="flex flex-wrap items-center gap-1.5">
 					{#each selectedTopics as topic (topic)}
-						<span
-							class="rounded-full border border-border bg-background-muted px-2 py-[2px] text-[11px] text-foreground-secondary"
-							>{topic}</span
-						>
+						{#if topic.name}
+							<span
+								class="rounded-full border border-border bg-background-muted px-2 py-0.5 text-[11px] text-foreground-secondary"
+								>#{topic.name}</span
+							>
+						{/if}
 					{/each}
 				</div>
 				<div
@@ -649,9 +629,9 @@
 			<div class="mb-3 text-[11px] font-semibold tracking-[0.08em] text-accent uppercase">
 				Tips for a great idea
 			</div>
-			<div class="mb-[10px] flex items-start gap-[10px]">
+			<div class="mb-2.5 flex items-start gap-2.5">
 				<div
-					class="mt-px flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-foreground"
+					class="mt-px flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-foreground"
 				>
 					1
 				</div>
@@ -660,9 +640,9 @@
 					afford university" is more compelling than "free exams".
 				</div>
 			</div>
-			<div class="mb-[10px] flex items-start gap-[10px]">
+			<div class="mb-2.5 flex items-start gap-2.5">
 				<div
-					class="mt-px flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-foreground"
+					class="mt-px flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-foreground"
 				>
 					2
 				</div>
@@ -671,9 +651,9 @@
 					gets more traction than "everyone".
 				</div>
 			</div>
-			<div class="flex items-start gap-[10px]">
+			<div class="flex items-start gap-2.5">
 				<div
-					class="mt-px flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-foreground"
+					class="mt-px flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-foreground"
 				>
 					3
 				</div>
@@ -684,15 +664,15 @@
 			</div>
 		</div>
 
-		<div class="rounded-2xl border border-border bg-background p-[14px]">
+		<div class="rounded-2xl border border-border bg-background p-3.5">
 			<div
-				class="mb-[10px] text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
+				class="mb-2.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
 			>
 				Similar ideas already posted
 			</div>
-			<div class="cursor-pointer border-b border-border-muted py-[7px]">
+			<div class="cursor-pointer border-b border-border-muted py-1.75">
 				<div
-					class="mb-[3px] text-[12.5px] leading-[1.4] font-medium text-foreground hover:text-yellow-500"
+					class="mb-0.75 text-[12.5px] leading-[1.4] font-medium text-foreground hover:text-yellow-500"
 				>
 					Build your own university major from multiple institutions
 				</div>
@@ -700,9 +680,9 @@
 					<span class="font-medium text-yellow-500">389 ⚡</span> · 2 builds
 				</div>
 			</div>
-			<div class="cursor-pointer border-b border-border-muted py-[7px]">
+			<div class="cursor-pointer border-b border-border-muted py-1.75">
 				<div
-					class="mb-[3px] text-[12.5px] leading-[1.4] font-medium text-foreground hover:text-yellow-500"
+					class="mb-0.75 text-[12.5px] leading-[1.4] font-medium text-foreground hover:text-yellow-500"
 				>
 					Employer-run certification to replace degrees
 				</div>
@@ -710,7 +690,7 @@
 					<span class="font-medium text-yellow-500">198 ⚡</span> · 1 build
 				</div>
 			</div>
-			<div class="mt-[10px] text-center text-[12px] text-foreground-muted">
+			<div class="mt-2.5 text-center text-[12px] text-foreground-muted">
 				Want to <a href={resolve('/')} class="cursor-pointer font-medium text-foreground"
 					>build on one of these</a
 				> instead?
