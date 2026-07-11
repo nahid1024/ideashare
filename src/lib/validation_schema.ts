@@ -18,5 +18,10 @@ export const postSchema = z.object({
 	description: z.string().nonempty('Description is requred'),
 	solvedProblem: z.string().nullable(),
 	isAnonymous: z.boolean().default(false),
-	intent: z.enum(['draft', 'publish']).default("publish"),
+	intent: z.enum(['draft', 'publish']).default('publish')
+});
+
+export const tagSchema = z.object({
+	tagId: z.string().nonempty(),
+	postId: z.string().nonempty()
 });

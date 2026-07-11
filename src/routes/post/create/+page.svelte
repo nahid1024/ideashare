@@ -5,46 +5,46 @@
 	import LightningIcon from 'phosphor-svelte/lib/LightningIcon';
 	import { Combobox } from 'bits-ui';
 	import CircleNotchIcon from 'phosphor-svelte/lib/CircleNotchIcon';
-	import { superForm } from 'sveltekit-superforms';
-	import { zod4 } from 'sveltekit-superforms/adapters';
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 	import { sleep } from '$lib/utils.js';
 
 	const MAXTOPICS = 2;
-
-	let { data } = $props();
-	const { form, enhance, errors, submitting, delayed } = superForm(data.form, {
-		validators: zod4(postSchema),
-		validationMethod: 'onblur',
-		delayMs: 300,
-		async onUpdated({ form }) {
-			if (form.valid && form.message.success) {
-				toast.success('Post Created');
-				await sleep(1000);
-				goto(resolve(`/post/${form.message.postId}`));
-			}
-		}
-	});
-
+	let title = $state('');
+	let description = $state('');
+	let solvedProblem = $state('');
+	let isAnonymous = $state(false);
+	let isLoading = $state({ intent: '', state: false });
 	let selectedChips = $state<string[]>([]);
 	let selectedTopics = $state<string[]>([]);
 	let focusedBlock = $state('title');
 	let showDupeWarning = $state(false);
 	let tagOpen = $state(false);
 	let whoOpen = $state(false);
-
 	let tagInput = $state('');
 	let tagInputRef = $state<HTMLInputElement | null>(null);
-
 	let whoInput = $state('');
 	let whoInputRef = $state<HTMLInputElement | null>(null);
 
 	const isValid = $derived(
-		postSchema
-			.pick({ title: true, description: true })
-			.safeParse({ title: $form.title, description: $form.description }).success
+		postSchema.pick({ title: true, description: true }).safeParse({ title, description }).success
 	);
+
+	let errors = $state({
+		title: '',
+		description: ''
+	});
+
+	function validate(field: string) {
+		if (field === 'title') {
+			const titleResult = postSchema.shape.title.safeParse(title);
+			errors.title = titleResult.success ? '' : titleResult.error.issues[0].message;
+		}
+		if (field === 'desc') {
+			const descResult = postSchema.shape.description.safeParse(description);
+			errors.description = descResult.success ? '' : descResult.error.issues[0].message;
+		}
+	}
 
 	const whoChips = [
 		{ name: 'Students', emoji: '🎓' },
@@ -120,6 +120,37 @@
 	function removeTopic(topicName: string) {
 		selectedTopics = selectedTopics.filter((t) => t !== topicName);
 	}
+
+	async function submit(intent: string) {
+		isLoading.state = true;
+		isLoading.intent = intent;
+		try {
+			const res = await fetch('/api/post/create', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					title: title,
+					description: description,
+					solvedProblem: solvedProblem,
+					isAnonymous: isAnonymous,
+					intent: intent
+				})
+			});
+			if (!res.ok) {
+				toast.error('Something went wrong');
+			}
+		} catch (error) {
+			console.log(error);
+		} finally {
+			await sleep(1000);
+			isLoading.state = false;
+			toast.success('Idea Posted!');
+			await sleep(1000);
+			goto(resolve('/post/1'));
+		}
+	}
 </script>
 
 <svelte:head>
@@ -134,7 +165,7 @@
 	class="post-layout mx-auto grid max-w-215 grid-cols-1 items-start gap-7 px-3 pt-3.5 pb-20 min-[601px]:px-4 min-[601px]:pt-5 min-[761px]:grid-cols-[minmax(0,1fr)_240px] min-[761px]:px-6 min-[761px]:pt-9 min-[761px]:pb-15"
 >
 	<!-- FORM -->
-	<form class="flex flex-col gap-0" method="POST" action="?/create" use:enhance>
+	<form class="flex flex-col gap-0" method="POST">
 		<div class="mb-7">
 			<h1
 				class="mb-1.5 font-display text-[26px] leading-tight font-bold tracking-[-0.4px] text-foreground"
@@ -172,25 +203,26 @@
 					id="title-input"
 					rows="2"
 					name="title"
-					bind:value={$form.title}
+					bind:value={title}
+					oninput={() => validate('title')}
 					onfocus={() => (focusedBlock = 'title')}
 					class="w-full resize-none border-none bg-transparent font-display text-[18px] leading-[1.4] font-semibold text-foreground outline-none placeholder:font-medium placeholder:text-foreground-disabled"
 					placeholder="e.g. A universal exam system where you study anywhere and just show up to get certified"
 				></textarea>
 
 				<div class="flex">
-					{#if $errors.title}
+					{#if errors.title}
 						<div class="mt-1.25 mr-auto flex text-[11px]">
-							<p class="text-[11px] text-red-400">{$errors.title}</p>
+							<p class="text-[11px] text-red-400">{errors.title}</p>
 						</div>
 					{/if}
 					<div
 						id="title-count"
-						class="mt-1.25 ml-auto text-[11px] {$form.title.length > 100
+						class="mt-1.25 ml-auto text-[11px] {title.length > 100
 							? 'text-yellow-500'
 							: 'text-foreground-disabled'}"
 					>
-						{$form.title.length} / 120
+						{title.length} / 120
 					</div>
 				</div>
 			</div>
@@ -219,14 +251,15 @@
 					id="desc-input"
 					rows="4"
 					name="description"
-					bind:value={$form.description}
+					oninput={() => validate('desc')}
+					bind:value={description}
 					onfocus={() => (focusedBlock = 'desc')}
 					class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
 					placeholder="What exactly would this look like? How would it work? Even a rough picture is great."
 				></textarea>
-				{#if $errors.description}
+				{#if errors.description}
 					<div class="mt-1.25 mr-auto flex text-[11px]">
-						<p class="text-[11px] text-red-400">{$errors.description}</p>
+						<p class="text-[11px] text-red-400">{errors.description}</p>
 					</div>
 				{/if}
 			</div>
@@ -255,7 +288,7 @@
 					id="problem-input"
 					rows="2"
 					name="solvedProblem"
-					bind:value={$form.solvedProblem}
+					bind:value={solvedProblem}
 					onfocus={() => (focusedBlock = 'problem')}
 					class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
 					placeholder="e.g. University is too expensive and location-dependent for most people in the world."
@@ -492,7 +525,7 @@
 							class="peer absolute h-0 w-0 opacity-0"
 							name="isanonymous"
 							type="checkbox"
-							bind:checked={$form.isAnonymous}
+							bind:checked={isAnonymous}
 						/>
 						<div
 							class="absolute inset-0 rounded-full bg-border-strong transition-colors peer-checked:bg-accent"
@@ -535,19 +568,17 @@
 			</div>
 		{/if}
 
-		<input type="hidden" name="intent" bind:value={$form.intent} />
-
 		<!-- Submit bar -->
 		<div class="mt-5 flex flex-wrap items-center gap-2.5">
 			<button
 				class="flex cursor-pointer items-center gap-2 rounded-full border-none bg-primary px-7 py-2.75 font-[inherit] text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-85 disabled:bg-border-strong disabled:text-foreground-disabled"
-				type="submit"
+				type="button"
 				name="intent"
 				value="publish"
-				disabled={!isValid || $submitting}
-				onclick={() => ($form.intent = 'publish')}
+				disabled={!isValid || isLoading.state}
+				onclick={() => submit('publish')}
 			>
-				{#if $delayed && $form.intent === 'publish'}
+				{#if isLoading.state && isLoading.intent === 'publish'}
 					<CircleNotchIcon class="animate-spin" />
 				{:else}
 					Publish idea
@@ -555,13 +586,13 @@
 			</button>
 			<button
 				class="cursor-pointer rounded-full border border-border bg-transparent px-5 py-2.75 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground disabled:border-border disabled:text-foreground-disabled"
-				type="submit"
+				type="button"
 				name="intent"
 				value="draft"
-				disabled={!isValid || $submitting}
-				onclick={() => ($form.intent = 'draft')}
+				disabled={!isValid || isLoading.state}
+				onclick={() => submit('draft')}
 			>
-				{#if $delayed && $form.intent === 'draft'}
+				{#if isLoading.state && isLoading.intent === 'draft'}
 					<CircleNotchIcon class="animate-spin" />
 				{:else}
 					Save as draft
@@ -585,7 +616,7 @@
 					id="preview-title"
 					class="font-display text-[13.5px] leading-[1.4] font-bold text-foreground"
 				>
-					{$form.title || 'Your idea title will appear here...'}
+					{title || 'Your idea title will appear here...'}
 				</div>
 			</div>
 			<div class="p-3 px-4">
@@ -593,8 +624,8 @@
 					id="preview-desc"
 					class="mb-[10px] text-[12px] leading-[1.6] text-foreground-secondary"
 				>
-					{$form.description
-						? $form.description.substring(0, 120) + ($form.description.length > 120 ? '...' : '')
+					{description
+						? description.substring(0, 120) + (description.length > 120 ? '...' : '')
 						: 'Your description will appear here...'}
 				</div>
 				<div class="flex flex-wrap items-center gap-1.5">
