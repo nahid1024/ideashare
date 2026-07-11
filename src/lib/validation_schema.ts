@@ -16,7 +16,7 @@ export const signupSchema = z
 export const postSchema = z.object({
 	title: z.string().nonempty('Title is required').max(120, 'Title cannot exceed 120 characters'),
 	description: z.string().nonempty('Description is requred'),
-	solvedProblems: z.string(),
+	solvedProblem: z.string().nullable(),
 	isAnonymous: z.boolean().default(false),
-	intent: z.enum(['draft', 'publish'])
+	intent: z.enum(['draft', 'publish']).default("publish"),
 });

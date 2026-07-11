@@ -1,87 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap');
 @import 'tailwindcss';
 
-@theme {
-	/* ── 1. Raw Palette (Yellow) ────────────────────── */
-	--color-yellow-50: #fffef5;
-	--color-yellow-100: #fff8dc;
-	--color-yellow-200: #ffe066;
-	--color-yellow-300: #f5c518;
-	--color-yellow-400: #e0b010;
-	--color-yellow-500: #c49a00;
-	--color-yellow-600: #a07d00;
-	--color-yellow-700: #7a5f00;
-	--color-yellow-800: #553f00;
-	--color-yellow-900: #2e2200;
+/* =======================================================
+   LIGHT THEME (Source of truth)
+======================================================= */
 
-	/* ── 2. Semantic Background Tokens ───────────────── */
-	--color-background: #ffffff;
-	--color-background-secondary: #f9fafb;
-	--color-background-muted: #f3f4f6;
-	--color-background-card: #ffffff;
-	--color-background-popover: #ffffff;
-
-	/* ── 3. Semantic Text Tokens ────────────────────── */
-	--color-foreground: #111111;
-	--color-foreground-secondary: #475569;
-	--color-foreground-muted: #64748b;
-	--color-foreground-disabled: #94a3b8;
-	--color-foreground-inverted: #ffffff;
-
-	/* ── 4. Brand ───────────────────────────────────── */
-	--color-brand: #3b82f6;
-	--color-brand-hover: #1d4ed8;
-	--color-brand-light: #eff6ff;
-	--color-brand-mid: #60a5fa;
-	--color-brand-dark: #1e3a8a;
-	--color-brand-foreground: #ffffff;
-
-	/* ── 5. Primary / Secondary / Accent / Muted ────── */
-	--color-primary: #1c1c1c;
-	--color-primary-hover: #1e293b;
-	--color-primary-foreground: #ffffff;
-
-	--color-secondary: #f1f5f9;
-	--color-secondary-hover: #e2e8f0;
-	--color-secondary-foreground: #0f172a;
-
-	--color-accent: #f5c518;
-	--color-accent-hover: #e0b010;
-	--color-accent-foreground: #2e2200;
-
-	--color-muted: #f1f5f9;
-	--color-muted-foreground: #64748b;
-
-	/* ── 6. Borders & Rings ─────────────────────────── */
-	--color-border: #e2e8f0;
-	--color-border-muted: #f1f5f9;
-	--color-border-strong: #cbd5e1;
-	--color-border-brand: #3b82f6;
-	--color-border-input: #cbd5e1;
-	--color-ring: #3b82f6;
-
-	/* ── 7. Status ──────────────────────────────────── */
-	--color-success: #10b981;
-	--color-success-background: #ecfdf5;
-	--color-success-border: #a7f3d0;
-	--color-success-foreground: #065f46;
-
-	--color-warning: #f59e0b;
-	--color-warning-background: #fffbeb;
-	--color-warning-border: #fde68a;
-	--color-warning-foreground: #92400e;
-
-	--color-destructive: #ef4444;
-	--color-destructive-background: #fef2f2;
-	--color-destructive-border: #fca5a5;
-	--color-destructive-foreground: #991b1b;
-
-	--color-info: #3b82f6;
-	--color-info-background: #eff6ff;
-	--color-info-border: #bfdbfe;
-	--color-info-foreground: #1e40af;
-
-	/* ── 8. Border Radius ────────────────────────────── */
+:root {
+	/* Radius */
+	--radius: 10px;
 	--radius-xs: 4px;
 	--radius-sm: 6px;
 	--radius-md: 10px;
@@ -90,32 +16,306 @@
 	--radius-2xl: 24px;
 	--radius-full: 999px;
 
-	/* ── 9. Font Families ────────────────────────────── */
+	/* Fonts */
 	--font-display: 'Bricolage Grotesque', sans-serif;
 	--font-body: 'DM Sans', sans-serif;
+
+	/* Yellow Palette */
+	--yellow-50: #fffef5;
+	--yellow-100: #fff8dc;
+	--yellow-200: #ffe066;
+	--yellow-300: #f5c518;
+	--yellow-400: #e0b010;
+	--yellow-500: #c49a00;
+	--yellow-600: #a07d00;
+	--yellow-700: #7a5f00;
+	--yellow-800: #553f00;
+	--yellow-900: #2e2200;
+
+	/* shadcn Variables */
+
+	--background: #ffffff;
+	--foreground: #111111;
+
+	--card: #ffffff;
+	--card-foreground: #111111;
+
+	--popover: #ffffff;
+	--popover-foreground: #111111;
+
+	--primary: #1c1c1c;
+	--primary-foreground: #ffffff;
+
+	--secondary: #f1f5f9;
+	--secondary-foreground: #0f172a;
+
+	--accent: #f5c518;
+	--accent-foreground: #2e2200;
+
+	--muted: #f1f5f9;
+	--muted-foreground: #64748b;
+
+	--destructive: #ef4444;
+	--destructive-foreground: #ffffff;
+
+	--border: #e2e8f0;
+	--input: #cbd5e1;
+	--ring: #3b82f6;
+
+	/* Sidebar */
+
+	--sidebar: #f9fafb;
+	--sidebar-foreground: #111111;
+
+	--sidebar-primary: #3b82f6;
+	--sidebar-primary-foreground: #ffffff;
+
+	--sidebar-accent: #f1f5f9;
+	--sidebar-accent-foreground: #111111;
+
+	--sidebar-border: #e2e8f0;
+	--sidebar-ring: #3b82f6;
+
+	/* Charts */
+
+	--chart-1: #3b82f6;
+	--chart-2: #10b981;
+	--chart-3: #f5c518;
+	--chart-4: #f59e0b;
+	--chart-5: #ef4444;
+
+	/* ========= Custom semantic colors ========= */
+
+	--background-secondary: #f9fafb;
+	--background-muted: #f3f4f6;
+
+	--foreground-secondary: #475569;
+	--foreground-muted: #64748b;
+	--foreground-disabled: #94a3b8;
+	--foreground-inverted: #ffffff;
+
+	--brand: #3b82f6;
+	--brand-hover: #1d4ed8;
+	--brand-light: #eff6ff;
+	--brand-mid: #60a5fa;
+	--brand-dark: #1e3a8a;
+	--brand-foreground: #ffffff;
+
+	--success: #10b981;
+	--success-background: #ecfdf5;
+	--success-border: #a7f3d0;
+	--success-foreground: #065f46;
+
+	--warning: #f59e0b;
+	--warning-background: #fffbeb;
+	--warning-border: #fde68a;
+	--warning-foreground: #92400e;
+
+	--info: #3b82f6;
+	--info-background: #eff6ff;
+	--info-border: #bfdbfe;
+	--info-foreground: #1e40af;
+
+	--border-muted: #f1f5f9;
+	--border-strong: #cbd5e1;
+	--border-brand: #3b82f6;
 }
 
-/* ── Global Base Styles & Dark Mode Overrides ────── */
+/* =======================================================
+   DARK THEME
+======================================================= */
+
+.dark {
+	--background: #0f172a;
+	--foreground: #f8fafc;
+
+	--card: #1e293b;
+	--card-foreground: #f8fafc;
+
+	--popover: #1e293b;
+	--popover-foreground: #f8fafc;
+
+	--primary: #f8fafc;
+	--primary-foreground: #0f172a;
+
+	--secondary: #334155;
+	--secondary-foreground: #f8fafc;
+
+	--accent: #f5c518;
+	--accent-foreground: #2e2200;
+
+	--muted: #334155;
+	--muted-foreground: #94a3b8;
+
+	--border: #334155;
+	--input: #334155;
+	--ring: #60a5fa;
+
+	--sidebar: #1e293b;
+	--sidebar-foreground: #f8fafc;
+
+	--sidebar-primary: #60a5fa;
+	--sidebar-primary-foreground: #ffffff;
+
+	--sidebar-accent: #334155;
+	--sidebar-accent-foreground: #f8fafc;
+
+	--sidebar-border: #334155;
+	--sidebar-ring: #60a5fa;
+
+	--background-secondary: #1e293b;
+	--background-muted: #334155;
+
+	--foreground-secondary: #cbd5e1;
+	--foreground-muted: #94a3b8;
+	--foreground-disabled: #64748b;
+	--foreground-inverted: #0f172a;
+
+	--brand: #60a5fa;
+	--brand-hover: #3b82f6;
+	--brand-light: #1e3a8a;
+	--brand-mid: #93c5fd;
+	--brand-dark: #bfdbfe;
+
+	--border-muted: #1e293b;
+	--border-strong: #475569;
+	--border-brand: #60a5fa;
+}
+
+/* =======================================================
+   Tailwind v4 Theme
+======================================================= */
+
+@theme inline {
+	/* shadcn */
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+
+	/* sidebar */
+
+	--color-sidebar: var(--sidebar);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-ring: var(--sidebar-ring);
+
+	/* charts */
+
+	--color-chart-1: var(--chart-1);
+	--color-chart-2: var(--chart-2);
+	--color-chart-3: var(--chart-3);
+	--color-chart-4: var(--chart-4);
+	--color-chart-5: var(--chart-5);
+
+	/* your semantic colors */
+
+	--color-background-secondary: var(--background-secondary);
+	--color-background-muted: var(--background-muted);
+
+	--color-foreground-secondary: var(--foreground-secondary);
+	--color-foreground-muted: var(--foreground-muted);
+	--color-foreground-disabled: var(--foreground-disabled);
+	--color-foreground-inverted: var(--foreground-inverted);
+
+	--color-brand: var(--brand);
+	--color-brand-hover: var(--brand-hover);
+	--color-brand-light: var(--brand-light);
+	--color-brand-mid: var(--brand-mid);
+	--color-brand-dark: var(--brand-dark);
+	--color-brand-foreground: var(--brand-foreground);
+
+	--color-success: var(--success);
+	--color-success-background: var(--success-background);
+	--color-success-border: var(--success-border);
+	--color-success-foreground: var(--success-foreground);
+
+	--color-warning: var(--warning);
+	--color-warning-background: var(--warning-background);
+	--color-warning-border: var(--warning-border);
+	--color-warning-foreground: var(--warning-foreground);
+
+	--color-info: var(--info);
+	--color-info-background: var(--info-background);
+	--color-info-border: var(--info-border);
+	--color-info-foreground: var(--info-foreground);
+
+	--color-border-muted: var(--border-muted);
+	--color-border-strong: var(--border-strong);
+	--color-border-brand: var(--border-brand);
+
+	/* yellow palette */
+
+	--color-yellow-50: var(--yellow-50);
+	--color-yellow-100: var(--yellow-100);
+	--color-yellow-200: var(--yellow-200);
+	--color-yellow-300: var(--yellow-300);
+	--color-yellow-400: var(--yellow-400);
+	--color-yellow-500: var(--yellow-500);
+	--color-yellow-600: var(--yellow-600);
+	--color-yellow-700: var(--yellow-700);
+	--color-yellow-800: var(--yellow-800);
+	--color-yellow-900: var(--yellow-900);
+
+	/* fonts */
+
+	--font-display: var(--font-display);
+	--font-body: var(--font-body);
+
+	/* radius */
+
+	--radius-xs: var(--radius-xs);
+	--radius-sm: var(--radius-sm);
+	--radius-md: var(--radius-md);
+	--radius-lg: var(--radius-lg);
+	--radius-xl: var(--radius-xl);
+	--radius-2xl: var(--radius-2xl);
+	--radius-full: var(--radius-full);
+}
+
 @layer base {
 	body {
-		background-color: var(--color-background-muted);
-		color: var(--color-foreground);
+		font-family: var(--font-body);
+		background: var(--background-muted);
+		color: var(--foreground);
 	}
 
-	.dark {
-		--color-background: #0f172a;
-		--color-background-secondary: #1e293b;
-		--color-background-muted: #334155;
-		--color-background-card: #1e293b;
-		--color-background-popover: #1e293b;
-
-		--color-foreground: #f8fafc;
-		--color-foreground-secondary: #cbd5e1;
-		--color-foreground-muted: #94a3b8;
-		--color-foreground-disabled: #64748b;
-		--color-foreground-inverted: #0f172a;
-
-		--color-border: #334155;
-		--color-border-muted: #1e293b;
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-display);
 	}
 }

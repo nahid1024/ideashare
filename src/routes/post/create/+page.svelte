@@ -1,15 +1,32 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import Navbar from '$lib/components/Navbar.svelte';
-	import { createPost } from '$lib/remotes/page.remote';
 	import { postSchema } from '$lib/validation_schema';
 	import LightningIcon from 'phosphor-svelte/lib/LightningIcon';
 	import { Combobox } from 'bits-ui';
+	import CircleNotchIcon from 'phosphor-svelte/lib/CircleNotchIcon';
+	import { superForm } from 'sveltekit-superforms';
+	import { zod4 } from 'sveltekit-superforms/adapters';
+	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
+	import { sleep } from '$lib/utils.js';
 
 	const MAXTOPICS = 2;
-	let title = $state('');
-	let description = $state('');
-	let solvedProblem = $state('');
+
+	let { data } = $props();
+	const { form, enhance, errors, submitting, delayed } = superForm(data.form, {
+		validators: zod4(postSchema),
+		validationMethod: 'onblur',
+		delayMs: 300,
+		async onUpdated({ form }) {
+			if (form.valid && form.message.success) {
+				toast.success('Post Created');
+				await sleep(1000);
+				goto(resolve(`/post/${form.message.postId}`));
+			}
+		}
+	});
+
 	let selectedChips = $state<string[]>([]);
 	let selectedTopics = $state<string[]>([]);
 	let focusedBlock = $state('title');
@@ -24,7 +41,9 @@
 	let whoInputRef = $state<HTMLInputElement | null>(null);
 
 	const isValid = $derived(
-		postSchema.pick({ title: true, description: true }).safeParse({ title, description }).success
+		postSchema
+			.pick({ title: true, description: true })
+			.safeParse({ title: $form.title, description: $form.description }).success
 	);
 
 	const whoChips = [
@@ -48,10 +67,6 @@
 		'#environment',
 		'#governance'
 	];
-	let errors = $state({
-		title: '',
-		description: ''
-	});
 
 	const filteredTopics = $derived(
 		topicsList.filter(
@@ -67,17 +82,6 @@
 				!selectedChips.includes(chip.name)
 		)
 	);
-
-	function validate(field: string) {
-		if (field === 'title') {
-			const titleResult = postSchema.shape.title.safeParse(title);
-			errors.title = titleResult.success ? '' : titleResult.error.issues[0].message;
-		}
-		if (field === 'desc') {
-			const descResult = postSchema.shape.description.safeParse(description);
-			errors.description = descResult.success ? '' : descResult.error.issues[0].message;
-		}
-	}
 
 	function addWhoChip(chipName: string) {
 		const trimmed = chipName.trim();
@@ -124,13 +128,13 @@
 
 <!-- NAVBAR -->
 <Navbar hasBackButton={true} />
-
 <!-- PAGE -->
+
 <div
 	class="post-layout mx-auto grid max-w-215 grid-cols-1 items-start gap-7 px-3 pt-3.5 pb-20 min-[601px]:px-4 min-[601px]:pt-5 min-[761px]:grid-cols-[minmax(0,1fr)_240px] min-[761px]:px-6 min-[761px]:pt-9 min-[761px]:pb-15"
 >
 	<!-- FORM -->
-	<form {...createPost} class="flex flex-col gap-0">
+	<form class="flex flex-col gap-0" method="POST" action="?/create" use:enhance>
 		<div class="mb-7">
 			<h1
 				class="mb-1.5 font-display text-[26px] leading-tight font-bold tracking-[-0.4px] text-foreground"
@@ -147,13 +151,13 @@
 			<!-- Title field -->
 			<div
 				id="block-title"
-				class="field-block relative rounded-t-2xl border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
+				class="field-block relative overflow-hidden rounded-t-2xl border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
 				'title'
 					? 'bg-yellow-50'
 					: ''}"
 			>
 				<div
-					class="field-accent absolute top-0 bottom-0 left-0 w-0.75 rounded-tl-2xl transition-colors {focusedBlock ===
+					class="field-accent absolute top-0 bottom-0 left-0 w-0.75 transition-colors {focusedBlock ===
 					'title'
 						? 'bg-accent'
 						: 'bg-transparent'}"
@@ -167,27 +171,26 @@
 				<textarea
 					id="title-input"
 					rows="2"
-					bind:value={title}
-					oninput={() => validate('title')}
+					name="title"
+					bind:value={$form.title}
 					onfocus={() => (focusedBlock = 'title')}
-					{...createPost.fields.title.as('text')}
 					class="w-full resize-none border-none bg-transparent font-display text-[18px] leading-[1.4] font-semibold text-foreground outline-none placeholder:font-medium placeholder:text-foreground-disabled"
 					placeholder="e.g. A universal exam system where you study anywhere and just show up to get certified"
 				></textarea>
 
 				<div class="flex">
-					{#if errors.title}
+					{#if $errors.title}
 						<div class="mt-1.25 mr-auto flex text-[11px]">
-							<p class="text-[11px] text-red-400">{errors.title}</p>
+							<p class="text-[11px] text-red-400">{$errors.title}</p>
 						</div>
 					{/if}
 					<div
 						id="title-count"
-						class="mt-1.25 ml-auto text-[11px] {title.length > 100
+						class="mt-1.25 ml-auto text-[11px] {$form.title.length > 100
 							? 'text-yellow-500'
 							: 'text-foreground-disabled'}"
 					>
-						{title.length} / 120
+						{$form.title.length} / 120
 					</div>
 				</div>
 			</div>
@@ -215,16 +218,15 @@
 				<textarea
 					id="desc-input"
 					rows="4"
-					bind:value={description}
-					oninput={() => validate('desc')}
-					{...createPost.fields.description.as('text')}
+					name="description"
+					bind:value={$form.description}
 					onfocus={() => (focusedBlock = 'desc')}
 					class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
 					placeholder="What exactly would this look like? How would it work? Even a rough picture is great."
 				></textarea>
-				{#if errors.description}
+				{#if $errors.description}
 					<div class="mt-1.25 mr-auto flex text-[11px]">
-						<p class="text-[11px] text-red-400">{errors.description}</p>
+						<p class="text-[11px] text-red-400">{$errors.description}</p>
 					</div>
 				{/if}
 			</div>
@@ -252,8 +254,8 @@
 				<textarea
 					id="problem-input"
 					rows="2"
-					bind:value={solvedProblem}
-					{...createPost.fields.solvedProblems.as('text')}
+					name="solvedProblem"
+					bind:value={$form.solvedProblem}
 					onfocus={() => (focusedBlock = 'problem')}
 					class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
 					placeholder="e.g. University is too expensive and location-dependent for most people in the world."
@@ -290,7 +292,7 @@
 					>
 				</div>
 				<div
-					class="relative flex min-h-[46px] w-full flex-wrap items-center gap-1.75 rounded-lg p-2.5 transition-colors focus-within:border-foreground-muted"
+					class="relative flex min-h-11.5 w-full flex-wrap items-center gap-1.75 rounded-lg p-2.5 transition-colors focus-within:border-foreground-muted"
 				>
 					{#each selectedChips as chipName (chipName)}
 						{@const matchingPredefined = whoChips.find((c) => c.name === chipName)}
@@ -488,7 +490,9 @@
 						<input
 							id="anon-toggle"
 							class="peer absolute h-0 w-0 opacity-0"
-							{...createPost.fields.isAnonymous.as('checkbox')}
+							name="isanonymous"
+							type="checkbox"
+							bind:checked={$form.isAnonymous}
 						/>
 						<div
 							class="absolute inset-0 rounded-full bg-border-strong transition-colors peer-checked:bg-accent"
@@ -531,6 +535,8 @@
 			</div>
 		{/if}
 
+		<input type="hidden" name="intent" bind:value={$form.intent} />
+
 		<!-- Submit bar -->
 		<div class="mt-5 flex flex-wrap items-center gap-2.5">
 			<button
@@ -538,17 +544,29 @@
 				type="submit"
 				name="intent"
 				value="publish"
-				disabled={!isValid}
+				disabled={!isValid || $submitting}
+				onclick={() => ($form.intent = 'publish')}
 			>
-				Publish idea
+				{#if $delayed && $form.intent === 'publish'}
+					<CircleNotchIcon class="animate-spin" />
+				{:else}
+					Publish idea
+				{/if}
 			</button>
 			<button
 				class="cursor-pointer rounded-full border border-border bg-transparent px-5 py-2.75 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground disabled:border-border disabled:text-foreground-disabled"
 				type="submit"
 				name="intent"
-				disabled={!isValid}
-				value="draft">Save as draft</button
+				value="draft"
+				disabled={!isValid || $submitting}
+				onclick={() => ($form.intent = 'draft')}
 			>
+				{#if $delayed && $form.intent === 'draft'}
+					<CircleNotchIcon class="animate-spin" />
+				{:else}
+					Save as draft
+				{/if}
+			</button>
 			<span class="text-[12px] text-foreground-muted">Your idea will be visible to everyone</span>
 		</div>
 	</form>
@@ -560,14 +578,14 @@
 		</div>
 
 		<div
-			class="overflow-hidden rounded-2xl border border-border bg-background-card shadow-[0_4px_20px_rgba(0,0,0,0.06)]"
+			class="bg-background-card overflow-hidden rounded-2xl border border-border shadow-[0_4px_20px_rgba(0,0,0,0.06)]"
 		>
 			<div class="bg-accent p-4">
 				<div
 					id="preview-title"
 					class="font-display text-[13.5px] leading-[1.4] font-bold text-foreground"
 				>
-					{title || 'Your idea title will appear here...'}
+					{$form.title || 'Your idea title will appear here...'}
 				</div>
 			</div>
 			<div class="p-3 px-4">
@@ -575,8 +593,8 @@
 					id="preview-desc"
 					class="mb-[10px] text-[12px] leading-[1.6] text-foreground-secondary"
 				>
-					{description
-						? description.substring(0, 120) + (description.length > 120 ? '...' : '')
+					{$form.description
+						? $form.description.substring(0, 120) + ($form.description.length > 120 ? '...' : '')
 						: 'Your description will appear here...'}
 				</div>
 				<div class="flex flex-wrap items-center gap-1.5">
