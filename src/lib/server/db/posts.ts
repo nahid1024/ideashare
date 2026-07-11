@@ -13,6 +13,7 @@ export const posts = pgTable('posts', {
 	title: varchar('title').notNull(),
 	description: text('description'),
 	solvedProblems: text('solvedProblems'),
+	whoBenefits: text('whoBenefits'),
 	isAnonymous: boolean('isAnonymous').notNull().default(false),
 	isPublished: boolean('isPublished').notNull().default(false),
 	authorId: text('authorId').references(() => user.id),

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import Navbar from '$lib/components/Navbar.svelte';
-	import { postSchema, topicSchema, whoBenefitsSchema } from '$lib/validation_schema';
+	import { postSchema, topicSchema } from '$lib/validation_schema';
 	import LightningIcon from 'phosphor-svelte/lib/LightningIcon';
 	import { Combobox } from 'bits-ui';
 	import CircleNotchIcon from 'phosphor-svelte/lib/CircleNotchIcon';
@@ -12,29 +12,24 @@
 
 	const MAXTOPICS = 5;
 	type Topics = z.infer<typeof topicSchema>;
-	type whoBenefits = z.infer<typeof whoBenefitsSchema>;
 
 	let title = $state('');
 	let description = $state('');
 	let solvedProblem = $state('');
 	let isAnonymous = $state(false);
+	let whoBenefits = $state<string>();
 	let isLoading = $state({ intent: '', state: false });
 	let postId = $state('');
-	let selectedChips = $state<whoBenefits[]>([]);
 	let selectedTopics = $state<Topics[]>([]);
 	let focusedBlock = $state('title');
 	let showDupeWarning = $state(false);
 	let tagOpen = $state(false);
-	let whoOpen = $state(false);
 	let tagInput = $state('');
 	let tagInputRef = $state<HTMLInputElement | null>(null);
-	let whoInput = $state('');
-	let whoInputRef = $state<HTMLInputElement | null>(null);
 
 	const { data } = $props();
 
 	const topicsList = data.topics;
-	const whoChips = data.whoBenefitsList;
 
 	const isValid = $derived(
 		postSchema.pick({ title: true, description: true }).safeParse({ title, description }).success
@@ -64,28 +59,6 @@
 		)
 	);
 
-	const filteredWhoChips = $derived(
-		whoChips.filter(
-			(chip) =>
-				chip.name.toLowerCase().includes(whoInput.toLowerCase()) &&
-				!selectedChips.some((t) => t.name === chip.name)
-		)
-	);
-
-	function addWhoChip(id: string) {
-		const whoChip = whoChips.find((c) => c.id === id);
-		if (!whoChip) return;
-
-		if (!selectedChips.some((c) => c.id === whoChip.id)) {
-			selectedChips = [...selectedChips, whoChip];
-		}
-		tagInput = '';
-	}
-
-	function removeWhoChip(topicId: string) {
-		selectedChips = selectedChips.filter((c) => c.id !== topicId);
-	}
-
 	function addTopic(id: string) {
 		const topic = topicsList.find((t) => t.id === id);
 		if (!topic) return;
@@ -113,10 +86,10 @@
 					title: title,
 					description: description,
 					solvedProblem: solvedProblem,
+					whoBenefits: whoBenefits,
 					isAnonymous: isAnonymous,
 					intent: intent,
-					topics: selectedTopics,
-					whoBenefits: selectedChips
+					topics: selectedTopics
 				})
 			});
 			if (!res.ok) {
@@ -279,21 +252,17 @@
 			</div>
 
 			<!-- Who benefits -->
+
 			<div
-				id="block-who"
-				role="presentation"
-				onclick={() => {
-					focusedBlock = 'who';
-					whoInputRef?.focus();
-				}}
+				id="block-problem"
 				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
-				'who'
+				'whobenefit'
 					? 'bg-yellow-50'
 					: ''}"
 			>
 				<div
 					class="field-accent absolute top-0 bottom-0 left-0 w-0.75 transition-colors {focusedBlock ===
-					'who'
+					'whobenefit'
 						? 'bg-accent'
 						: 'bg-transparent'}"
 				></div>
@@ -302,84 +271,17 @@
 				>
 					<div class="inline-block h-1.25 w-1.25 rounded-full bg-yellow-500"></div>
 					Who would benefit?
-					<span
-						class="rounded-full bg-background-muted px-1.5 py-px text-[10px] font-medium tracking-normal text-foreground-disabled normal-case"
-						>Pick all that apply</span
-					>
 				</div>
-				<div
-					class="relative flex min-h-11.5 w-full flex-wrap items-center gap-1.75 rounded-lg p-2.5 transition-colors focus-within:border-foreground-muted"
-				>
-					{#each selectedChips as chipName (chipName)}
-						<span
-							class="inline-flex items-center gap-1 rounded-full border border-accent bg-yellow-100 px-2.5 py-1 text-[12.5px] font-semibold text-foreground transition-colors"
-						>
-							{chipName.name}
-							<button
-								type="button"
-								class="ml-1 inline-flex h-3.5 w-3.5 cursor-pointer items-center justify-center rounded-full text-foreground/50 hover:bg-yellow-200 hover:text-foreground"
-								onclick={(e) => {
-									e.stopPropagation();
-									removeWhoChip(chipName.id);
-								}}
-							>
-								✕
-							</button>
-						</span>
-					{/each}
-					<Combobox.Root
-						type="single"
-						value={whoInput}
-						bind:open={whoOpen}
-						onValueChange={(v) => {
-							if (v) {
-								addWhoChip(v);
-								if (whoInputRef) whoInputRef.value = '';
-							}
-						}}
-						onOpenChangeComplete={(open) => {
-							if (!open) {
-								if (whoInputRef) whoInputRef.value = '';
-							}
-						}}
-					>
-						<Combobox.Input
-							type="text"
-							bind:ref={whoInputRef}
-							oninput={(e) => (whoInput = e.currentTarget.value)}
-							onclick={() => {
-								whoOpen = true;
-							}}
-							placeholder="Type or select who benefits..."
-							class="min-w-30 grow border-none bg-transparent p-1 text-[13.5px] text-foreground outline-none placeholder:text-foreground-disabled"
-						/>
-						<Combobox.Trigger />
-
-						<Combobox.Portal>
-							<Combobox.Content
-								align="start"
-								class="w-58.75 rounded-md border border-border bg-background p-2 shadow-md outline-hidden focus-visible:outline-hidden"
-							>
-								<Combobox.Viewport class="max-h-50hmin-h-25flow-y-auto">
-									{#each filteredWhoChips as chip (chip.name)}
-										<Combobox.Item
-											class="flex w-full cursor-pointer items-center gap-2 rounded-sm px-4 py-3 text-left text-[13px] font-medium text-foreground transition-colors hover:bg-background-muted focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
-											value={chip.id}
-										>
-											{chip.name}
-										</Combobox.Item>
-									{:else}
-										<div class="px-5 py-6 text-sm text-muted-foreground">
-											No results found, try again.
-										</div>
-									{/each}
-								</Combobox.Viewport>
-							</Combobox.Content>
-						</Combobox.Portal>
-					</Combobox.Root>
-				</div>
+				<textarea
+					id="benefit-input"
+					rows="2"
+					name="whobenefit"
+					bind:value={whoBenefits}
+					onfocus={() => (focusedBlock = 'whobenefit')}
+					class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
+					placeholder="e.g. Students in developing countries, working adults..."
+				></textarea>
 			</div>
-
 			<!-- Topic tags -->
 			<div
 				id="block-topic"

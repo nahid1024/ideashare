@@ -1,10 +1,10 @@
 <script>
-	import { sessionData } from '$lib/remotes/session.remote';
+	import { userData } from '$lib/remotes/session.remote';
 	import { resolve } from '$app/paths';
 	import AvatarDropdown from './AvatarDropdown.svelte';
 	import PlusIcon from 'phosphor-svelte/lib/PlusIcon';
 	let { hasBackButton } = $props();
-	const data = await sessionData();
+	const data = await userData();
 </script>
 
 <nav
@@ -38,7 +38,7 @@
 			<input
 				type="text"
 				placeholder="Search ideas..."
-				class="h-9 w-full rounded-full border border-border-input bg-background-muted px-4 text-[13px] text-foreground transition-colors outline-none placeholder:text-foreground-muted focus:border-accent focus:bg-background"
+				class="border-border-input h-9 w-full rounded-full border bg-background-muted px-4 text-[13px] text-foreground transition-colors outline-none placeholder:text-foreground-muted focus:border-accent focus:bg-background"
 			/>
 		</div>
 	{/if}

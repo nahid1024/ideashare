@@ -6,5 +6,3 @@ export * from './refinements';
 export * from './share';
 export * from './sparked';
 export * from './topics';
-export * from './whoBenefeits';
-export * from './whobenefitslist';

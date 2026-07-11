@@ -1,6 +1,5 @@
 import { db } from '$lib/server/db';
 import { topics } from '$lib/server/db/topics';
-import { whoBenefitsList } from '$lib/server/db/whobenefitslist';
 import type { PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 
@@ -10,11 +9,9 @@ export const load: PageServerLoad = async (event) => {
 	}
 
 	const allTopics = await db.select().from(topics);
-	const allWhoBenefits = await db.select().from(whoBenefitsList);
 
 	return {
-		topics: allTopics,
-		whoBenefitsList: allWhoBenefits
+		topics: allTopics
 	};
 };
 
