@@ -11,12 +11,14 @@ import { refinementVotes } from './refinementVotes';
 export const posts = pgTable('posts', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	title: varchar('title').notNull(),
-	description: text('description'),
+	description: text('description').notNull(),
 	solvedProblems: text('solvedProblems'),
 	whoBenefits: text('whoBenefits'),
 	isAnonymous: boolean('isAnonymous').notNull().default(false),
 	isPublished: boolean('isPublished').notNull().default(false),
-	authorId: text('authorId').references(() => user.id),
+	authorId: text('authorId')
+		.notNull()
+		.references(() => user.id),
 	createdAt: timestamp('createdAt').defaultNow().notNull(),
 	updatedAt: timestamp('updatedAt')
 		.defaultNow()

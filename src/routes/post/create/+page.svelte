@@ -15,7 +15,7 @@
 
 	let title = $state('');
 	let description = $state('');
-	let solvedProblem = $state('');
+	let solvedProblem = $state<string>();
 	let isAnonymous = $state(false);
 	let whoBenefits = $state<string>();
 	let isLoading = $state({ intent: '', state: false });
@@ -29,7 +29,7 @@
 
 	const { data } = $props();
 
-	const topicsList = data.topics;
+	const topicsList = $derived(data.topics);
 
 	const isValid = $derived(
 		postSchema.pick({ title: true, description: true }).safeParse({ title, description }).success
@@ -86,8 +86,8 @@
 					title: title,
 					description: description,
 					solvedProblem: solvedProblem,
-					whoBenefits: whoBenefits,
-					isAnonymous: isAnonymous,
+					whoBenefits: whoBenefits ?? null,
+					isAnonymous: isAnonymous ?? null,
 					intent: intent,
 					topics: selectedTopics
 				})

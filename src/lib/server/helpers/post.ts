@@ -3,6 +3,8 @@ import { db } from '../db';
 import { posts } from '../db/posts';
 import z from 'zod';
 import { postTopics } from '../db/postTopics';
+import { eq } from 'drizzle-orm';
+import { error } from 'console';
 
 type CreatePost = z.infer<typeof postSchema>;
 type Tags = z.infer<typeof tagSchema>;
@@ -30,8 +32,8 @@ export const CreatePost = async (data: CreatePost, authorId: string) => {
 			{
 				title: data.title,
 				description: data.description,
-				solvedProblems: data.solvedProblem,
-				whoBenefits: data.whoBenefits,
+				solvedProblems: data.solvedProblem ?? null,
+				whoBenefits: data.whoBenefits ?? null,
 				isAnonymous: data.isAnonymous,
 				isPublished: isPublished,
 				authorId: authorId
@@ -43,4 +45,25 @@ export const CreatePost = async (data: CreatePost, authorId: string) => {
 		await AttachTopic(data.topics, post.id);
 	}
 	return post.id;
+};
+
+export const getPostById = async (postId: string) => {
+	const post = await db.query.posts.findFirst({
+		where: eq(posts.id, postId),
+		with: {
+			postTopics: {
+				with: {
+					topic: true
+				}
+			},
+			author: true
+		}
+	});
+
+	if (!post) {
+		throw error(404, 'Post not found');
+	}
+
+	console.log(post);
+	return post;
 };

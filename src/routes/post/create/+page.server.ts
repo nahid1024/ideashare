@@ -14,22 +14,3 @@ export const load: PageServerLoad = async (event) => {
 		topics: allTopics
 	};
 };
-
-// export const actions: Actions = {
-// 	create: async (event) => {
-// 		const form = await superValidate(event.request, zod4(postSchema));
-// 		console.log(form.data);
-// 		if (!form.valid) {
-// 			return fail(400, { form });
-// 		}
-
-// 		const postId = await CreatePost(
-// 			{
-// 				...form.data
-// 			},
-// 			event.locals.user.id
-// 		);
-
-// 		return message(form, { postId: postId, success: true });
-// 	}
-// };

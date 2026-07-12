@@ -10,7 +10,7 @@ export const postTopics = pgTable('post_topics', {
 });
 
 export const postTopiceRelation = relations(postTopics, ({ one }) => ({
-	tag: one(topics, {
+	topic: one(topics, {
 		fields: [postTopics.tagId],
 		references: [topics.id]
 	}),

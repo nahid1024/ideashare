@@ -2,6 +2,9 @@
 	import { resolve } from '$app/paths';
 	import Navbar from '$lib/components/Navbar.svelte';
 
+	const { data } = $props();
+
+	const post = $derived(data.post);
 	// Reactive state for the idea details
 	let idea = $state({
 		title:
@@ -216,7 +219,7 @@
 </script>
 
 <svelte:head>
-	<title>IdeaShare — {idea.title}</title>
+	<title>IdeaShare — {post.title}</title>
 </svelte:head>
 
 <!-- NAVBAR -->
@@ -224,14 +227,14 @@
 
 <!-- LAYOUT -->
 <div
-	class="detail-layout mx-auto grid max-w-[1000px] grid-cols-1 items-start gap-6 px-3 pt-[14px] pb-[80px] min-[761px]:grid-cols-[minmax(0,1fr)_240px] min-[761px]:px-6 min-[761px]:pt-7 min-[761px]:pb-7"
+	class="detail-layout mx-auto grid max-w-250 grid-cols-1 items-start gap-6 px-3 pt-3.5 pb-20 min-[761px]:grid-cols-[minmax(0,1fr)_240px] min-[761px]:px-6 min-[761px]:pt-7 min-[761px]:pb-7"
 >
 	<!-- MAIN -->
 	<div class="flex flex-col gap-4">
 		<!-- Back link -->
 		<a
 			href={resolve('/')}
-			class="mb-1 flex w-fit items-center gap-[6px] text-[13px] text-foreground-muted no-underline transition-colors hover:text-foreground"
+			class="mb-1 flex w-fit items-center gap-1.5 text-[13px] text-foreground-muted no-underline transition-colors hover:text-foreground"
 		>
 			<svg
 				width="14"
@@ -249,47 +252,55 @@
 		<!-- Idea header -->
 		<div class="overflow-hidden rounded-2xl border border-border bg-background">
 			<div class="relative bg-accent p-[28px_28px_24px]">
-				<div class="mb-[14px] flex items-center gap-2">
+				<div class="mb-3.5 flex items-center gap-2">
 					<span
-						class="rounded-full bg-primary px-[10px] py-[3px] text-[11px] font-semibold tracking-[0.03em] text-accent"
+						class="rounded-full bg-primary px-2.5 py-0.75 text-[11px] font-semibold tracking-[0.03em] text-accent"
 						>⚡
 						{idea.status}</span
 					>
-					{#each idea.tags as tag (tag)}
+					{#each post.postTopics as tag (tag)}
 						<span
-							class="rounded-full bg-foreground/10 px-[10px] py-[3px] text-[11px] font-medium text-foreground"
-							>#{tag}</span
+							class="rounded-full bg-foreground/10 px-2.5 py-0.75 text-[11px] font-medium text-foreground"
+							>#{tag.topic?.name}</span
 						>
 					{/each}
 				</div>
 				<h1
-					class="max-w-[560px] font-display text-[24px] leading-[1.3] font-bold tracking-[-0.4px] text-foreground"
+					class="max-w-140 font-display text-[24px] leading-[1.3] font-bold tracking-[-0.4px] text-foreground"
 				>
-					{idea.title}
+					{post.title}
 				</h1>
 			</div>
 			<div class="p-[20px_28px]">
-				<p class="mb-5 text-[14.5px] leading-[1.75] text-foreground-secondary">
-					{idea.description}
+				<p class="mb-5 text-[14.5px] leading-[1.75] wrap-break-word text-foreground-secondary">
+					{post.description}
 				</p>
 
 				<div class="mb-5 flex flex-col gap-3">
-					<div class="rounded-md bg-background-muted p-[12px_16px]">
-						<div
-							class="mb-[5px] text-[11px] font-semibold tracking-[0.07em] text-foreground-muted uppercase"
-						>
-							Problem it solves
+					{#if post.solvedProblems}
+						<div class="rounded-md bg-background-muted p-[12px_16px]">
+							<div
+								class="mb-[5px] text-[11px] font-semibold tracking-[0.07em] text-foreground-muted uppercase"
+							>
+								Problem it solves
+							</div>
+							<div class="text-[13.5px] leading-[1.6] wrap-break-word text-foreground">
+								{post.solvedProblems}
+							</div>
 						</div>
-						<div class="text-[13.5px] leading-[1.6] text-foreground">{idea.problem}</div>
-					</div>
-					<div class="rounded-md bg-background-muted p-[12px_16px]">
-						<div
-							class="mb-[5px] text-[11px] font-semibold tracking-[0.07em] text-foreground-muted uppercase"
-						>
-							Who would benefit
+					{/if}
+					{#if post.whoBenefits}
+						<div class="rounded-md bg-background-muted p-[12px_16px]">
+							<div
+								class="mb-[5px] text-[11px] font-semibold tracking-[0.07em] text-foreground-muted uppercase"
+							>
+								Who would benefit
+							</div>
+							<div class="text-[13.5px] leading-[1.6] wrap-break-word text-foreground">
+								{post.whoBenefits}
+							</div>
 						</div>
-						<div class="text-[13.5px] leading-[1.6] text-foreground">{idea.whoBenefits}</div>
-					</div>
+					{/if}
 				</div>
 
 				<div class="flex items-center gap-3 border-t border-border pt-4">
@@ -299,10 +310,14 @@
 						>
 							{idea.author.initials}
 						</div>
-						<div>
-							<div class="text-[13px] font-medium text-foreground">{idea.author.name}</div>
-							<div class="text-[12px] text-foreground-muted">{idea.author.location}</div>
-						</div>
+						{#if post.isAnonymous}
+							<div class="text-[13px] font-medium text-foreground">Anonymous</div>
+						{:else}
+							<div>
+								<div class="text-[13px] font-medium text-foreground">{post.author.name}</div>
+								<!-- <div class="text-[12px] text-foreground-muted">{idea.author.location}</div> -->
+							</div>
+						{/if}
 					</div>
 					<div class="ml-auto text-[12px] text-foreground-muted">{idea.createdAtText}</div>
 				</div>
