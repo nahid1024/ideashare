@@ -1,6 +1,8 @@
 <script>
 	import { resolve } from '$app/paths';
 	import Navbar from '$lib/components/Navbar.svelte';
+
+	const { data } = $props();
 </script>
 
 <Navbar hasBackButton={false} />
@@ -92,7 +94,7 @@
 					<path d="M12 14v7" />
 				</svg>
 			</div>
-			Being built
+			Following
 		</a>
 		<a
 			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
@@ -114,116 +116,30 @@
 					/>
 				</svg>
 			</div>
+			Bookmarks
+		</a>
+
+		<a
+			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
+			href={resolve('/')}
+		>
+			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="size-6"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0"
+					/>
+				</svg>
+			</div>
 			Join an Ideathon
-		</a>
-
-		<div
-			class="mt-4 hidden px-2.5 py-1 text-[11px] font-semibold tracking-wider text-foreground-muted uppercase sm:block"
-		>
-			Topics
-		</div>
-
-		<a
-			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-			href={resolve('/')}
-		>
-			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
-				<svg
-					class="h-3.5 w-3.5"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-				>
-					<path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" />
-					<path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
-				</svg>
-			</div>
-			Education
-		</a>
-		<a
-			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-			href={resolve('/')}
-		>
-			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="size-6"
-				>
-					<path stroke-linecap="round" stroke-linejoin="round" d="M22 12h-4l-3 9L9 3l-3 9H2" />
-				</svg>
-			</div>
-			Health
-		</a>
-		<a
-			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-			href={resolve('/')}
-		>
-			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="size-6"
-				>
-					<rect x="2" y="3" width="20" height="14" rx="2" />
-					<line x1="8" y1="21" x2="16" y2="21" />
-					<line x1="12" y1="17" x2="12" y2="21" />
-				</svg>
-			</div>
-			Technology
-		</a>
-		<a
-			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-			href={resolve('/')}
-		>
-			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="size-6"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"
-					/>
-					<polyline points="9 22 9 12 15 12 15 22" />
-				</svg>
-			</div>
-			Cities
-		</a>
-		<a
-			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
-			href={resolve('/')}
-		>
-			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="size-6"
-				>
-					<path stroke-linecap="round" stroke-linejoin="round" d="M12 1v22" />
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"
-					/>
-				</svg>
-			</div>
-			Economy
 		</a>
 	</aside>
 
@@ -262,257 +178,73 @@
 				Filter
 			</button>
 		</div>
+		<!-- Post list -->
 
-		<article
-			class="cursor-pointer rounded-lg border border-border bg-background p-[18px_20px] transition-all hover:border-accent hover:[box-shadow:var(--shadow-focus)]"
-		>
-			<a href={resolve('/')}>
-				<div class="mb-[10px] flex items-start gap-[14px]">
-					<div class="flex-1 font-display text-[15px] leading-[1.4] font-semibold text-foreground">
-						A universal exam system independent of any university — certify your skills, study
-						anywhere
-					</div>
-					<div class="flex shrink-0 flex-col items-center gap-[3px]">
+		{#each data.posts as post (post.id)}
+			<article
+				class="cursor-pointer rounded-lg border border-border bg-background p-[18px_20px] transition-all hover:border-accent hover:[box-shadow:var(--shadow-focus)]"
+			>
+				<a href={resolve(`/post/${post.id}`)}>
+					<div class="flex items-start gap-[14px]">
+						<!-- Post title -->
 						<div
-							class="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-md border-[1.5px] border-accent bg-accent"
+							class="flex-1 font-display text-[15px] leading-[1.4] font-semibold text-foreground"
 						>
-							<svg
-								width="16"
-								height="16"
-								viewBox="0 0 24 24"
-								fill="currentColor"
-								class="text-accent-foreground"
+							{post.title}
+						</div>
+						<div class="flex shrink-0 flex-col items-center gap-[3px]">
+							<div
+								class="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-md border-[1.5px] border-accent bg-accent"
 							>
-								<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-							</svg>
+								<svg
+									width="16"
+									height="16"
+									viewBox="0 0 24 24"
+									fill="currentColor"
+									class="text-accent-foreground"
+								>
+									<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+								</svg>
+							</div>
+							<div class="text-[12px] font-medium text-foreground-secondary">847</div>
 						</div>
-						<div class="text-[12px] font-medium text-foreground-secondary">847</div>
 					</div>
-				</div>
-			</a>
-			<p class="mb-[14px] text-[13.5px] leading-[1.65] text-foreground-secondary">
-				What if you could study from YouTube, books, or anywhere you want — and just show up to a
-				standardised exam to get certified? No enrollment, no fees, no location barrier.
-			</p>
-			<div class="card-footer flex flex-wrap items-center gap-[6px]">
-				<span
-					class="rounded-full border border-border bg-background-muted px-[10px] py-[3px] text-[12px] text-foreground-secondary"
-					>#education</span
-				>
-				<span
-					class="rounded-full border border-border bg-background-muted px-[10px] py-[3px] text-[12px] text-foreground-secondary"
-					>#credentials</span
-				>
-				<span
-					class="rounded-full border border-[#C7D2FE] bg-[#EEF2FF] px-[10px] py-[3px] text-[12px] font-medium text-[#3730A3]"
-					>Being refined</span
-				>
+				</a>
+				<!-- Post description -->
+				<p class="mb-[14px] text-[13.5px] leading-[1.65] wrap-break-word text-foreground-secondary">
+					{post.description}
+				</p>
+				<div class="card-footer flex flex-wrap items-center gap-1.5">
+					{#each post.postTopics as topic (topic.id)}
+						<span
+							class="rounded-full border border-border bg-background-muted px-[10px] py-[3px] text-[12px] text-foreground-secondary"
+							>#{topic.topic?.name}</span
+						>
+					{/each}
 
-				<div class="card-meta ml-auto hidden items-center gap-3 min-[601px]:flex">
-					<div class="flex items-center">
-						<div
-							class="ml-0 flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-accent text-[9px] font-semibold text-accent-foreground"
-						>
-							RK
+					<div class="card-meta ml-auto hidden items-center gap-3 min-[601px]:flex">
+						<div class="flex items-center">
+							<div
+								class="ml-0 flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-accent text-[9px] font-semibold text-accent-foreground"
+							>
+								RK
+							</div>
+							<div
+								class="ml-[-6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-primary text-[9px] font-semibold text-foreground-inverted"
+							>
+								SM
+							</div>
+							<div
+								class="ml-[-6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-border-strong text-[9px] font-semibold text-foreground-secondary"
+							>
+								+4
+							</div>
 						</div>
-						<div
-							class="ml-[-6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-primary text-[9px] font-semibold text-foreground-inverted"
-						>
-							SM
-						</div>
-						<div
-							class="ml-[-6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-border-strong text-[9px] font-semibold text-foreground-secondary"
-						>
-							+4
-						</div>
+						<span class="text-[12px] whitespace-nowrap text-foreground-muted">12 builds</span>
 					</div>
-					<span class="text-[12px] whitespace-nowrap text-foreground-muted">12 builds</span>
 				</div>
-			</div>
-		</article>
-
-		<article
-			class="cursor-pointer rounded-lg border border-border bg-background p-[18px_20px] transition-all hover:border-accent hover:[box-shadow:var(--shadow-focus)]"
-		>
-			<div class="mb-[10px] flex items-start gap-[14px]">
-				<div class="flex-1 font-display text-[15px] leading-[1.4] font-semibold text-foreground">
-					Let patients own their medical records — stored on their phone, shared with any doctor
-				</div>
-				<div class="flex shrink-0 flex-col items-center gap-[3px]">
-					<div
-						class="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-md border-[1.5px] border-border bg-background transition-all hover:border-accent hover:bg-yellow-100"
-					>
-						<svg
-							width="16"
-							height="16"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							class="text-foreground-muted"
-						>
-							<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-						</svg>
-					</div>
-					<div class="text-[12px] font-medium text-foreground-secondary">512</div>
-				</div>
-			</div>
-			<p class="mb-[14px] text-[13.5px] leading-[1.65] text-foreground-secondary">
-				Right now hospitals hold your data hostage. What if every person had a personal health file
-				they control — share it with any doctor, anywhere in the world, instantly.
-			</p>
-			<div class="card-footer flex flex-wrap items-center gap-[6px]">
-				<span
-					class="rounded-full border border-border bg-background-muted px-[10px] py-[3px] text-[12px] text-foreground-secondary"
-					>#health</span
-				>
-				<span
-					class="rounded-full border border-border bg-background-muted px-[10px] py-[3px] text-[12px] text-foreground-secondary"
-					>#data</span
-				>
-				<span
-					class="rounded-full border border-success-border bg-success-background px-[10px] py-[3px] text-[12px] font-medium text-success-foreground"
-					>Someone's building it</span
-				>
-
-				<div class="card-meta ml-auto hidden items-center gap-3 min-[601px]:flex">
-					<div class="flex items-center">
-						<div
-							class="ml-0 flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-primary text-[9px] font-semibold text-foreground-inverted"
-						>
-							TA
-						</div>
-						<div
-							class="ml-[-6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-accent text-[9px] font-semibold text-accent-foreground"
-						>
-							NI
-						</div>
-					</div>
-					<span class="text-[12px] whitespace-nowrap text-foreground-muted">5 builds</span>
-				</div>
-			</div>
-		</article>
-
-		<article
-			class="cursor-pointer rounded-lg border border-border bg-background p-[18px_20px] transition-all hover:border-accent hover:[box-shadow:var(--shadow-focus)]"
-		>
-			<div class="mb-[10px] flex items-start gap-[14px]">
-				<div class="flex-1 font-display text-[15px] leading-[1.4] font-semibold text-foreground">
-					Build your own university major — pick courses from different institutions to form a
-					custom degree
-				</div>
-				<div class="flex shrink-0 flex-col items-center gap-[3px]">
-					<div
-						class="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-md border-[1.5px] border-border bg-background transition-all hover:border-accent hover:bg-yellow-100"
-					>
-						<svg
-							width="16"
-							height="16"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							class="text-foreground-muted"
-						>
-							<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-						</svg>
-					</div>
-					<div class="text-[12px] font-medium text-foreground-secondary">389</div>
-				</div>
-			</div>
-			<p class="mb-[14px] text-[13.5px] leading-[1.65] text-foreground-secondary">
-				Why does a major have to be pre-defined? Let students mix AI ethics from MIT, film theory
-				from NYU, and economics from LSE into a single recognised credential.
-			</p>
-			<div class="card-footer flex flex-wrap items-center gap-[6px]">
-				<span
-					class="rounded-full border border-border bg-background-muted px-[10px] py-[3px] text-[12px] text-foreground-secondary"
-					>#education</span
-				>
-				<span
-					class="rounded-full border border-border bg-background-muted px-[10px] py-[3px] text-[12px] text-foreground-secondary"
-					>#future</span
-				>
-				<span
-					class="rounded-full border border-warning-border bg-warning-background px-[10px] py-[3px] text-[12px] font-medium text-warning-foreground"
-					>Raw idea</span
-				>
-
-				<div class="card-meta ml-auto hidden items-center gap-3 min-[601px]:flex">
-					<div class="flex items-center">
-						<div
-							class="ml-0 flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-accent text-[9px] font-semibold text-accent-foreground"
-						>
-							FK
-						</div>
-					</div>
-					<span class="text-[12px] whitespace-nowrap text-foreground-muted">2 builds</span>
-				</div>
-			</div>
-		</article>
-
-		<article
-			class="cursor-pointer rounded-lg border border-border bg-background p-[18px_20px] transition-all hover:border-accent hover:[box-shadow:var(--shadow-focus)]"
-		>
-			<div class="mb-[10px] flex items-start gap-[14px]">
-				<div class="flex-1 font-display text-[15px] leading-[1.4] font-semibold text-foreground">
-					A neighbourhood app where locals vote on which small businesses get a temporary rent
-					subsidy
-				</div>
-				<div class="flex shrink-0 flex-col items-center gap-[3px]">
-					<div
-						class="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-md border-[1.5px] border-border bg-background transition-all hover:border-accent hover:bg-yellow-100"
-					>
-						<svg
-							width="16"
-							height="16"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							class="text-foreground-muted"
-						>
-							<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-						</svg>
-					</div>
-					<div class="text-[12px] font-medium text-foreground-secondary">204</div>
-				</div>
-			</div>
-			<p class="mb-[14px] text-[13.5px] leading-[1.65] text-foreground-secondary">
-				High rents kill the best local spots. What if the community could pool a small monthly fund
-				and vote each quarter on which café, bookshop, or repair shop gets supported?
-			</p>
-			<div class="card-footer flex flex-wrap items-center gap-[6px]">
-				<span
-					class="rounded-full border border-border bg-background-muted px-[10px] py-[3px] text-[12px] text-foreground-secondary"
-					>#cities</span
-				>
-				<span
-					class="rounded-full border border-border bg-background-muted px-[10px] py-[3px] text-[12px] text-foreground-secondary"
-					>#economy</span
-				>
-				<span
-					class="rounded-full border border-warning-border bg-warning-background px-[10px] py-[3px] text-[12px] font-medium text-warning-foreground"
-					>Raw idea</span
-				>
-
-				<div class="card-meta ml-auto hidden items-center gap-3 min-[601px]:flex">
-					<div class="flex items-center">
-						<div
-							class="ml-0 flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-primary text-[9px] font-semibold text-foreground-inverted"
-						>
-							LM
-						</div>
-						<div
-							class="ml-[-6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-border-strong text-[9px] font-semibold text-foreground-secondary"
-						>
-							+2
-						</div>
-					</div>
-					<span class="text-[12px] whitespace-nowrap text-foreground-muted">3 builds</span>
-				</div>
-			</div>
-		</article>
+			</article>
+		{/each}
 	</main>
 
 	<aside class="sidebar-right hidden flex-col gap-4 lg:flex">
@@ -551,7 +283,7 @@
 			<div
 				class="flex items-center justify-between border-b border-border-muted py-[6px] text-[13px]"
 			>
-				<span class="cursor-pointer font-medium text-foreground hover:text-accent-hover"
+				<span class="hover:text-accent-hover cursor-pointer font-medium text-foreground"
 					>#education</span
 				>
 				<span class="text-[12px] text-foreground-muted">1.2k ideas</span>
@@ -559,7 +291,7 @@
 			<div
 				class="flex items-center justify-between border-b border-border-muted py-[6px] text-[13px]"
 			>
-				<span class="cursor-pointer font-medium text-foreground hover:text-accent-hover"
+				<span class="hover:text-accent-hover cursor-pointer font-medium text-foreground"
 					>#health</span
 				>
 				<span class="text-[12px] text-foreground-muted">874 ideas</span>
@@ -567,7 +299,7 @@
 			<div
 				class="flex items-center justify-between border-b border-border-muted py-[6px] text-[13px]"
 			>
-				<span class="cursor-pointer font-medium text-foreground hover:text-accent-hover"
+				<span class="hover:text-accent-hover cursor-pointer font-medium text-foreground"
 					>#cities</span
 				>
 				<span class="text-[12px] text-foreground-muted">631 ideas</span>
@@ -575,13 +307,13 @@
 			<div
 				class="flex items-center justify-between border-b border-border-muted py-[6px] text-[13px]"
 			>
-				<span class="cursor-pointer font-medium text-foreground hover:text-accent-hover"
+				<span class="hover:text-accent-hover cursor-pointer font-medium text-foreground"
 					>#technology</span
 				>
 				<span class="text-[12px] text-foreground-muted">590 ideas</span>
 			</div>
 			<div class="flex items-center justify-between py-[6px] text-[13px]">
-				<span class="cursor-pointer font-medium text-foreground hover:text-accent-hover"
+				<span class="hover:text-accent-hover cursor-pointer font-medium text-foreground"
 					>#economy</span
 				>
 				<span class="text-[12px] text-foreground-muted">412 ideas</span>

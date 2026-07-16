@@ -85,9 +85,9 @@
 				body: JSON.stringify({
 					title: title,
 					description: description,
-					solvedProblem: solvedProblem,
+					solvedProblem: solvedProblem ?? null,
 					whoBenefits: whoBenefits ?? null,
-					isAnonymous: isAnonymous ?? null,
+					isAnonymous: isAnonymous,
 					intent: intent,
 					topics: selectedTopics
 				})

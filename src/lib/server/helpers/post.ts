@@ -1,14 +1,16 @@
-import type { postSchema, tagSchema, topicSchema } from '$lib/validation_schema';
+import type { postSchema, tagSchema, topicSchema, refinementSchema } from '$lib/validation_schema';
 import { db } from '../db';
 import { posts } from '../db/posts';
 import z from 'zod';
 import { postTopics } from '../db/postTopics';
-import { eq } from 'drizzle-orm';
-import { error } from 'console';
+import { desc, eq } from 'drizzle-orm';
+import { error } from '@sveltejs/kit';
+import { refinements } from '../db/refinements';
 
 type CreatePost = z.infer<typeof postSchema>;
 type Tags = z.infer<typeof tagSchema>;
 type Topics = z.infer<typeof topicSchema>;
+type RefinementSchema = z.infer<typeof refinementSchema>;
 
 export const AttachTopic = async (tags: Topics[], postId: string) => {
 	const values: Tags[] = [];
@@ -63,7 +65,66 @@ export const getPostById = async (postId: string) => {
 	if (!post) {
 		throw error(404, 'Post not found');
 	}
-
-	console.log(post);
 	return post;
 };
+
+export const getPostList = async (limit: number) => {
+	const post = await db.query.posts.findMany({
+		limit: limit,
+		orderBy: desc(posts.createdAt),
+		with: {
+			postTopics: {
+				with: {
+					topic: true
+				}
+			}
+		}
+	});
+	if (!post) {
+		throw error(404, 'Posts not found');
+	}
+	return post;
+};
+
+export const getRefinements = async (postId: string) => {
+	const refinement = await db.query.refinements.findMany({
+		orderBy: desc(refinements.createdAt),
+		where: eq(refinements.postId, postId),
+		with: {
+			user: true,
+			votes: true
+		}
+	});
+	return refinement;
+};
+
+export const createRefinement = async (data: RefinementSchema) => {
+	const [inserted] = await db
+		.insert(refinements)
+		.values({
+			postId: data.postId,
+			userId: data.userId,
+			parentRefinementId: data.parentRefinementId ?? null,
+			body: data.body,
+			isHidden: data.isHidden ?? false,
+			isEdited: data.isEdited ?? false,
+			refinementType: data.refinementType
+		})
+		.returning({ id: refinements.id });
+	if (!inserted) {
+		throw new Error('Failed to create refinement');
+	}
+	const refinement = await db.query.refinements.findFirst({
+		where: eq(refinements.id, inserted.id),
+		with: {
+			user: true,
+			votes: true
+		}
+	});
+	if (!refinement) {
+		throw new Error('Created refinement not found');
+	}
+	return refinement;
+};
+
+export type RefinementWithRelations = Awaited<ReturnType<typeof getRefinements>>[number];

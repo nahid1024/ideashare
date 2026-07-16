@@ -32,3 +32,13 @@ export const postSchema = z.object({
 	intent: z.enum(['draft', 'publish']).default('publish'),
 	topics: topicSchema.array()
 });
+
+export const refinementSchema = z.object({
+	postId: z.string(),
+	userId: z.string(),
+	parentRefinementId: z.string().nullable(),
+	body: z.string().nonempty(),
+	isHidden: z.boolean().default(false),
+	isEdited: z.boolean().default(false),
+	refinementType: z.string().default('build')
+});

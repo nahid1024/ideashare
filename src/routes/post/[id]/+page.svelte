@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import Navbar from '$lib/components/Navbar.svelte';
+	import RefinementSection from '$lib/components/RefinementSection.svelte';
 
 	const { data } = $props();
 
@@ -30,55 +31,6 @@
 		buildersCount: 12,
 		viewsCount: '4.2k'
 	});
-
-	// Refinements list
-	let refinements = $state([
-		{
-			id: 1,
-			author: {
-				name: 'Sara Müller',
-				initials: 'SM',
-				role: 'Works in education'
-			},
-			type: 'obstacle',
-			typeText: '⚠ Potential obstacle',
-			content:
-				"The biggest challenge is exam integrity — how do you prevent cheating when anyone can take it anywhere? The existing standardised tests like IELTS solve this with proctored centres. You'd need a global network of trusted testing locations, which is expensive to build.",
-			helpfulCount: 38,
-			helpfulClicked: false,
-			timeAgo: '2 days ago'
-		},
-		{
-			id: 2,
-			author: {
-				name: 'Tolu Adeyemi',
-				initials: 'TA',
-				role: 'Software developer'
-			},
-			type: 'build',
-			typeText: '✦ Builds on idea',
-			content:
-				'This already partially exists — CompTIA, AWS certifications, and CFA all work this way. The gap is that they\'re industry-specific and not unified. What if there was a single credentialing body that issued a "passport" combining multiple such certifications into one verified profile?',
-			helpfulCount: 61,
-			helpfulClicked: false,
-			timeAgo: '2 days ago'
-		},
-		{
-			id: 3,
-			author: {
-				name: 'Nadia Islam',
-				initials: 'NI',
-				role: 'Student'
-			},
-			type: 'build',
-			typeText: '✦ Builds on idea',
-			content:
-				'In Bangladesh this would be transformational. Internet access is widespread but quality universities are only in Dhaka. If a student in Sylhet could study online and sit an exam locally to get a credential recognised by employers, it would change everything for rural students.',
-			helpfulCount: 44,
-			helpfulClicked: false,
-			timeAgo: '1 day ago'
-		}
-	]);
 
 	// Builders list
 	let builders = $state([
@@ -132,16 +84,8 @@
 	];
 
 	// Refinement types config
-	const refinementTypes = [
-		{ id: 'build', text: '✦ Builds on idea' },
-		{ id: 'obstacle', text: '⚠ Potential obstacle' },
-		{ id: 'fork', text: '↗ Fork idea' },
-		{ id: 'question', text: '? Question' }
-	];
 
 	// Interactive Form State
-	let selectedRefinementType = $state('build');
-	let newRefinementText = $state('');
 
 	// Spark toggle handler
 	function toggleSpark() {
@@ -152,46 +96,6 @@
 			idea.sparks++;
 			idea.sparked = true;
 		}
-	}
-
-	// Refinement upvote handler
-	function handleHelpful(refinementId: number) {
-		const r = refinements.find((x) => x.id === refinementId);
-		if (r) {
-			if (r.helpfulClicked) {
-				r.helpfulCount--;
-				r.helpfulClicked = false;
-			} else {
-				r.helpfulCount++;
-				r.helpfulClicked = true;
-			}
-		}
-	}
-
-	// Refinement post handler
-	function postRefinement() {
-		if (!newRefinementText.trim()) return;
-
-		const typeObj = refinementTypes.find((t) => t.id === selectedRefinementType);
-		const typeText = typeObj ? typeObj.text : '✦ Builds on idea';
-
-		refinements.push({
-			id: Date.now(),
-			author: {
-				name: 'Nahid Khan',
-				initials: 'NK',
-				role: 'Creator'
-			},
-			type: selectedRefinementType,
-			typeText,
-			content: newRefinementText,
-			helpfulCount: 0,
-			helpfulClicked: false,
-			timeAgo: 'Just now'
-		});
-
-		idea.refinementsCount++;
-		newRefinementText = '';
 	}
 
 	// Join builder state and handler
@@ -425,7 +329,7 @@
 		</div>
 
 		<!-- Fork card -->
-		<div class="rounded-2xl border border-info-border bg-info-background p-[16px_18px]">
+		<!-- <div class="rounded-2xl border border-info-border bg-info-background p-[16px_18px]">
 			<div
 				class="mb-2 flex items-center gap-[6px] text-[11px] font-semibold tracking-wider text-info-foreground uppercase"
 			>
@@ -451,107 +355,11 @@
 				Removes the political barrier of getting governments to agree. Companies like Google or
 				Siemens could certify skills directly — more trusted by hiring managers anyway.
 			</div>
-		</div>
+		</div> -->
 
 		<!-- Refinement list loop -->
-		{#each refinements as r (r.id)}
-			<div
-				class="rounded-2xl border border-border bg-background p-[16px_18px] transition-colors hover:border-accent"
-			>
-				<div class="mb-[10px] flex items-center gap-[10px]">
-					<div
-						class="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full text-[11px] font-semibold
-						{r.author.initials === 'SM'
-							? 'bg-info-background text-info-foreground'
-							: r.author.initials === 'TA'
-								? 'bg-success-background text-success-foreground'
-								: r.author.initials === 'NI'
-									? 'bg-yellow-100 text-yellow-500'
-									: 'bg-accent text-accent-foreground'}"
-					>
-						{r.author.initials}
-					</div>
-					<div>
-						<div class="text-[13px] font-medium text-foreground">{r.author.name}</div>
-					</div>
-					<span
-						class="rounded-full border border-border bg-background-muted px-[7px] py-[2px] text-[11px] text-foreground-muted"
-						>{r.author.role}</span
-					>
-					<span class="ml-auto text-[12px] text-foreground-muted">{r.timeAgo}</span>
-				</div>
-				<div
-					class="mb-[7px] inline-flex items-center gap-[5px] rounded-full border px-2 py-[2px] text-[11px] font-semibold
-					{r.type === 'obstacle'
-						? 'border-warning-border bg-warning-background text-warning-foreground'
-						: r.type === 'build'
-							? 'border-success-border bg-success-background text-success-foreground'
-							: 'border-info-border bg-info-background text-info-foreground'}"
-				>
-					{r.typeText}
-				</div>
-				<p
-					class="mb-[10px] text-[13.5px] leading-[1.65] whitespace-pre-line text-foreground-secondary"
-				>
-					{r.content}
-				</p>
-				<div class="flex items-center gap-[10px]">
-					<button
-						onclick={() => handleHelpful(r.id)}
-						class="flex cursor-pointer items-center gap-[5px] rounded-sm border-none bg-transparent px-2 py-1 font-[inherit] text-[12px] transition-all {r.helpfulClicked
-							? 'bg-yellow-100 font-medium text-yellow-600'
-							: 'text-foreground-muted hover:bg-yellow-100 hover:text-foreground'}"
-					>
-						<svg
-							width="12"
-							height="12"
-							viewBox="0 0 24 24"
-							fill={r.helpfulClicked ? 'currentColor' : 'none'}
-							stroke="currentColor"
-							stroke-width="2"
-						>
-							<path
-								d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"
-							/>
-						</svg>
-						{r.helpfulCount} helpful
-					</button>
-					<button
-						class="cursor-pointer rounded-sm border-none bg-transparent px-2 py-1 font-[inherit] text-[12px] text-foreground-muted transition-colors hover:text-foreground"
-						>Reply</button
-					>
-				</div>
-			</div>
-		{/each}
-
-		<!-- Add refinement -->
-		<div class="rounded-2xl border border-border bg-background p-[16px_18px]">
-			<div class="mb-3 font-display text-base font-semibold text-foreground">
-				Add your refinement
-			</div>
-			<div class="mb-3 flex flex-wrap gap-[6px]">
-				{#each refinementTypes as t (t.id)}
-					<button
-						onclick={() => (selectedRefinementType = t.id)}
-						class="cursor-pointer rounded-full border px-3 py-[5px] text-[12px] font-medium transition-all {selectedRefinementType ===
-						t.id
-							? 'border-yellow-500 bg-accent text-foreground'
-							: 'border-border bg-transparent text-foreground-secondary hover:border-foreground'}"
-					>
-						{t.text}
-					</button>
-				{/each}
-			</div>
-			<textarea
-				bind:value={newRefinementText}
-				class="mb-[10px] min-h-[80px] w-full resize-y rounded-md border border-border bg-background-muted p-[12px_14px] font-[inherit] text-[13.5px] text-foreground transition-colors outline-none placeholder:text-foreground-muted focus:border-accent focus:bg-background"
-				placeholder="Share how this idea could be improved, a challenge you see, or a real-world example..."
-			></textarea>
-			<button
-				onclick={postRefinement}
-				class="cursor-pointer rounded-full border-none bg-primary px-5 py-2 font-[inherit] text-[13px] font-medium text-primary-foreground transition-opacity hover:opacity-85"
-				>Post refinement</button
-			>
+		<div class="flex flex-col gap-2">
+			<RefinementSection refinements={data.refinements} postId={post.id} userId={data.userId} />
 		</div>
 	</div>
 

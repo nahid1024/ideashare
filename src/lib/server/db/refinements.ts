@@ -7,8 +7,12 @@ import { refinementVotes } from './refinementVotes';
 
 export const refinements = pgTable('refinements', {
 	id: uuid('id').primaryKey().defaultRandom(),
-	postId: uuid('postId').references(() => posts.id),
-	userId: text('userId').references(() => user.id),
+	postId: uuid('postId')
+		.references(() => posts.id)
+		.notNull(),
+	userId: text('userId')
+		.references(() => user.id)
+		.notNull(),
 	parentRefinementId: uuid('parentRefinementId').references((): AnyPgColumn => refinements.id),
 	body: text('body').notNull(),
 	createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -29,7 +33,14 @@ export const refinementsRelation = relations(refinements, (rel) => ({
 	}),
 	parent: rel.one(refinements, {
 		fields: [refinements.parentRefinementId],
-		references: [refinements.id]
+		references: [refinements.id],
+		relationName: 'parent'
+	}),
+	children: rel.many(refinements, {
+		relationName: 'parent'
 	}),
 	votes: rel.many(refinementVotes)
 }));
+
+export type RefinementTable = typeof refinements.$inferSelect;
+export type NewRefinement = typeof refinements.$inferInsert;
