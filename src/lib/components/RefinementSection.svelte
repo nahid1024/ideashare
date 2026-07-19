@@ -2,12 +2,12 @@
 	import { buildRefinementTree } from '$lib/utils';
 	import Refinement from './Refinement.svelte';
 	import RefinementForm from './RefinementForm.svelte';
-	//import { type RefinementTable } from '$lib/server/db/refinements';
 	import { type RefinementTreeType } from '$lib/utils';
 	import type { RefinementWithRelations } from '$lib/server/helpers/post';
 
 	let { refinements, postId, userId } = $props();
 	let RefinementTree = $state<RefinementTreeType[]>(buildRefinementTree(refinements));
+	console.log(userId);
 
 	function insertRefinement(
 		nodes: RefinementTreeType[],
@@ -42,7 +42,7 @@
 	};
 </script>
 
-<RefinementForm isReply={false} {postId} {userId} {onCreated} parentId={null} />
+<RefinementForm isReply={false} {postId} {userId} {onCreated} authorName="" parentId={null} />
 {#each RefinementTree as refinement (refinement.id)}
-	<Refinement {refinement} {onCreated} />
+	<Refinement {refinement} {userId} {onCreated} />
 {/each}

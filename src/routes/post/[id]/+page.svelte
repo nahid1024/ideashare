@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import RefinementSection from '$lib/components/RefinementSection.svelte';
+	import { Avatar } from 'bits-ui';
 
 	const { data } = $props();
 
@@ -209,11 +210,11 @@
 
 				<div class="flex items-center gap-3 border-t border-border pt-4">
 					<div class="flex items-center gap-2">
-						<div
-							class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-[12px] font-semibold text-accent"
+						<Avatar.Root
+							class="flex h-10 w-10 items-center justify-center rounded-full p-0.5 text-[12px] font-semibold text-accent"
 						>
-							{idea.author.initials}
-						</div>
+							<Avatar.Image class="rounded-full" src={post.author.image} />
+						</Avatar.Root>
 						{#if post.isAnonymous}
 							<div class="text-[13px] font-medium text-foreground">Anonymous</div>
 						{:else}
@@ -324,7 +325,7 @@
 		<div>
 			<div class="font-display text-base font-semibold text-foreground">Refinements</div>
 			<div class="mb-[14px] text-[12px] text-foreground-muted">
-				{idea.refinementsCount} people have added their thoughts — sorted by most helpful
+				{data.refinements.length} people have added their thoughts — sorted by most helpful
 			</div>
 		</div>
 
