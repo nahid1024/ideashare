@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import Footer from '$lib/components/Footer.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import RefinementSection from '$lib/components/RefinementSection.svelte';
 	import { Avatar } from 'bits-ui';
@@ -261,7 +262,7 @@
 				>
 					<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
 				</svg>
-				{idea.refinementsCount} refinements
+				{data.refinements.length} refinements
 			</button>
 			<button
 				class="flex cursor-pointer items-center gap-[7px] rounded-full border border-border bg-transparent px-4 py-2 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground"
@@ -468,3 +469,5 @@
 		</div>
 	</aside>
 </div>
+
+<Footer />
