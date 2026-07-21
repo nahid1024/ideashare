@@ -7,7 +7,6 @@
 
 	let { refinements, postId, userId } = $props();
 	let RefinementTree = $state<RefinementTreeType[]>(buildRefinementTree(refinements));
-	console.log(userId);
 
 	function insertRefinement(
 		nodes: RefinementTreeType[],
