@@ -212,9 +212,10 @@
 				<div class="flex items-center gap-3 border-t border-border pt-4">
 					<div class="flex items-center gap-2">
 						<Avatar.Root
-							class="flex h-10 w-10 items-center justify-center rounded-full p-0.5 text-[12px] font-semibold text-accent"
+							class="flex h-10 w-10 items-center justify-center rounded-full bg-black text-[12px] font-semibold text-accent"
 						>
 							<Avatar.Image class="rounded-full" src={post.author.image} />
+							<Avatar.Fallback class="rounded-full">NK</Avatar.Fallback>
 						</Avatar.Root>
 						{#if post.isAnonymous}
 							<div class="text-[13px] font-medium text-foreground">Anonymous</div>
