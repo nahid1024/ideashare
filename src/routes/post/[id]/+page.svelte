@@ -3,6 +3,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import RefinementSection from '$lib/components/RefinementSection.svelte';
+	import { timeAgo } from '$lib/utils.js';
 	import { Avatar } from 'bits-ui';
 
 	const { data } = $props();
@@ -186,7 +187,7 @@
 					{#if post.solvedProblems}
 						<div class="rounded-md bg-background-muted p-[12px_16px]">
 							<div
-								class="mb-[5px] text-[11px] font-semibold tracking-[0.07em] text-foreground-muted uppercase"
+								class="mb-1.25 text-[11px] font-semibold tracking-[0.07em] text-foreground-muted uppercase"
 							>
 								Problem it solves
 							</div>
@@ -198,7 +199,7 @@
 					{#if post.whoBenefits}
 						<div class="rounded-md bg-background-muted p-[12px_16px]">
 							<div
-								class="mb-[5px] text-[11px] font-semibold tracking-[0.07em] text-foreground-muted uppercase"
+								class="mb-1.25 text-[11px] font-semibold tracking-[0.07em] text-foreground-muted uppercase"
 							>
 								Who would benefit
 							</div>
@@ -226,18 +227,20 @@
 							</div>
 						{/if}
 					</div>
-					<div class="ml-auto text-[12px] text-foreground-muted">{idea.createdAtText}</div>
+					<div class="ml-auto text-[12px] text-foreground-muted">
+						Posted {timeAgo(post.createdAt)}
+					</div>
 				</div>
 			</div>
 		</div>
 
 		<!-- Action bar -->
 		<div
-			class="flex flex-wrap items-center gap-[10px] rounded-2xl border border-border bg-background p-[14px_20px]"
+			class="flex flex-wrap items-center gap-2.5 rounded-2xl border border-border bg-background p-[14px_20px]"
 		>
 			<button
 				onclick={toggleSpark}
-				class="flex cursor-pointer items-center gap-2 rounded-full border-[1.5px] px-[18px] py-2 font-[inherit] text-sm font-semibold transition-colors {idea.sparked
+				class="flex cursor-pointer items-center gap-2 rounded-full border-[1.5px] px-4.5 py-2 font-[inherit] text-sm font-semibold transition-colors {idea.sparked
 					? 'border-accent bg-accent text-foreground'
 					: 'border-border bg-transparent text-foreground-secondary hover:border-foreground hover:text-foreground'}"
 			>
@@ -251,7 +254,7 @@
 			<div class="mx-1 h-7 w-px bg-border"></div>
 
 			<button
-				class="flex cursor-pointer items-center gap-[7px] rounded-full border border-border bg-transparent px-4 py-2 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground"
+				class="flex cursor-pointer items-center gap-1.75 rounded-full border border-border bg-transparent px-4 py-2 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground"
 			>
 				<svg
 					width="14"
@@ -266,7 +269,7 @@
 				{data.refinements.length} refinements
 			</button>
 			<button
-				class="flex cursor-pointer items-center gap-[7px] rounded-full border border-border bg-transparent px-4 py-2 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground"
+				class="flex cursor-pointer items-center gap-1.75 rounded-full border border-border bg-transparent px-4 py-2 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground"
 			>
 				<svg
 					width="14"
@@ -285,7 +288,7 @@
 				Share
 			</button>
 			<button
-				class="flex cursor-pointer items-center gap-[7px] rounded-full border border-border bg-transparent px-4 py-2 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground"
+				class="flex cursor-pointer items-center gap-1.75 rounded-full border border-border bg-transparent px-4 py-2 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground"
 			>
 				<svg
 					width="14"
@@ -303,7 +306,7 @@
 			</button>
 			<button
 				onclick={toggleJoinBuilder}
-				class="ml-auto flex cursor-pointer items-center gap-[7px] rounded-full border-none px-5 py-2 font-[inherit] text-[13px] font-semibold transition-all hover:opacity-85 {joinedAsBuilder
+				class="ml-auto flex cursor-pointer items-center gap-1.75 rounded-full border-none px-5 py-2 font-[inherit] text-[13px] font-semibold transition-all hover:opacity-85 {joinedAsBuilder
 					? 'bg-success text-white'
 					: 'bg-primary text-primary-foreground'}"
 			>
@@ -326,7 +329,7 @@
 		<!-- Refinements heading -->
 		<div>
 			<div class="font-display text-base font-semibold text-foreground">Refinements</div>
-			<div class="mb-[14px] text-[12px] text-foreground-muted">
+			<div class="mb-3.5 text-[12px] text-foreground-muted">
 				{data.refinements.length} people have added their thoughts — sorted by most helpful
 			</div>
 		</div>
@@ -373,41 +376,41 @@
 				Idea stats
 			</div>
 			<div
-				class="flex items-center justify-between border-b border-border-muted py-[6px] text-[13px]"
+				class="flex items-center justify-between border-b border-border-muted py-1.5 text-[13px]"
 			>
 				<span class="text-foreground-muted">Sparks</span><span class="font-semibold text-yellow-500"
 					>{idea.sparks} ⚡</span
 				>
 			</div>
 			<div
-				class="flex items-center justify-between border-b border-border-muted py-[6px] text-[13px]"
+				class="flex items-center justify-between border-b border-border-muted py-1.5 text-[13px]"
 			>
 				<span class="text-foreground-muted">Refinements</span><span
 					class="font-semibold text-foreground">{idea.refinementsCount}</span
 				>
 			</div>
 			<div
-				class="flex items-center justify-between border-b border-border-muted py-[6px] text-[13px]"
+				class="flex items-center justify-between border-b border-border-muted py-1.5 text-[13px]"
 			>
 				<span class="text-foreground-muted">Forks</span><span class="font-semibold text-foreground"
 					>{idea.forksCount}</span
 				>
 			</div>
 			<div
-				class="flex items-center justify-between border-b border-border-muted py-[6px] text-[13px]"
+				class="flex items-center justify-between border-b border-border-muted py-1.5 text-[13px]"
 			>
 				<span class="text-foreground-muted">Builders</span><span
 					class="font-semibold text-foreground">{idea.buildersCount}</span
 				>
 			</div>
 			<div
-				class="flex items-center justify-between border-b border-border-muted py-[6px] text-[13px]"
+				class="flex items-center justify-between border-b border-border-muted py-1.5 text-[13px]"
 			>
 				<span class="text-foreground-muted">Views</span><span class="font-semibold text-foreground"
 					>{idea.viewsCount}</span
 				>
 			</div>
-			<div class="flex items-center justify-between py-[6px] text-[13px]">
+			<div class="flex items-center justify-between py-1.5 text-[13px]">
 				<span class="text-foreground-muted">Status</span><span class="font-semibold text-foreground"
 					>{idea.status}</span
 				>
@@ -419,9 +422,7 @@
 				Want to build this
 			</div>
 			{#each builders as b (b.name)}
-				<div
-					class="flex items-center gap-[10px] border-b border-border-muted py-[7px] last:border-b-0"
-				>
+				<div class="flex items-center gap-2.5 border-b border-border-muted py-1.75 last:border-b-0">
 					<div
 						class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold {b.bgClass}"
 					>
@@ -433,7 +434,7 @@
 					</div>
 					{#if b.lead}
 						<span
-							class="rounded-full border border-yellow-200 bg-yellow-100 px-[9px] py-[2px] text-[11px] font-medium whitespace-nowrap text-yellow-500"
+							class="rounded-full border border-yellow-200 bg-yellow-100 px-2.25 py-0.5 text-[11px] font-medium whitespace-nowrap text-yellow-500"
 						>
 							Lead
 						</span>

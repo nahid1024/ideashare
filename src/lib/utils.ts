@@ -18,10 +18,12 @@ export type WithoutChildren<T> = T extends { children?: any } ? Omit<T, 'childre
 export type WithoutChildrenOrChild<T> = WithoutChildren<WithoutChild<T>>;
 export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & { ref?: U | null };
 
+// Sleep function for delay
 export function sleep(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+//Build refinement tree function
 export function buildRefinementTree(refinement: RefinementWithRelations[]) {
 	const map = new Map<string, RefinementTreeType>();
 	const roots: RefinementTreeType[] = [];
@@ -44,4 +46,36 @@ export function buildRefinementTree(refinement: RefinementWithRelations[]) {
 	}
 
 	return roots;
+}
+
+//Date time conversion function
+
+export function timeAgo(date: Date | string): string {
+	if (typeof date === 'string') {
+		date = new Date(date);
+	}
+
+	const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+
+	if (seconds < 10) return 'just now';
+
+	const intervals = [
+		{ label: 'year', seconds: 31536000 },
+		{ label: 'month', seconds: 2592000 }, // 30 days
+		{ label: 'week', seconds: 604800 },
+		{ label: 'day', seconds: 86400 },
+		{ label: 'hour', seconds: 3600 },
+		{ label: 'minute', seconds: 60 },
+		{ label: 'second', seconds: 1 }
+	];
+
+	for (const interval of intervals) {
+		const count = Math.floor(seconds / interval.seconds);
+
+		if (count >= 1) {
+			return `${count} ${interval.label}${count === 1 ? '' : 's'} ago`;
+		}
+	}
+
+	return 'just now';
 }
