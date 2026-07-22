@@ -15,8 +15,18 @@ export const refinements = pgTable('refinements', {
 		.notNull(),
 	parentRefinementId: uuid('parentRefinementId').references((): AnyPgColumn => refinements.id),
 	body: text('body').notNull(),
-	createdAt: timestamp('created_at').defaultNow().notNull(),
-	updatedAt: timestamp('updated_at').defaultNow().notNull(),
+	createdAt: timestamp('created_at', {
+		withTimezone: true,
+		mode: 'date'
+	})
+		.defaultNow()
+		.notNull(),
+	updatedAt: timestamp('updated_at', {
+		withTimezone: true,
+		mode: 'date'
+	})
+		.defaultNow()
+		.notNull(),
 	isHidden: boolean('isHidden').default(false).notNull(),
 	isEdited: boolean('isEdited').default(false).notNull(),
 	refinementType: varchar('refinementType').notNull()

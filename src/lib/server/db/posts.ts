@@ -19,8 +19,16 @@ export const posts = pgTable('posts', {
 	authorId: text('authorId')
 		.notNull()
 		.references(() => user.id),
-	createdAt: timestamp('createdAt').defaultNow().notNull(),
-	updatedAt: timestamp('updatedAt')
+	createdAt: timestamp('createdAt', {
+		withTimezone: true,
+		mode: 'date'
+	})
+		.defaultNow()
+		.notNull(),
+	updatedAt: timestamp('updatedAt', {
+		withTimezone: true,
+		mode: 'date'
+	})
 		.defaultNow()
 		.$onUpdate(() => new Date())
 		.notNull()
