@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Refinement from './Refinement.svelte';
 	import { type RefinementWithRelations } from '$lib/server/helpers/post';
-	import { type RefinementTreeType } from '$lib/utils';
+	import { timeAgo, type RefinementTreeType } from '$lib/utils';
 	import RefinementForm from './RefinementForm.svelte';
 	import { fly } from 'svelte/transition';
 
@@ -52,7 +52,7 @@
 		>
 			{refinement.refinementType}
 		</div>
-		<span class="ml-auto text-[12px] text-foreground-muted">1 day ago</span>
+		<span class="ml-auto text-[12px] text-foreground-muted">{timeAgo(refinement.createdAt)}</span>
 	</div>
 
 	<p class="mb-2.5 text-[13.5px] leading-[1.65] whitespace-pre-line text-foreground-secondary">
