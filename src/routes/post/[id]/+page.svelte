@@ -130,7 +130,7 @@
 </svelte:head>
 
 <!-- NAVBAR -->
-<Navbar hasBackButton={false} />
+<Navbar />
 
 <!-- LAYOUT -->
 <div
@@ -160,20 +160,14 @@
 		<div class="overflow-hidden rounded-2xl border border-border bg-background">
 			<div class="relative bg-accent p-[28px_28px_24px]">
 				<div class="mb-3.5 flex items-center gap-2">
-					<span
-						class="rounded-full bg-primary px-2.5 py-0.75 text-[11px] font-semibold tracking-[0.03em] text-accent"
-						>⚡
-						{idea.status}</span
-					>
 					{#each post.postTopics as tag (tag)}
-						<span
-							class="rounded-full bg-foreground/10 px-2.5 py-0.75 text-[11px] font-medium text-foreground"
+						<span class="rounded-full bg-black/10 px-2.5 py-0.75 text-[11px] font-medium text-black"
 							>#{tag.topic?.name}</span
 						>
 					{/each}
 				</div>
 				<h1
-					class="max-w-140 font-display text-[24px] leading-[1.3] font-bold tracking-[-0.4px] text-foreground"
+					class="max-w-140 font-display text-[24px] leading-[1.3] font-bold tracking-[-0.4px] text-black"
 				>
 					{post.title}
 				</h1>
@@ -451,14 +445,14 @@
 			</div>
 		</div>
 
-		<div class="rounded-2xl bg-primary p-4">
+		<div class="rounded-2xl bg-[#0f0f0f] p-4">
 			<div class="mb-3 text-[11px] font-semibold tracking-[0.07em] text-accent uppercase">
 				Similar ideas
 			</div>
 			{#each similarIdeas as sim (sim.title)}
 				<div class="group cursor-pointer border-b border-white/8 py-2 last:border-b-0">
 					<div
-						class="mb-1 text-[12.5px] leading-[1.4] font-medium text-primary-foreground transition-colors group-hover:text-accent"
+						class="mb-1 text-[12.5px] leading-[1.4] font-medium text-[#f1f0eb] transition-colors group-hover:text-accent"
 					>
 						{sim.title}
 					</div>

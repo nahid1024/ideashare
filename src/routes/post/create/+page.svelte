@@ -2,13 +2,14 @@
 	import { resolve } from '$app/paths';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import { postSchema, topicSchema } from '$lib/validation_schema';
-	import LightningIcon from 'phosphor-svelte/lib/LightningIcon';
 	import { Combobox } from 'bits-ui';
 	import CircleNotchIcon from 'phosphor-svelte/lib/CircleNotchIcon';
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 	import { sleep } from '$lib/utils.js';
 	import z from 'zod';
+	import { Accordion } from 'bits-ui';
+	import CaretDown from 'phosphor-svelte/lib/CaretDownIcon';
 
 	const MAXTOPICS = 5;
 	type Topics = z.infer<typeof topicSchema>;
@@ -114,7 +115,7 @@
 </svelte:head>
 
 <!-- NAVBAR -->
-<Navbar hasBackButton={true} />
+<Navbar />
 <!-- PAGE -->
 
 <div
@@ -140,7 +141,7 @@
 				id="block-title"
 				class="field-block relative overflow-hidden rounded-t-2xl border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
 				'title'
-					? 'bg-yellow-50'
+					? 'bg-accent/5'
 					: ''}"
 			>
 				<div
@@ -162,7 +163,7 @@
 					bind:value={title}
 					oninput={() => validate('title')}
 					onfocus={() => (focusedBlock = 'title')}
-					class="w-full resize-none border-none bg-transparent font-display text-[18px] leading-[1.4] font-semibold text-foreground outline-none placeholder:font-medium placeholder:text-foreground-disabled"
+					class="w-full resize-none border-none font-display text-[18px] leading-[1.4] font-semibold text-foreground outline-none placeholder:font-medium placeholder:text-foreground-disabled"
 					placeholder="e.g. A universal exam system where you study anywhere and just show up to get certified"
 				></textarea>
 
@@ -188,15 +189,9 @@
 				id="block-desc"
 				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
 				'desc'
-					? 'bg-yellow-50'
+					? 'border-l-3 border-l-accent bg-accent/5'
 					: ''}"
 			>
-				<div
-					class="field-accent absolute top-0 bottom-0 left-0 w-0.75 transition-colors {focusedBlock ===
-					'desc'
-						? 'bg-accent'
-						: 'bg-transparent'}"
-				></div>
 				<div
 					class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
 				>
@@ -220,68 +215,94 @@
 				{/if}
 			</div>
 
-			<!-- Problem field -->
-			<div
-				id="block-problem"
-				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
-				'problem'
-					? 'bg-yellow-50'
-					: ''}"
-			>
-				<div
-					class="field-accent absolute top-0 bottom-0 left-0 w-0.75 transition-colors {focusedBlock ===
-					'problem'
-						? 'bg-accent'
-						: 'bg-transparent'}"
-				></div>
-				<div
-					class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
-				>
-					<div class="inline-block h-1.25 w-1.25 rounded-full bg-yellow-500"></div>
-					What problem does this solve?
-				</div>
-				<textarea
-					id="problem-input"
-					rows="2"
-					name="solvedProblem"
-					bind:value={solvedProblem}
-					onfocus={() => (focusedBlock = 'problem')}
-					class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
-					placeholder="e.g. University is too expensive and location-dependent for most people in the world."
-				></textarea>
-			</div>
+			<Accordion.Root type="multiple">
+				<!-- Problem field -->
 
-			<!-- Who benefits -->
-
-			<div
-				id="block-problem"
-				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
-				'whobenefit'
-					? 'bg-yellow-50'
-					: ''}"
-			>
 				<div
-					class="field-accent absolute top-0 bottom-0 left-0 w-0.75 transition-colors {focusedBlock ===
-					'whobenefit'
-						? 'bg-accent'
-						: 'bg-transparent'}"
-				></div>
-				<div
-					class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
+					class="border-l-3 {focusedBlock === 'problem'
+						? 'border-l-accent'
+						: 'border-l-transparent'}"
 				>
-					<div class="inline-block h-1.25 w-1.25 rounded-full bg-yellow-500"></div>
-					Who would benefit?
+					<Accordion.Item
+						value="problem-item"
+						class="border-b border-border-muted {focusedBlock === 'problem' ? 'bg-accent/5' : ''}"
+					>
+						<Accordion.Header>
+							<Accordion.Trigger class="w-full cursor-pointer text-left">
+								<!-- Accordion Header Content -->
+								<div
+									id="block-problem"
+									class="field-block relative p-[20px_24px] transition-colors"
+								>
+									<div
+										class="flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
+									>
+										<CaretDown class="transition-transform duration-200" size="18px" />
+										What problem does this solve?
+									</div>
+								</div>
+							</Accordion.Trigger>
+						</Accordion.Header>
+
+						<Accordion.Content class="px-6 pb-5">
+							<!-- Accordion Collapsible Body -->
+							<textarea
+								id="problem-input"
+								rows="2"
+								name="solvedProblem"
+								bind:value={solvedProblem}
+								onfocus={() => (focusedBlock = 'problem')}
+								class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
+								placeholder="e.g. University is too expensive and location-dependent for most people in the world."
+							></textarea>
+						</Accordion.Content>
+					</Accordion.Item>
 				</div>
-				<textarea
-					id="benefit-input"
-					rows="2"
-					name="whobenefit"
-					bind:value={whoBenefits}
-					onfocus={() => (focusedBlock = 'whobenefit')}
-					class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
-					placeholder="e.g. Students in developing countries, working adults..."
-				></textarea>
-			</div>
+				<!-- Who benefits -->
+
+				<div
+					class="border-l-3 {focusedBlock === 'whobenefit'
+						? 'border-l-accent'
+						: 'border-l-transparent'}"
+				>
+					<Accordion.Item
+						value="who-benefit"
+						class="border-b border-border-muted [&[data-state=open]>svg]:rotate-180 {focusedBlock ===
+						'whobenefit'
+							? 'bg-accent/5'
+							: ''}"
+					>
+						<Accordion.Header>
+							<Accordion.Trigger class="w-full cursor-pointer text-left">
+								<!-- Accordion Header Content -->
+
+								<div id="who-benefit" class="field-block relative p-[20px_24px] transition-colors">
+									<div
+										class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
+									>
+										<CaretDown class="transition-transform duration-200" size="18px" />
+										Who would benefit?
+									</div>
+								</div>
+							</Accordion.Trigger>
+						</Accordion.Header>
+
+						<Accordion.Content class="px-6 pb-5">
+							<!-- Accordion Collapsible Body -->
+							<textarea
+								id="benefit-input"
+								rows="2"
+								name="whobenefit"
+								bind:value={whoBenefits}
+								onfocus={() => (focusedBlock = 'whobenefit')}
+								class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
+								placeholder="e.g. Students in developing countries, working adults..."
+							></textarea>
+						</Accordion.Content>
+					</Accordion.Item>
+				</div>
+			</Accordion.Root>
+
 			<!-- Topic tags -->
 			<div
 				id="block-topic"
@@ -292,7 +313,7 @@
 				}}
 				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
 				'topic'
-					? 'bg-yellow-50'
+					? 'bg-accent/5'
 					: ''}"
 			>
 				<div
@@ -487,79 +508,39 @@
 
 	<!-- RIGHT COLUMN -->
 	<div class="preview-col hidden flex-col gap-3.5 min-[761px]:flex">
-		<div class="text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase">
-			Live preview
-		</div>
-
-		<div
-			class="bg-background-card overflow-hidden rounded-2xl border border-border shadow-[0_4px_20px_rgba(0,0,0,0.06)]"
-		>
-			<div class="bg-accent p-4">
-				<div
-					id="preview-title"
-					class="font-display text-[13.5px] leading-[1.4] font-bold text-foreground"
-				>
-					{title || 'Your idea title will appear here...'}
-				</div>
-			</div>
-			<div class="p-3 px-4">
-				<div id="preview-desc" class="mb-2.5 text-[12px] leading-[1.6] text-foreground-secondary">
-					{description
-						? description.substring(0, 120) + (description.length > 120 ? '...' : '')
-						: 'Your description will appear here...'}
-				</div>
-				<div class="flex flex-wrap items-center gap-1.5">
-					{#each selectedTopics as topic (topic)}
-						{#if topic.name}
-							<span
-								class="rounded-full border border-border bg-background-muted px-2 py-0.5 text-[11px] text-foreground-secondary"
-								>#{topic.name}</span
-							>
-						{/if}
-					{/each}
-				</div>
-				<div
-					class="ml-auto flex items-center justify-end text-[12px] font-semibold text-foreground-muted"
-				>
-					<LightningIcon weight="fill" class="text-accent" />
-					<div>0</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="rounded-2xl bg-primary p-4">
+		<div class="rounded-2xl bg-black p-4">
 			<div class="mb-3 text-[11px] font-semibold tracking-[0.08em] text-accent uppercase">
 				Tips for a great idea
 			</div>
 			<div class="mb-2.5 flex items-start gap-2.5">
 				<div
-					class="mt-px flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-foreground"
+					class="mt-px flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-dark"
 				>
 					1
 				</div>
-				<div class="text-[12px] leading-[1.55] text-foreground-disabled">
+				<div class="text-[12px] leading-[1.55] text-foreground-muted">
 					<strong class="text-white">Lead with the problem,</strong> not the solution. "Millions can't
 					afford university" is more compelling than "free exams".
 				</div>
 			</div>
 			<div class="mb-2.5 flex items-start gap-2.5">
 				<div
-					class="mt-px flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-foreground"
+					class="mt-px flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-dark"
 				>
 					2
 				</div>
-				<div class="text-[12px] leading-[1.55] text-foreground-disabled">
+				<div class="text-[12px] leading-[1.55] text-foreground-muted">
 					<strong class="text-white">Be specific</strong> about who benefits. "Students in rural areas"
 					gets more traction than "everyone".
 				</div>
 			</div>
 			<div class="flex items-start gap-2.5">
 				<div
-					class="mt-px flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-foreground"
+					class="mt-px flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-dark"
 				>
 					3
 				</div>
-				<div class="text-[12px] leading-[1.55] text-foreground-disabled">
+				<div class="text-[12px] leading-[1.55] text-foreground-muted">
 					<strong class="text-white">Raw ideas are welcome.</strong> You don't need to have it all figured
 					out — the community will help refine it.
 				</div>

@@ -3,7 +3,10 @@
 	import { resolve } from '$app/paths';
 	import AvatarDropdown from './AvatarDropdown.svelte';
 	import PlusIcon from 'phosphor-svelte/lib/PlusIcon';
-	let { hasBackButton } = $props();
+	import { Toggle } from 'bits-ui';
+	import Moon from 'phosphor-svelte/lib/MoonIcon';
+	import Sun from 'phosphor-svelte/lib/SunDimIcon';
+	import { toggleMode, mode } from 'mode-watcher';
 	const data = await userData();
 </script>
 
@@ -17,32 +20,27 @@
 		>
 	</a>
 
-	{#if hasBackButton}
-		<button
-			class="nav-back-post flex cursor-pointer items-center gap-[5px] border-none bg-transparent font-[inherit] text-[13px] text-foreground-muted transition-colors hover:text-foreground"
+	<!-- Search field -->
+
+	<div class="nav-search ml-2 hidden max-w-[320px] flex-1 md:flex">
+		<input
+			type="text"
+			placeholder="Search ideas..."
+			class="h-9 w-full rounded-full border border-input bg-background-muted px-4 text-[13px] text-foreground transition-colors outline-none placeholder:text-foreground-muted focus:border-accent focus:bg-background"
+		/>
+	</div>
+
+	<div class="ml-auto flex items-center gap-2.5">
+		<Toggle.Root
+			class="mr-1 cursor-pointer rounded-full p-3 hover:bg-muted hover:text-accent"
+			onclick={toggleMode}
 		>
-			<svg
-				width="14"
-				height="14"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-			>
-				<polyline points="15 18 9 12 15 6" />
-			</svg>
-			<a href={resolve('/')} class="max-[600px]:text-[12px]">Back to feed</a>
-		</button>
-	{:else}
-		<div class="nav-search ml-2 hidden max-w-[320px] flex-1 md:flex">
-			<input
-				type="text"
-				placeholder="Search ideas..."
-				class="border-border-input h-9 w-full rounded-full border bg-background-muted px-4 text-[13px] text-foreground transition-colors outline-none placeholder:text-foreground-muted focus:border-accent focus:bg-background"
-			/>
-		</div>
-	{/if}
-	<div class="ml-auto flex items-center gap-[10px]">
+			{#if mode.current === 'light'}
+				<Moon size="20px" />
+			{:else}
+				<Sun size="20px" />
+			{/if}
+		</Toggle.Root>
 		{#if data}
 			<AvatarDropdown avatar={data.image} />
 		{:else}
@@ -58,9 +56,9 @@
 				class="flex cursor-pointer items-center gap-1.5 rounded-full border-none bg-primary px-4 py-1.5 text-[13px] font-medium text-primary-foreground transition-opacity hover:opacity-85"
 			>
 				<div
-					class="flex h-[15px] w-[15px] items-center justify-center rounded-full bg-accent text-[13px] leading-none text-foreground"
+					class="flex h-3.75 w-3.75 items-center justify-center rounded-full bg-accent text-[13px] leading-none text-foreground"
 				>
-					<PlusIcon size=".7em" weight="bold" />
+					<PlusIcon size=".7em" weight="bold" color="black" />
 				</div>
 				Post idea
 			</button>
@@ -70,10 +68,10 @@
 
 <div
 	id="bottom-nav"
-	class="fixed right-0 bottom-0 left-0 z-200 flex h-[60px] border-t border-border bg-background sm:hidden"
+	class="fixed right-0 bottom-0 left-0 z-200 flex h-15 border-t border-border bg-background sm:hidden"
 >
 	<button
-		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px] text-foreground"
+		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-0.75 border-none bg-transparent font-body text-[10px] text-foreground"
 	>
 		<svg
 			width="20"
@@ -88,7 +86,7 @@
 		Feed
 	</button>
 	<button
-		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px] text-foreground-muted"
+		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-0.75 border-none bg-transparent font-body text-[10px] text-foreground-muted"
 	>
 		<svg
 			width="20"
@@ -108,14 +106,14 @@
 			class="-mt-4 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border-none bg-primary shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
 		>
 			<div
-				class="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-accent text-sm leading-none text-foreground"
+				class="flex h-4.5 w-4.5 items-center justify-center rounded-full bg-accent text-sm leading-none text-foreground"
 			>
 				+
 			</div>
 		</div>
 	</button>
 	<button
-		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px] text-foreground-muted"
+		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-0.75 border-none bg-transparent font-body text-[10px] text-foreground-muted"
 	>
 		<svg
 			width="20"
@@ -131,7 +129,7 @@
 		Alerts
 	</button>
 	<button
-		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent font-body text-[10px] text-foreground-muted"
+		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-0.75 border-none bg-transparent font-body text-[10px] text-foreground-muted"
 	>
 		<svg
 			width="20"

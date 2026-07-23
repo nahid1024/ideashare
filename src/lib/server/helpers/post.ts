@@ -1,16 +1,10 @@
-import type { postSchema, tagSchema, topicSchema, refinementSchema } from '$lib/validation_schema';
 import { db } from '../db';
 import { posts } from '../db/posts';
-import z from 'zod';
 import { postTopics } from '../db/postTopics';
 import { desc, eq } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
 import { refinements } from '../db/refinements';
-
-type CreatePost = z.infer<typeof postSchema>;
-type Tags = z.infer<typeof tagSchema>;
-type Topics = z.infer<typeof topicSchema>;
-type RefinementSchema = z.infer<typeof refinementSchema>;
+import type { PostCreation, Tags, Topics, RefinementSchema } from '$lib/types';
 
 export const AttachTopic = async (tags: Topics[], postId: string) => {
 	const values: Tags[] = [];
@@ -25,7 +19,7 @@ export const AttachTopic = async (tags: Topics[], postId: string) => {
 	}
 };
 
-export const CreatePost = async (data: CreatePost, authorId: string) => {
+export const CreatePost = async (data: PostCreation, authorId: string) => {
 	const isPublished = data.intent === 'publish';
 
 	const [post] = await db
@@ -126,5 +120,3 @@ export const createRefinement = async (data: RefinementSchema) => {
 	}
 	return refinement;
 };
-
-export type RefinementWithRelations = Awaited<ReturnType<typeof getRefinements>>[number];
