@@ -8,7 +8,12 @@ export const shares = pgTable('shares', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	postId: uuid('postId').references(() => posts.id),
 	userId: text('userId').references(() => user.id),
-	createdAt: timestamp('created_at').defaultNow().notNull()
+	createdAt: timestamp('created_at', {
+		withTimezone: true,
+		mode: 'date'
+	})
+		.defaultNow()
+		.notNull()
 });
 
 export const sharesRelation = relations(shares, ({ one }) => ({

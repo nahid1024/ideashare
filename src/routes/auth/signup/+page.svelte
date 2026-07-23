@@ -34,10 +34,10 @@
 	function getStrength(val: string) {
 		if (val.length === 0)
 			return { score: 0, hint: 'Use a mix of letters, numbers, and symbols', class: '' };
-		if (val.length < 6) return { score: 1, hint: 'Too short', class: 'weak' };
+		if (val.length < 6) return { score: 1, hint: 'Too short', class: 'bg-destructive' };
 		if (val.length < 10 || !/[0-9]/.test(val))
-			return { score: 2, hint: 'Getting there — add numbers or symbols', class: 'fair' };
-		return { score: 3, hint: '✓ Strong password', class: 'strong' };
+			return { score: 2, hint: 'Getting there — add numbers or symbols', class: 'bg-warning' };
+		return { score: 3, hint: '✓ Strong password', class: 'bg-success' };
 	}
 
 	// 3. This automatically updates whenever 'password' changes
@@ -48,35 +48,12 @@
 	class="fixed inset-0 flex h-screen w-screen overflow-hidden font-body text-foreground-inverted select-none"
 >
 	<!-- LEFT PANEL -->
-	<div class="left relative flex w-[52%] flex-col overflow-hidden bg-primary p-9 px-10">
+	<div
+		class="left relative flex w-[52%] max-[860px]:w-[44%] max-[640px]:hidden flex-col overflow-hidden bg-primary p-9 px-10 max-[860px]:p-7 max-[860px]:px-6 before:content-[''] before:absolute before:inset-0 before:bg-[radial-gradient(circle,_rgba(245,197,24,0.12)_1px,_transparent_1px)] before:bg-[length:28px_28px] before:pointer-events-none after:content-[''] after:absolute after:w-[500px] after:h-[500px] after:rounded-full after:bg-[radial-gradient(circle,_rgba(245,197,24,0.18)_0%,_transparent_70%)] after:-top-[100px] after:-left-[100px] after:pointer-events-none after:animate-pulse-slow"
+	>
 		<!-- Logo -->
 		<div class="relative z-2 mb-12 flex items-center gap-2.25">
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="30" height="30">
-				<path
-					d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z"
-					fill="var(--color-accent)"
-				/>
-				<ellipse
-					cx="38"
-					cy="26"
-					rx="7"
-					ry="10"
-					fill="var(--color-yellow-100)"
-					opacity="0.7"
-					transform="rotate(-20 38 26)"
-				/>
-				<rect x="39" y="83" width="22" height="5" rx="2.5" fill="var(--color-yellow-500)" />
-				<rect
-					x="40.5"
-					y="90"
-					width="19"
-					height="5"
-					rx="2.5"
-					fill="var(--color-yellow-500)"
-					opacity="0.7"
-				/>
-				<path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="var(--color-primary)" />
-			</svg>
+			<img src="/logo.svg" alt="logo" class="h-6 w-6" />
 			<span class="font-display text-lg font-bold tracking-[-0.3px] text-foreground-inverted"
 				>Idea<span class="text-accent">Share</span></span
 			>
@@ -85,10 +62,13 @@
 		<!-- Headline -->
 		<div class="left-headline relative z-2 mb-10">
 			<h2
-				class="font-display text-[36px] leading-[1.2] font-extrabold tracking-[-0.8px] text-foreground-inverted"
+				class="font-display text-[36px] max-[860px]:text-[28px] leading-[1.2] font-extrabold tracking-[-0.8px] text-foreground-inverted"
 			>
 				Where good ideas<br />find
-				<em class="headline-em relative text-accent not-italic">their people</em>
+				<em
+					class="headline-em relative text-accent not-italic after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:right-0 after:h-[3px] after:bg-accent after:rounded-[2px] after:opacity-40"
+					>their people</em
+				>
 			</h2>
 			<p class="mt-3 max-w-85 text-sm leading-[1.65] text-foreground-inverted/50">
 				A place to drop the thought before it disappears. Share it, refine it, build it — together.
@@ -98,7 +78,8 @@
 		<!-- Floating idea cards -->
 		<div class="relative z-2 flex-1 overflow-hidden">
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
+				class="animate-float-up absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] left-0 opacity-0"
+				style="animation-duration: 14s; animation-delay: 0s;"
 			>
 				<div
 					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
@@ -122,7 +103,8 @@
 			</div>
 
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
+				class="animate-float-up absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] left-[50px] opacity-0"
+				style="animation-duration: 18s; animation-delay: -6s;"
 			>
 				<div
 					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
@@ -146,7 +128,8 @@
 			</div>
 
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
+				class="animate-float-up absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] left-[20px] opacity-0"
+				style="animation-duration: 16s; animation-delay: -11s;"
 			>
 				<div
 					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
@@ -170,7 +153,8 @@
 			</div>
 
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
+				class="animate-float-up absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] left-[60px] opacity-0"
+				style="animation-duration: 20s; animation-delay: -3s;"
 			>
 				<div
 					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
@@ -194,7 +178,8 @@
 			</div>
 
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
+				class="animate-float-up absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] left-[10px] opacity-0"
+				style="animation-duration: 15s; animation-delay: -9s;"
 			>
 				<div
 					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
@@ -241,22 +226,22 @@
 
 	<!-- RIGHT PANEL -->
 	<div
-		class="right relative flex w-[48%] flex-col justify-center overflow-y-auto bg-background px-13 py-12"
+		class="right relative flex w-[48%] max-[860px]:w-[56%] max-[640px]:w-full flex-col justify-center max-[640px]:justify-start overflow-y-auto bg-background px-13 py-12 max-[860px]:p-9 max-[640px]:p-[28px_20px_40px] max-[640px]:min-h-screen"
 		id="right-panel"
 	>
-		<div class="screen visible" id="screen1">
+		<div class="screen visible hidden [&.visible]:block [&.visible]:animate-fade-in" id="screen1">
 			<h1
-				class="screen-title mb-1.5 font-display text-[28px] leading-[1.2] font-extrabold tracking-[-0.5px] text-foreground"
+				class="screen-title mb-1.5 font-display text-[28px] max-[640px]:text-[22px] leading-[1.2] font-extrabold tracking-[-0.5px] text-foreground"
 			>
 				Create your account
 			</h1>
-			<p class="screen-sub mb-7 text-[13.5px] leading-[1.6] text-foreground-muted">
+			<p class="screen-sub mb-7 max-[640px]:mb-5 text-[13.5px] max-[640px]:text-[13px] leading-[1.6] text-foreground-muted">
 				Your ideas deserve a home. Takes 30 seconds.
 			</p>
 
-			<div class="social-btns mb-5 flex flex-col gap-2.5">
+			<div class="social-btns mb-5 max-[640px]:mb-3.5 flex flex-col gap-2.5 max-[640px]:gap-2">
 				<button
-					class="social-btn flex h-11.5 w-full cursor-pointer items-center justify-center gap-2.5 rounded-md border-[1.5px] border-border bg-background font-body text-[13.5px] font-medium text-foreground transition-all duration-150 hover:border-border-strong hover:shadow-sm"
+					class="social-btn flex h-11.5 max-[640px]:h-11 w-full cursor-pointer items-center justify-center gap-2.5 rounded-md border-[1.5px] border-border bg-background font-body text-[13.5px] max-[640px]:text-[13px] font-medium text-foreground transition-all duration-150 hover:border-border-strong hover:shadow-sm"
 				>
 					<svg class="h-4.5 w-4.5" viewBox="0 0 24 24"
 						><path
@@ -279,7 +264,7 @@
 					<input type="hidden" name="provider" value="github" />
 					<input type="hidden" name="callbackURL" value="/auth" />
 					<button
-						class="social-btn flex h-11.5 w-full cursor-pointer items-center justify-center gap-2.5 rounded-md border-[1.5px] border-border bg-background font-body text-[13.5px] font-medium text-foreground transition-all duration-150 hover:border-border-strong hover:shadow-sm"
+						class="social-btn flex h-11.5 max-[640px]:h-11 w-full cursor-pointer items-center justify-center gap-2.5 rounded-md border-[1.5px] border-border bg-background font-body text-[13.5px] max-[640px]:text-[13px] font-medium text-foreground transition-all duration-150 hover:border-border-strong hover:shadow-sm"
 					>
 						<svg
 							class="h-4.5 w-4.5"
@@ -317,7 +302,7 @@
 				>
 					or sign up with email
 				</div>
-				<div class="field-row grid grid-cols-2 gap-3">
+				<div class="field-row grid grid-cols-2 max-[640px]:grid-cols-1 gap-3 max-[640px]:gap-0">
 					<div class="field mb-4">
 						<label
 							for="first_name"
@@ -327,7 +312,7 @@
 						<input
 							type="text"
 							bind:value={first_name}
-							class="field-input h-11.5 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
+							class="h-11.5 max-[640px]:h-11 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
 							placeholder="Rafiq"
 							id="first_name"
 							name="name"
@@ -346,7 +331,7 @@
 						<input
 							type="text"
 							bind:value={last_name}
-							class="field-input h-11.5 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
+							class="field-input h-11.5 max-[640px]:h-11 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
 							placeholder="Karim"
 							id="lastName"
 							onblur={() => (touched.last_name = true)}
@@ -363,7 +348,7 @@
 					<input
 						type="email"
 						bind:value={email}
-						class="field-input h-11.5 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
+						class="field-input h-11.5 max-[640px]:h-11 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
 						placeholder="you@example.com"
 						id="email"
 						name="email"
@@ -385,16 +370,16 @@
 					>
 					<input
 						type="password"
-						class="field-input h-11.5 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
+						class="field-input h-11.5 max-[640px]:h-11 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
 						placeholder="Min. 8 characters"
 						bind:value={password}
 						id="password"
 						name="password"
 					/>
 					<div class="pwd-strength mt-1.5 flex gap-1">
-						<div class="pwd-bar {strength.score >= 1 ? strength.class : ''}"></div>
-						<div class="pwd-bar {strength.score >= 2 ? strength.class : ''}"></div>
-						<div class="pwd-bar {strength.score >= 3 ? strength.class : ''}"></div>
+						<div class="pwd-bar h-[3px] flex-1 rounded-sm bg-border transition-colors duration-300 {strength.score >= 1 ? strength.class : ''}"></div>
+						<div class="pwd-bar h-[3px] flex-1 rounded-sm bg-border transition-colors duration-300 {strength.score >= 2 ? strength.class : ''}"></div>
+						<div class="pwd-bar h-[3px] flex-1 rounded-sm bg-border transition-colors duration-300 {strength.score >= 3 ? strength.class : ''}"></div>
 					</div>
 					<div class="pwd-hint mt-1 text-[11px] text-foreground-muted">
 						{strength.hint}
@@ -409,7 +394,7 @@
 					>
 					<input
 						type="password"
-						class="field-input h-11.5 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
+						class="field-input h-11.5 max-[640px]:h-11 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden"
 						placeholder="Min. 8 characters"
 						bind:value={confirm_password}
 						id="confirm_password"
@@ -442,337 +427,3 @@
 	</div>
 </div>
 
-<style>
-	/* ── Pseudo-elements (::before / ::after) ── */
-
-	/* Dot-grid overlay on left panel */
-	.left::before {
-		content: '';
-		position: absolute;
-		inset: 0;
-		background-image: radial-gradient(circle, rgba(245, 197, 24, 0.12) 1px, transparent 1px);
-		background-size: 28px 28px;
-		pointer-events: none;
-	}
-
-	/* Yellow glow blob */
-	.left::after {
-		content: '';
-		position: absolute;
-		width: 500px;
-		height: 500px;
-		border-radius: 50%;
-		background: radial-gradient(circle, rgba(245, 197, 24, 0.18) 0%, transparent 70%);
-		top: -100px;
-		left: -100px;
-		pointer-events: none;
-		animation: pulse 6s ease-in-out infinite;
-	}
-
-	/* Underline accent on headline <em> */
-	.headline-em::after {
-		content: '';
-		position: absolute;
-		bottom: -2px;
-		left: 0;
-		right: 0;
-		height: 3px;
-		background: var(--color-accent);
-		border-radius: 2px;
-		opacity: 0.4;
-	}
-
-	.pwd-bar {
-		height: 3px;
-		flex: 1;
-		border-radius: 0.125rem; /* rounded-sm */
-		background-color: var(--color-border);
-		transition: background-color 300ms;
-	}
-
-	/* Svelte safely compiles these classes now because they are explicitly in the template */
-	.weak {
-		background-color: var(--color-destructive);
-	} /* Red */
-	.fair {
-		background-color: var(--color-warning);
-	} /* Orange/Yellow */
-	.strong {
-		background-color: var(--color-success);
-	} /* Green */
-
-	/* ── Keyframe animations ── */
-	@keyframes pulse {
-		0%,
-		100% {
-			transform: scale(1);
-			opacity: 1;
-		}
-		50% {
-			transform: scale(1.1);
-			opacity: 0.7;
-		}
-	}
-
-	@keyframes floatUp {
-		0% {
-			transform: translateY(340px);
-			opacity: 0;
-		}
-		8% {
-			opacity: 1;
-		}
-		85% {
-			opacity: 1;
-		}
-		100% {
-			transform: translateY(-120px);
-			opacity: 0;
-		}
-	}
-
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(8px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	@keyframes popIn {
-		from {
-			transform: scale(0.5);
-			opacity: 0;
-		}
-		to {
-			transform: scale(1);
-			opacity: 1;
-		}
-	}
-
-	@keyframes confettiFall {
-		0% {
-			transform: translateY(-20px) rotate(0deg);
-			opacity: 1;
-		}
-		100% {
-			transform: translateY(600px) rotate(720deg);
-			opacity: 0;
-		}
-	}
-
-	/* ── Animated elements ── */
-	.idea-float {
-		animation: floatUp linear infinite;
-		opacity: 0;
-	}
-	.idea-float:nth-child(1) {
-		left: 0;
-		animation-duration: 14s;
-		animation-delay: 0s;
-	}
-	.idea-float:nth-child(2) {
-		left: 50px;
-		animation-duration: 18s;
-		animation-delay: -6s;
-	}
-	.idea-float:nth-child(3) {
-		left: 20px;
-		animation-duration: 16s;
-		animation-delay: -11s;
-	}
-	.idea-float:nth-child(4) {
-		left: 60px;
-		animation-duration: 20s;
-		animation-delay: -3s;
-	}
-	.idea-float:nth-child(5) {
-		left: 10px;
-		animation-duration: 15s;
-		animation-delay: -9s;
-	}
-
-	.success-bulb {
-		animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-	}
-	.conf-piece {
-		animation: confettiFall linear forwards;
-		opacity: 0;
-	}
-
-	/* ── JS-toggled states (class names referenced by script) ── */
-
-	/* Screen visibility */
-	.screen {
-		display: none;
-	}
-	.screen.visible {
-		display: block;
-		animation: fadeIn 0.3s ease;
-	}
-
-	/* Progress step bar states */
-	.step.done {
-		background: var(--color-accent);
-	}
-	.step.active {
-		background: var(--color-primary);
-	}
-
-	/* Topic tile selected state */
-	.topic-tile:hover {
-		border-color: var(--color-yellow-500);
-	}
-	.topic-tile.selected {
-		border-color: var(--color-accent);
-		background: var(--color-yellow-100);
-	}
-
-	/* Type tile selected state */
-	.type-tile:hover {
-		border-color: var(--color-foreground-secondary);
-	}
-	.type-tile.selected {
-		border-color: var(--color-primary);
-		background: var(--color-primary);
-	}
-
-	/* ── Hover / active states ── */
-	.social-btn:hover {
-		border-color: var(--color-border-strong);
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-	}
-	.btn-next:hover {
-		opacity: 0.88;
-	}
-	.btn-next:active {
-		transform: scale(0.99);
-	}
-	.already-have a:hover {
-		text-decoration: underline;
-	}
-
-	/* ── Responsive ── */
-	@media (max-width: 860px) {
-		.left {
-			width: 44%;
-			padding: 28px 24px;
-		}
-		.right {
-			width: 56%;
-			padding: 36px;
-		}
-		.left-headline h2 {
-			font-size: 28px;
-		}
-	}
-
-	@media (max-width: 640px) {
-		.left {
-			display: none;
-		}
-		.right {
-			width: 100%;
-			min-height: 100vh;
-			padding: 28px 20px 40px;
-			justify-content: flex-start;
-		}
-		.mobile-top {
-			display: flex !important;
-			align-items: center;
-			justify-content: space-between;
-			margin-bottom: 28px;
-		}
-		.mobile-logo {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-		}
-		.mobile-logo-text {
-			font-family: var(--font-display);
-			font-size: 17px;
-			font-weight: 700;
-			color: var(--color-foreground);
-			letter-spacing: -0.3px;
-		}
-		.mobile-signin {
-			font-size: 13px;
-			color: var(--color-foreground);
-			font-weight: 500;
-			cursor: pointer;
-			text-decoration: underline;
-		}
-		.steps {
-			margin-bottom: 24px;
-		}
-		.screen-title {
-			font-size: 22px;
-		}
-		.screen-sub {
-			font-size: 13px;
-			margin-bottom: 20px;
-		}
-		.social-btns {
-			gap: 8px;
-			margin-bottom: 14px;
-		}
-		.social-btn {
-			height: 44px;
-			font-size: 13px;
-		}
-		.field-row {
-			grid-template-columns: 1fr;
-			gap: 0;
-		}
-		.field-input {
-			height: 44px;
-			font-size: 14px;
-		}
-		.topic-grid {
-			grid-template-columns: 1fr 1fr;
-			gap: 7px;
-		}
-		.topic-tile {
-			padding: 10px 12px;
-		}
-		.topic-emoji {
-			font-size: 17px;
-		}
-		.topic-name {
-			font-size: 12px;
-		}
-		.topic-count {
-			font-size: 10px;
-		}
-		.type-list {
-			gap: 7px;
-		}
-		.type-tile {
-			padding: 12px 14px;
-		}
-		.type-icon-wrap {
-			width: 32px;
-			height: 32px;
-			font-size: 16px;
-		}
-		.type-name {
-			font-size: 13px;
-		}
-		.type-desc {
-			font-size: 11.5px;
-		}
-		.btn-next {
-			height: 48px;
-			font-size: 14px;
-		}
-		.success-bulb {
-			width: 60px;
-			height: 60px;
-			font-size: 30px;
-			border-radius: 16px;
-		}
-	}
-</style>

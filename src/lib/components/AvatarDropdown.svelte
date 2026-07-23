@@ -11,11 +11,11 @@
 
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger
-		class="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-border-input font-medium text-foreground shadow-xs select-none hover:bg-muted active:scale-[0.98]"
+		class="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full font-medium text-foreground shadow-xs select-none hover:bg-muted active:scale-[0.98]"
 	>
 		<Avatar.Root
 			delayMs={200}
-			class="h-10 w-10 rounded-full border border-border bg-muted text-[17px] font-medium text-muted-foreground uppercase data-[status=loaded]:border-foreground data-[status=loading]:border-transparent"
+			class="h-10 w-10 rounded-full border border-border bg-muted text-[17px] font-medium text-muted-foreground uppercase data-[status=loaded]:border-accent data-[status=loading]:border-transparent"
 		>
 			<div
 				class="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-transparent"
@@ -91,7 +91,7 @@
 				</div>
 			</DropdownMenu.Item>
 			<DropdownMenu.Item
-				class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-destructive select-none focus-visible:outline-none data-highlighted:bg-destructive-background data-highlighted:text-destructive-foreground"
+				class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-destructive select-none focus-visible:outline-none data-highlighted:bg-muted"
 			>
 				<form method="post" action="/auth?/signOut" use:enhance class="w-full">
 					<button

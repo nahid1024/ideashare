@@ -3,7 +3,7 @@
 	import Refinement from './Refinement.svelte';
 	import RefinementForm from './RefinementForm.svelte';
 	import { type RefinementTreeType } from '$lib/utils';
-	import type { RefinementWithRelations } from '$lib/server/helpers/post';
+	import { type RefinementWithRelations } from '$lib/types/index';
 
 	let { refinements, postId, userId } = $props();
 	let RefinementTree = $state<RefinementTreeType[]>(buildRefinementTree(refinements));

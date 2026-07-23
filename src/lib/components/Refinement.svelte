@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Refinement from './Refinement.svelte';
-	import { type RefinementWithRelations } from '$lib/server/helpers/post';
+	import { type RefinementWithRelations } from '$lib/types/index';
 	import { timeAgo, type RefinementTreeType } from '$lib/utils';
 	import RefinementForm from './RefinementForm.svelte';
 	import { fly } from 'svelte/transition';

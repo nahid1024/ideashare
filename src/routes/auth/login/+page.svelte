@@ -11,56 +11,39 @@
 <div
 	class="fixed inset-0 flex h-screen w-screen overflow-hidden bg-primary font-body text-foreground-inverted select-none"
 >
+	<!-- Left Panel -->
 	<div
-		class="left relative flex w-[52%] flex-col overflow-hidden bg-primary p-9 px-10 max-md:w-[44%] max-md:px-6 max-sm:hidden"
+		class="left relative flex w-[52%] flex-col overflow-hidden bg-primary p-9 px-10 before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle,_rgba(245,197,24,0.12)_1px,_transparent_1px)] before:bg-[length:28px_28px] before:content-[''] after:pointer-events-none after:absolute after:-top-[100px] after:-left-[100px] after:h-[500px] after:w-[500px] after:animate-pulse-slow after:rounded-full after:bg-[radial-gradient(circle,_rgba(245,197,24,0.18)_0%,_transparent_70%)] after:content-[''] max-[860px]:w-[44%] max-[860px]:p-7 max-[860px]:px-6 max-[640px]:hidden"
 	>
+		<!-- Logo -->
 		<div class="relative z-2 mb-12 flex items-center gap-2.25">
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="30" height="30">
-				<path
-					d="M50 8 C32 8 19 21 19 38 C19 50 26 60 37 66 C38.5 67 39 68.5 39 70 L39 78 C39 80.2 40.8 82 43 82 L57 82 C59.2 82 61 80.2 61 78 L61 70 C61 68.5 61.5 67 63 66 C74 60 81 50 81 38 C81 21 68 8 50 8Z"
-					fill="var(--color-accent)"
-				/>
-				<ellipse
-					cx="38"
-					cy="26"
-					rx="7"
-					ry="10"
-					fill="var(--color-yellow-100)"
-					opacity="0.7"
-					transform="rotate(-20 38 26)"
-				/>
-				<rect x="39" y="83" width="22" height="5" rx="2.5" fill="var(--color-yellow-500)" />
-				<rect
-					x="40.5"
-					y="90"
-					width="19"
-					height="5"
-					rx="2.5"
-					fill="var(--color-yellow-500)"
-					opacity="0.7"
-				/>
-				<path d="M54 22 L44 46 L51 46 L46 68 L62 40 L54 40 Z" fill="var(--color-primary)" />
-			</svg>
+			<img src="/logo.svg" alt="logo" class="h-6 w-6" />
 			<span class="font-display text-lg font-bold tracking-[-0.3px] text-foreground-inverted"
 				>Idea<span class="text-accent">Share</span></span
 			>
 		</div>
 
+		<!-- Headline -->
 		<div class="left-headline relative z-2 mb-10">
 			<h2
-				class="font-display text-[36px] leading-[1.2] font-extrabold tracking-[-0.8px] text-foreground-inverted max-md:text-2xl"
+				class="font-display text-[36px] leading-[1.2] font-extrabold tracking-[-0.8px] text-foreground-inverted max-[860px]:text-[28px]"
 			>
 				Where good ideas<br />find
-				<em class="headline-em relative text-accent not-italic">their people</em>
+				<em
+					class="headline-em relative text-accent not-italic after:absolute after:right-0 after:-bottom-[2px] after:left-0 after:h-[3px] after:rounded-[2px] after:bg-accent after:opacity-40 after:content-['']"
+					>their people</em
+				>
 			</h2>
 			<p class="mt-3 max-w-85 text-sm leading-[1.65] text-foreground-inverted/50">
 				A place to drop the thought before it disappears. Share it, refine it, build it — together.
 			</p>
 		</div>
 
+		<!-- Floating idea cards -->
 		<div class="relative z-2 flex-1 overflow-hidden">
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
+				class="absolute left-0 w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] opacity-0"
+				style="animation-duration: 14s; animation-delay: 0s;"
 			>
 				<div
 					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
@@ -84,7 +67,8 @@
 			</div>
 
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
+				class="absolute left-[50px] w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] opacity-0"
+				style="animation-duration: 18s; animation-delay: -6s;"
 			>
 				<div
 					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
@@ -108,7 +92,8 @@
 			</div>
 
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
+				class="absolute left-[20px] w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] opacity-0"
+				style="animation-duration: 16s; animation-delay: -11s;"
 			>
 				<div
 					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
@@ -132,7 +117,8 @@
 			</div>
 
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
+				class="absolute left-[60px] w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] opacity-0"
+				style="animation-duration: 20s; animation-delay: -3s;"
 			>
 				<div
 					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
@@ -156,7 +142,8 @@
 			</div>
 
 			<div
-				class="idea-float absolute w-75 rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px]"
+				class="absolute left-[10px] w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] opacity-0"
+				style="animation-duration: 15s; animation-delay: -9s;"
 			>
 				<div
 					class="mb-2 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent"
@@ -180,6 +167,7 @@
 			</div>
 		</div>
 
+		<!-- Bottom stats -->
 		<div class="relative z-2 mt-6 flex gap-7 border-t border-foreground-inverted/10 pt-5">
 			<div>
 				<div class="font-display text-[22px] font-extrabold tracking-[-0.5px] text-accent">

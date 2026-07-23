@@ -8,11 +8,13 @@
 	import Clock from 'phosphor-svelte/lib/ClockIcon';
 	import TrendUp from 'phosphor-svelte/lib/TrendUpIcon';
 	import HouseSimple from 'phosphor-svelte/lib/HouseSimpleIcon';
+	import IdeaCard from '$lib/components/IdeaCard.svelte';
+	import LightBulb from 'phosphor-svelte/lib/LightbulbIcon';
 
 	const { data } = $props();
 </script>
 
-<Navbar hasBackButton={false} />
+<Navbar />
 
 <div
 	class="layout mx-auto grid max-w-270 grid-cols-1 gap-6 px-3 py-7 max-[600px]:pb-20 min-[601px]:grid-cols-[160px_minmax(0,1fr)] min-[601px]:px-6 min-[861px]:grid-cols-[200px_minmax(0,1fr)_220px]"
@@ -27,7 +29,7 @@
 		</div>
 
 		<a
-			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-primary bg-primary px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-inverted no-underline transition-colors duration-100 sm:rounded-md sm:border-none sm:bg-yellow-100 sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:font-medium sm:text-foreground"
+			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-primary bg-primary px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-inverted no-underline transition-colors duration-100 sm:rounded-md sm:border-none sm:bg-accent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:font-medium sm:text-black"
 			href={resolve('/')}
 		>
 			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
@@ -124,87 +126,14 @@
 		<!-- Post list -->
 
 		{#each data.posts as post (post.id)}
-			<article
-				class="cursor-pointer rounded-lg border border-border bg-background p-[18px_20px] transition-all hover:border-accent hover:[box-shadow:var(--shadow-focus)]"
-			>
-				<a href={resolve(`/post/${post.id}`)}>
-					<div class="flex items-start gap-[14px]">
-						<!-- Post title -->
-						<div
-							class="flex-1 font-display text-[15px] leading-[1.4] font-semibold text-foreground"
-						>
-							{post.title}
-						</div>
-						<div class="flex shrink-0 flex-col items-center gap-[3px]">
-							<div
-								class="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-md border-[1.5px] border-accent bg-accent"
-							>
-								<svg
-									width="16"
-									height="16"
-									viewBox="0 0 24 24"
-									fill="currentColor"
-									class="text-accent-foreground"
-								>
-									<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-								</svg>
-							</div>
-							<div class="text-[12px] font-medium text-foreground-secondary">847</div>
-						</div>
-					</div>
-				</a>
-				<!-- Post description -->
-				<p class="mb-[14px] text-[13.5px] leading-[1.65] wrap-break-word text-foreground-secondary">
-					{post.description}
-				</p>
-				<div class="card-footer flex flex-wrap items-center gap-1.5">
-					{#each post.postTopics as topic (topic.id)}
-						<span
-							class="rounded-full border border-border bg-background-muted px-[10px] py-[3px] text-[12px] text-foreground-secondary"
-							>#{topic.topic?.name}</span
-						>
-					{/each}
-
-					<div class="card-meta ml-auto hidden items-center gap-3 min-[601px]:flex">
-						<div class="flex items-center">
-							<div
-								class="ml-0 flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-accent text-[9px] font-semibold text-accent-foreground"
-							>
-								RK
-							</div>
-							<div
-								class="ml-[-6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-primary text-[9px] font-semibold text-foreground-inverted"
-							>
-								SM
-							</div>
-							<div
-								class="ml-[-6px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-background bg-border-strong text-[9px] font-semibold text-foreground-secondary"
-							>
-								+4
-							</div>
-						</div>
-						<span class="text-[12px] whitespace-nowrap text-foreground-muted">12 builds</span>
-					</div>
-				</div>
-			</article>
+			<IdeaCard {post} />
 		{/each}
 	</main>
 
 	<aside class="sidebar-right hidden flex-col gap-4 lg:flex">
 		<div class="rounded-lg bg-accent p-[18px_16px] text-accent-foreground">
-			<div class="mb-3 flex h-9 w-9 items-center justify-center rounded-md bg-primary">
-				<svg viewBox="0 0 24 24" fill="none" width="20" height="20">
-					<path
-						d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z"
-						fill="currentColor"
-						class="text-accent"
-					/>
-					<path
-						d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z"
-						fill="currentColor"
-						class="text-accent"
-					/>
-				</svg>
+			<div class="mb-3 flex h-9 w-9 items-center justify-center rounded-md bg-dark">
+				<LightBulb color="#f5c518" weight="fill" />
 			</div>
 			<div class="mb-[6px] font-display text-[15px] leading-[1.35] font-semibold">
 				You had a thought today. Don't let it disappear.
@@ -213,7 +142,7 @@
 				Ideas shared here have inspired real projects.
 			</div>
 			<button
-				class="w-full cursor-pointer rounded-md border-none bg-primary py-[9px] font-body text-[13px] font-medium text-foreground-inverted transition-opacity hover:opacity-85"
+				class="w-full cursor-pointer rounded-md border-none bg-dark py-[9px] font-body text-[13px] font-medium text-light transition-opacity hover:opacity-85"
 			>
 				+ Share your idea
 			</button>
@@ -263,13 +192,11 @@
 			</div>
 		</div>
 
-		<div class="rounded-lg bg-primary p-4">
+		<div class="rounded-lg bg-dark p-4">
 			<div class="mb-2 text-[11px] font-semibold tracking-[0.08em] text-accent uppercase">
 				This week's top idea
 			</div>
-			<div
-				class="mb-[10px] font-display text-[13px] leading-[1.45] font-medium text-foreground-inverted"
-			>
+			<div class="mb-[10px] font-display text-[13px] leading-[1.45] font-medium text-light">
 				Universal exam system gains 800+ sparks in 3 days
 			</div>
 			<div class="text-[12px] text-foreground-muted">

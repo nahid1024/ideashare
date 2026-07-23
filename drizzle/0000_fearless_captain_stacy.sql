@@ -33,8 +33,8 @@ CREATE TABLE "user" (
 	"email" text NOT NULL,
 	"email_verified" boolean DEFAULT false NOT NULL,
 	"image" text,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"role" text,
 	"banned" boolean DEFAULT false,
 	"ban_reason" text,
@@ -60,8 +60,8 @@ CREATE TABLE "posts" (
 	"isAnonymous" boolean DEFAULT false NOT NULL,
 	"isPublished" boolean DEFAULT false NOT NULL,
 	"authorId" text NOT NULL,
-	"createdAt" timestamp DEFAULT now() NOT NULL,
-	"updatedAt" timestamp DEFAULT now() NOT NULL
+	"createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+	"updatedAt" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "media" (
@@ -78,12 +78,12 @@ CREATE TABLE "post_topics" (
 --> statement-breakpoint
 CREATE TABLE "refinements" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"postId" uuid,
-	"userId" text,
+	"postId" uuid NOT NULL,
+	"userId" text NOT NULL,
 	"parentRefinementId" uuid,
 	"body" text NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"isHidden" boolean DEFAULT false NOT NULL,
 	"isEdited" boolean DEFAULT false NOT NULL,
 	"refinementType" varchar NOT NULL
@@ -93,7 +93,7 @@ CREATE TABLE "shares" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"postId" uuid,
 	"userId" text,
-	"created_at" timestamp DEFAULT now() NOT NULL
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "sparked" (
@@ -106,6 +106,13 @@ CREATE TABLE "sparked" (
 CREATE TABLE "topics" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" varchar NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "refinementVotes" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"userId" text,
+	"refinementId" uuid,
+	CONSTRAINT "refinementVotes_userId_refinementId_unique" UNIQUE("userId","refinementId")
 );
 --> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -121,6 +128,8 @@ ALTER TABLE "shares" ADD CONSTRAINT "shares_postId_posts_id_fk" FOREIGN KEY ("po
 ALTER TABLE "shares" ADD CONSTRAINT "shares_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "sparked" ADD CONSTRAINT "sparked_postId_posts_id_fk" FOREIGN KEY ("postId") REFERENCES "public"."posts"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "sparked" ADD CONSTRAINT "sparked_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "refinementVotes" ADD CONSTRAINT "refinementVotes_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "refinementVotes" ADD CONSTRAINT "refinementVotes_refinementId_refinements_id_fk" FOREIGN KEY ("refinementId") REFERENCES "public"."refinements"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "account_userId_idx" ON "account" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "session_userId_idx" ON "session" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "user_email_index" ON "user" USING btree ("email");--> statement-breakpoint

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
-	import type { RefinementWithRelations } from '$lib/server/helpers/post';
+	import { type RefinementWithRelations } from '$lib/types/index';
 	import { sleep } from '$lib/utils';
 	import CircleNotch from 'phosphor-svelte/lib/CircleNotchIcon';
 
@@ -104,7 +104,7 @@
 					onclick={() => (selectedRefinementType = t.id)}
 					class="cursor-pointer rounded-full border px-3 py-[5px] text-[12px] font-medium transition-all {selectedRefinementType ===
 					t.id
-						? 'border-yellow-500 bg-accent text-foreground'
+						? 'border-yellow-500 bg-accent text-black'
 						: 'border-border bg-transparent text-foreground-secondary hover:border-foreground'}"
 				>
 					{t.text}

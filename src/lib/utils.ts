@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import type { RefinementWithRelations } from './server/helpers/post';
+import type { RefinementWithRelations } from '$lib/types';
 
 //type Refinement = InferSelectModel<typeof refinements>;
 export type RefinementTreeType = RefinementWithRelations & {

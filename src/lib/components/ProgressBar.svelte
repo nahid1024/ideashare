@@ -41,7 +41,7 @@
 		top: 0;
 		left: 0;
 
-		height: 3px;
+		height: 2px;
 		background: #f5c518;
 		box-shadow:
 			0 0 10px #f5c518,
