@@ -63,6 +63,18 @@
 		"zod": "^4.4.3"
 	},
 	"dependencies": {
+		"@sentry/sveltekit": "^10.67.0",
+		"@tiptap/core": "^3.28.0",
+		"@tiptap/extension-bubble-menu": "^3.28.0",
+		"@tiptap/extension-document": "^3.28.0",
+		"@tiptap/extension-link": "^3.28.0",
+		"@tiptap/extension-paragraph": "^3.28.0",
+		"@tiptap/extension-placeholder": "^3.28.0",
+		"@tiptap/extension-text": "^3.28.0",
+		"@tiptap/extension-underline": "^3.28.0",
+		"@tiptap/markdown": "^3.28.0",
+		"@tiptap/pm": "^3.28.0",
+		"@tiptap/starter-kit": "^3.28.0",
 		"bits-ui": "^2.18.1",
 		"zod-validation-error": "^5.0.0"
 	}

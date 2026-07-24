@@ -25,7 +25,7 @@ export const topicSchema = z.object({
 
 export const postSchema = z.object({
 	title: z.string().nonempty('Title is required').max(120, 'Title cannot exceed 120 characters'),
-	description: z.string().nonempty('Description is requred'),
+	description: z.string().nonempty('Description is required'),
 	solvedProblem: z.string().nullable(),
 	whoBenefits: z.string().nullable(),
 	isAnonymous: z.boolean().default(false),

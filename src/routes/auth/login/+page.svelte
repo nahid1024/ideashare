@@ -13,12 +13,12 @@
 >
 	<!-- Left Panel -->
 	<div
-		class="left relative flex w-[52%] flex-col overflow-hidden bg-primary p-9 px-10 before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle,_rgba(245,197,24,0.12)_1px,_transparent_1px)] before:bg-[length:28px_28px] before:content-[''] after:pointer-events-none after:absolute after:-top-[100px] after:-left-[100px] after:h-[500px] after:w-[500px] after:animate-pulse-slow after:rounded-full after:bg-[radial-gradient(circle,_rgba(245,197,24,0.18)_0%,_transparent_70%)] after:content-[''] max-[860px]:w-[44%] max-[860px]:p-7 max-[860px]:px-6 max-[640px]:hidden"
+		class="left relative flex w-[52%] flex-col overflow-hidden bg-dark p-9 px-10 before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle,rgba(245,197,24,0.12)_1px,transparent_1px)] before:bg-size-[28px_28px] before:content-[''] after:pointer-events-none after:absolute after:-top-25 after:-left-25 after:h-125 after:w-125 after:animate-pulse-slow after:rounded-full after:bg-[radial-gradient(circle,rgba(245,197,24,0.18)_0%,transparent_70%)] after:content-[''] max-[860px]:w-[44%] max-[860px]:p-7 max-[860px]:px-6 max-[640px]:hidden"
 	>
 		<!-- Logo -->
 		<div class="relative z-2 mb-12 flex items-center gap-2.25">
 			<img src="/logo.svg" alt="logo" class="h-6 w-6" />
-			<span class="font-display text-lg font-bold tracking-[-0.3px] text-foreground-inverted"
+			<span class="font-display text-lg font-bold tracking-[-0.3px] text-light"
 				>Idea<span class="text-accent">Share</span></span
 			>
 		</div>
@@ -26,15 +26,15 @@
 		<!-- Headline -->
 		<div class="left-headline relative z-2 mb-10">
 			<h2
-				class="font-display text-[36px] leading-[1.2] font-extrabold tracking-[-0.8px] text-foreground-inverted max-[860px]:text-[28px]"
+				class="font-display text-[36px] leading-[1.2] font-extrabold tracking-[-0.8px] text-light max-[860px]:text-[28px]"
 			>
 				Where good ideas<br />find
 				<em
-					class="headline-em relative text-accent not-italic after:absolute after:right-0 after:-bottom-[2px] after:left-0 after:h-[3px] after:rounded-[2px] after:bg-accent after:opacity-40 after:content-['']"
+					class="headline-em relative text-accent not-italic after:absolute after:right-0 after:-bottom-0.5 after:left-0 after:h-0.75 after:rounded-[2px] after:bg-accent after:opacity-40 after:content-['']"
 					>their people</em
 				>
 			</h2>
-			<p class="mt-3 max-w-85 text-sm leading-[1.65] text-foreground-inverted/50">
+			<p class="mt-3 max-w-85 text-sm leading-[1.65] text-light/50">
 				A place to drop the thought before it disappears. Share it, refine it, build it — together.
 			</p>
 		</div>
@@ -42,7 +42,7 @@
 		<!-- Floating idea cards -->
 		<div class="relative z-2 flex-1 overflow-hidden">
 			<div
-				class="absolute left-0 w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] opacity-0"
+				class="absolute left-0 w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-[#1c1c1c] p-[14px_16px] opacity-0"
 				style="animation-duration: 14s; animation-delay: 0s;"
 			>
 				<div
@@ -50,9 +50,7 @@
 				>
 					#education
 				</div>
-				<div
-					class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted"
-				>
+				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-light">
 					A universal exam that certifies your skills — no university required
 				</div>
 				<div class="flex items-center gap-2">
@@ -61,13 +59,13 @@
 					>
 						RK
 					</div>
-					<div class="text-[11px] text-foreground-inverted/40">Rafiq K.</div>
+					<div class="text-[11px] text-light/40">Rafiq K.</div>
 					<div class="ml-auto text-[11px] font-semibold text-accent">⚡ 847</div>
 				</div>
 			</div>
 
 			<div
-				class="absolute left-[50px] w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] opacity-0"
+				class="absolute left-12.5 w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-[#1c1c1c] p-[14px_16px] opacity-0"
 				style="animation-duration: 18s; animation-delay: -6s;"
 			>
 				<div
@@ -75,24 +73,22 @@
 				>
 					#health
 				</div>
-				<div
-					class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted"
-				>
+				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-light">
 					Let patients own their medical records — shared with any doctor, anywhere
 				</div>
 				<div class="flex items-center gap-2">
 					<div
-						class="flex h-5 w-5 items-center justify-center rounded-full bg-success text-[9px] font-bold text-success-foreground"
+						class="flex h-5 w-5 items-center justify-center rounded-full bg-success text-[9px] font-bold text-dark"
 					>
 						TA
 					</div>
-					<div class="text-[11px] text-foreground-inverted/40">Tolu A.</div>
+					<div class="text-[11px] text-light/40">Tolu A.</div>
 					<div class="ml-auto text-[11px] font-semibold text-accent">⚡ 512</div>
 				</div>
 			</div>
 
 			<div
-				class="absolute left-[20px] w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] opacity-0"
+				class="absolute left-5 w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-[#1c1c1c] p-[14px_16px] opacity-0"
 				style="animation-duration: 16s; animation-delay: -11s;"
 			>
 				<div
@@ -100,9 +96,7 @@
 				>
 					#cities
 				</div>
-				<div
-					class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted"
-				>
+				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-light">
 					Neighbourhoods vote on which small businesses get rent subsidies each quarter
 				</div>
 				<div class="flex items-center gap-2">
@@ -111,13 +105,13 @@
 					>
 						LM
 					</div>
-					<div class="text-[11px] text-foreground-inverted/40">Lena M.</div>
+					<div class="text-[11px] text-light/40">Lena M.</div>
 					<div class="ml-auto text-[11px] font-semibold text-accent">⚡ 389</div>
 				</div>
 			</div>
 
 			<div
-				class="absolute left-[60px] w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] opacity-0"
+				class="absolute left-15 w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-[#1c1c1c] p-[14px_16px] opacity-0"
 				style="animation-duration: 20s; animation-delay: -3s;"
 			>
 				<div
@@ -125,9 +119,7 @@
 				>
 					#economy
 				</div>
-				<div
-					class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted"
-				>
+				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-light">
 					A global skills passport replacing the traditional CV once and for all
 				</div>
 				<div class="flex items-center gap-2">
@@ -136,13 +128,13 @@
 					>
 						NI
 					</div>
-					<div class="text-[11px] text-foreground-inverted/40">Nadia I.</div>
+					<div class="text-[11px] text-light/40">Nadia I.</div>
 					<div class="ml-auto text-[11px] font-semibold text-accent">⚡ 271</div>
 				</div>
 			</div>
 
 			<div
-				class="absolute left-[10px] w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-primary p-[14px_16px] opacity-0"
+				class="absolute left-2.5 w-75 animate-float-up rounded-[14px] border border-foreground-inverted/20 bg-[#1c1c1c] p-[14px_16px] opacity-0"
 				style="animation-duration: 15s; animation-delay: -9s;"
 			>
 				<div
@@ -150,9 +142,7 @@
 				>
 					#technology
 				</div>
-				<div
-					class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-foreground-inverted"
-				>
+				<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-semibold text-light">
 					Open-source AI trained only on public domain works — no copyright risk
 				</div>
 				<div class="flex items-center gap-2">
@@ -161,7 +151,7 @@
 					>
 						PO
 					</div>
-					<div class="text-[11px] text-foreground-inverted/40">Paulo O.</div>
+					<div class="text-[11px] text-light/40">Paulo O.</div>
 					<div class="ml-auto text-[11px] font-semibold text-accent">⚡ 634</div>
 				</div>
 			</div>
@@ -173,17 +163,17 @@
 				<div class="font-display text-[22px] font-extrabold tracking-[-0.5px] text-accent">
 					24k+
 				</div>
-				<div class="mt-0.5 text-[11px] text-foreground-inverted/40">Ideas shared</div>
+				<div class="mt-0.5 text-[11px] text-light/40">Ideas shared</div>
 			</div>
 			<div>
 				<div class="font-display text-[22px] font-extrabold tracking-[-0.5px] text-accent">
 					8.3k
 				</div>
-				<div class="mt-0.5 text-[11px] text-foreground-inverted/40">Being built</div>
+				<div class="mt-0.5 text-[11px] text-light/40">Being built</div>
 			</div>
 			<div>
 				<div class="font-display text-[22px] font-extrabold tracking-[-0.5px] text-accent">142</div>
-				<div class="mt-0.5 text-[11px] text-foreground-inverted/40">Countries</div>
+				<div class="mt-0.5 text-[11px] text-light/40">Countries</div>
 			</div>
 		</div>
 	</div>
@@ -192,7 +182,7 @@
 		class="right relative flex w-[48%] flex-col justify-center overflow-y-auto bg-background px-13 py-12 max-md:w-[56%] max-md:p-9 max-sm:min-h-screen max-sm:w-full max-sm:justify-start max-sm:p-5 max-sm:pb-10"
 		id="right-panel"
 	>
-		<div class="screen visible block animate-[fadeIn_0.3s_ease]">
+		<div class="screen visible block animate-fade-in">
 			<div
 				class="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full border border-warning-border bg-warning-background px-3 py-1 text-[11px] font-bold tracking-widest text-warning-foreground uppercase"
 			>
@@ -415,36 +405,5 @@
 			transform: translateY(-120px);
 			opacity: 0;
 		}
-	}
-
-	/* ── Animated elements ── */
-	.idea-float {
-		animation: floatUp linear infinite;
-		opacity: 0;
-	}
-	.idea-float:nth-child(1) {
-		left: 0;
-		animation-duration: 14s;
-		animation-delay: 0s;
-	}
-	.idea-float:nth-child(2) {
-		left: 50px;
-		animation-duration: 18s;
-		animation-delay: -6s;
-	}
-	.idea-float:nth-child(3) {
-		left: 20px;
-		animation-duration: 16s;
-		animation-delay: -11s;
-	}
-	.idea-float:nth-child(4) {
-		left: 60px;
-		animation-duration: 20s;
-		animation-delay: -3s;
-	}
-	.idea-float:nth-child(5) {
-		left: 10px;
-		animation-duration: 15s;
-		animation-delay: -9s;
 	}
 </style>

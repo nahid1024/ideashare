@@ -28,11 +28,11 @@
 	};
 </script>
 
-<footer class="mt-20 bg-[#111] px-10 pt-12 pb-7 font-body sm:px-5 sm:pt-8">
+<footer class="mt-20 bg-[#111] px-5 pt-10 pb-7 font-body sm:px-10 sm:pt-12">
 	<!-- Top grid -->
-	<div class="mb-10 grid gap-10" style="grid-template-columns: 1.8fr 1fr 1fr 1fr;">
+	<div class="mb-10 grid grid-cols-1 gap-10 sm:grid-cols-3 md:grid-cols-[1.8fr_1fr_1fr_1fr]">
 		<!-- Brand column -->
-		<div>
+		<div class="sm:col-span-3 md:col-span-1">
 			<!-- Open beta badge -->
 			<div
 				class="mb-4 inline-flex items-center gap-1.5 rounded-full
@@ -102,8 +102,8 @@
 	<div class="mb-5 h-px bg-white/7"></div>
 
 	<!-- Bottom bar -->
-	<div class="flex flex-wrap items-center justify-between gap-3">
-		<div class="text-[12px] text-white/25">
+	<div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
+		<div class="text-center text-[12px] text-white/25 sm:text-left">
 			© {year} <span class="text-[#F5C518]">IdeaShare</span>. Ideas belong to their people.
 		</div>
 		<div class="flex gap-5">
@@ -111,7 +111,7 @@
 				<a
 					{href}
 					class="text-[12px] text-white/30 no-underline
-                         transition-colors hover:text-white/60"
+                          transition-colors hover:text-white/60"
 				>
 					{label}
 				</a>

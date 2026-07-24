@@ -10,6 +10,7 @@
 	import z from 'zod';
 	import { Accordion } from 'bits-ui';
 	import CaretDown from 'phosphor-svelte/lib/CaretDownIcon';
+	import TipTap from '$lib/components/TipTap.svelte';
 
 	const MAXTOPICS = 5;
 	type Topics = z.infer<typeof topicSchema>;
@@ -185,7 +186,7 @@
 			</div>
 
 			<!-- Describe field -->
-			<div
+			<!-- <div
 				id="block-desc"
 				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
 				'desc'
@@ -213,8 +214,17 @@
 						<p class="text-[11px] text-red-400">{errors.description}</p>
 					</div>
 				{/if}
-			</div>
+			</div> -->
 
+			<!-- MArkdown -->
+
+			<TipTap
+				bind:value={description}
+				minHeight="300px"
+				oninput={() => validate('desc')}
+				onfocus={() => (focusedBlock = 'desc')}
+				errorMessage={errors.description}
+			/>
 			<Accordion.Root type="multiple">
 				<!-- Problem field -->
 

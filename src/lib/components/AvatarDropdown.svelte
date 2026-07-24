@@ -27,7 +27,7 @@
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Portal>
 		<DropdownMenu.Content
-			class="w-[229px] rounded-lg border border-border bg-background px-1 py-1.5 shadow-md outline-hidden focus-visible:outline-hidden"
+			class="w-57.25 rounded-lg border border-border bg-background px-1 py-1.5 shadow-md outline-hidden focus-visible:outline-hidden"
 			sideOffset={8}
 		>
 			<DropdownMenu.Item
