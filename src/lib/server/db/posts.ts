@@ -1,4 +1,4 @@
-import { boolean, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { boolean, jsonb, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 import { user } from './auth.schema';
 import { relations } from 'drizzle-orm';
 import { shares } from './share';
@@ -7,11 +7,12 @@ import { sparked } from './sparked';
 import { postTopics } from './postTopics';
 import { refinements } from './refinements';
 import { refinementVotes } from './refinementVotes';
+import type { JSONContent } from '@tiptap/core';
 
 export const posts = pgTable('posts', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	title: varchar('title').notNull(),
-	description: text('description').notNull(),
+	description: jsonb().$type<JSONContent>().notNull(),
 	solvedProblems: text('solvedProblems'),
 	whoBenefits: text('whoBenefits'),
 	isAnonymous: boolean('isAnonymous').notNull().default(false),

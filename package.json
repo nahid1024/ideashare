@@ -72,10 +72,11 @@
 		"@tiptap/extension-placeholder": "^3.28.0",
 		"@tiptap/extension-text": "^3.28.0",
 		"@tiptap/extension-underline": "^3.28.0",
-		"@tiptap/markdown": "^3.28.0",
+		"@tiptap/html": "^3.29.0",
 		"@tiptap/pm": "^3.28.0",
 		"@tiptap/starter-kit": "^3.28.0",
 		"bits-ui": "^2.18.1",
+		"isomorphic-dompurify": "^3.19.0",
 		"zod-validation-error": "^5.0.0"
 	}
 }

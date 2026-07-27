@@ -79,3 +79,31 @@ export function timeAgo(date: Date | string): string {
 
 	return 'just now';
 }
+
+//Render tiptap
+
+import { generateHTML } from '@tiptap/html';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import Link from '@tiptap/extension-link';
+import type { JSONContent } from '@tiptap/core';
+
+export function renderTiptapJSON(content: JSONContent) {
+	return generateHTML(content, [
+		StarterKit.configure({
+			heading: false,
+			codeBlock: false,
+			blockquote: false,
+			horizontalRule: false
+		}),
+		Underline,
+		Link.configure({
+			openOnClick: false,
+			HTMLAttributes: {
+				class: 'editor-link',
+				rel: 'noopener noreferrer',
+				target: '_blank'
+			}
+		})
+	]);
+}

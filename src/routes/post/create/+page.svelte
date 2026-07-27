@@ -11,12 +11,16 @@
 	import { Accordion } from 'bits-ui';
 	import CaretDown from 'phosphor-svelte/lib/CaretDownIcon';
 	import TipTap from '$lib/components/TipTap.svelte';
+	import type { JSONContent } from '@tiptap/core';
 
 	const MAXTOPICS = 5;
 	type Topics = z.infer<typeof topicSchema>;
 
 	let title = $state('');
-	let description = $state('');
+	let description = $state<JSONContent>({
+		type: 'doc',
+		content: []
+	});
 	let solvedProblem = $state<string>();
 	let isAnonymous = $state(false);
 	let whoBenefits = $state<string>();
@@ -162,7 +166,7 @@
 					rows="2"
 					name="title"
 					bind:value={title}
-					oninput={() => validate('title')}
+					onblur={() => validate('title')}
 					onfocus={() => (focusedBlock = 'title')}
 					class="w-full resize-none border-none font-display text-[18px] leading-[1.4] font-semibold text-foreground outline-none placeholder:font-medium placeholder:text-foreground-disabled"
 					placeholder="e.g. A universal exam system where you study anywhere and just show up to get certified"
@@ -185,46 +189,24 @@
 				</div>
 			</div>
 
-			<!-- Describe field -->
-			<!-- <div
-				id="block-desc"
-				class="field-block relative border-b border-border-muted p-[20px_24px] transition-colors {focusedBlock ===
-				'desc'
-					? 'border-l-3 border-l-accent bg-accent/5'
-					: ''}"
-			>
+			<!-- Description Field - Prose Editor -->
+			<div class="border-l-3 border-l-transparent focus-within:border-l-accent">
 				<div
-					class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
+					class="mb-2 flex items-center gap-1.5 px-6 pt-5 text-[11px] font-semibold tracking-[0.08em] text-foreground-muted uppercase"
 				>
 					<div class="inline-block h-1.25 w-1.25 rounded-full bg-yellow-500"></div>
 					Describe the idea
 				</div>
-				<textarea
-					id="desc-input"
-					rows="4"
-					name="description"
-					oninput={() => validate('desc')}
+
+				<TipTap
 					bind:value={description}
+					minHeight="300px"
+					onblur={() => validate('desc')}
 					onfocus={() => (focusedBlock = 'desc')}
-					class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
-					placeholder="What exactly would this look like? How would it work? Even a rough picture is great."
-				></textarea>
-				{#if errors.description}
-					<div class="mt-1.25 mr-auto flex text-[11px]">
-						<p class="text-[11px] text-red-400">{errors.description}</p>
-					</div>
-				{/if}
-			</div> -->
-
-			<!-- MArkdown -->
-
-			<TipTap
-				bind:value={description}
-				minHeight="300px"
-				oninput={() => validate('desc')}
-				onfocus={() => (focusedBlock = 'desc')}
-				errorMessage={errors.description}
-			/>
+					errorMessage={errors.description}
+					placeholder="Describe your idea in detail"
+				/>
+			</div>
 			<Accordion.Root type="multiple">
 				<!-- Problem field -->
 

@@ -7,8 +7,8 @@ export const refinementVotes = pgTable(
 	'refinementVotes',
 	{
 		id: uuid().defaultRandom().notNull().primaryKey(),
-		userId: text().references(() => user.id),
-		refinementId: uuid().references(() => refinements.id)
+		userId: text().references(() => user.id, { onDelete: 'cascade' }),
+		refinementId: uuid().references(() => refinements.id, { onDelete: 'cascade' })
 	},
 	(table) => [unique().on(table.userId, table.refinementId)]
 );

@@ -6,8 +6,8 @@ export const followers = pgTable(
 	'followers',
 	{
 		id: uuid().notNull().defaultRandom().primaryKey(),
-		userId: text().references(() => user.id),
-		followerId: uuid().references(() => user.id)
+		userId: text().references(() => user.id, { onDelete: 'cascade' }),
+		followerId: uuid().references(() => user.id, { onDelete: 'cascade' })
 	},
 	(table) => [unique().on(table.userId, table.followerId)]
 );
