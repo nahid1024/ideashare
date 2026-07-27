@@ -5,8 +5,7 @@
 	import RefinementSection from '$lib/components/RefinementSection.svelte';
 	import { timeAgo } from '$lib/utils.js';
 	import { Avatar } from 'bits-ui';
-	import { renderTiptapJSON } from '$lib/utils.js';
-	import DOMPurify from 'isomorphic-dompurify';
+	import RichTextRender from '$lib/components/RichTextRender.svelte';
 
 	const { data } = $props();
 
@@ -178,7 +177,7 @@
 				<p
 					class="editor-content mb-5 text-[14.5px] leading-[1.75] wrap-break-word text-foreground-secondary"
 				>
-					{@html DOMPurify.sanitize(renderTiptapJSON(post.description))}
+					<RichTextRender content={post.description} />
 				</p>
 
 				<div class="mb-5 flex flex-col gap-3">
