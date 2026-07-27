@@ -11,5 +11,8 @@ export default defineConfig({
 		}),
 		tailwindcss(),
 		sveltekit()
-	]
+	],
+	ssr: {
+		noExternal: ['html-encoding-sniffer', '@exodus/bytes', 'jsdom']
+	}
 });
