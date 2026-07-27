@@ -5,7 +5,7 @@ import { relations } from 'drizzle-orm';
 export const media = pgTable('media', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	url: varchar('url'),
-	postId: uuid('postId').references(() => posts.id)
+	postId: uuid('postId').references(() => posts.id, { onDelete: 'cascade' })
 });
 
 export const mediaRelation = relations(media, ({ one }) => ({

@@ -1,29 +1,31 @@
 <!-- src/lib/components/Editor.svelte -->
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { Editor } from '@tiptap/core';
+	import { Editor, type JSONContent } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
 	import Underline from '@tiptap/extension-underline';
 	import Link from '@tiptap/extension-link';
 	import Placeholder from '@tiptap/extension-placeholder';
-	import { Markdown } from '@tiptap/markdown';
 
 	interface Props {
-		value?: string;
+		value?: JSONContent;
 		placeholder?: string;
 		minHeight?: string;
-		onchange?: (markdown: string) => void;
-		oninput?: () => void;
+		onchange?: (content: JSONContent) => void;
+		onblur?: () => void;
 		onfocus?: () => void;
 		errorMessage?: string;
 	}
 
 	let {
-		value = $bindable(''),
+		value = $bindable<JSONContent>({
+			type: 'doc',
+			content: []
+		}),
 		placeholder = 'Describe your idea in detail...',
 		minHeight = '140px',
 		onchange,
-		oninput,
+		onblur,
 		onfocus,
 		errorMessage
 	}: Props = $props();
@@ -31,13 +33,14 @@
 	// ── DOM refs ──────────────────────────────────────────────
 	let editorEl = $state<HTMLElement | null>(null);
 	let editor = $state<Editor | null>(null);
-	// ── Active format states (reactive to cursor position) ────
+
+	// ── Active format states ───────────────────────────────────
 	let isBold = $derived(editor?.isActive('bold') ?? false);
 	let isItalic = $derived(editor?.isActive('italic') ?? false);
 	let isUnderline = $derived(editor?.isActive('underline') ?? false);
 	let isBullet = $derived(editor?.isActive('bulletList') ?? false);
 	let isOrdered = $derived(editor?.isActive('orderedList') ?? false);
-	let charCount = $derived(0);
+	let charCount = $state(0);
 
 	// ── Init TipTap ───────────────────────────────────────────
 	onMount(() => {
@@ -45,7 +48,7 @@
 			element: editorEl!,
 			extensions: [
 				StarterKit.configure({
-					heading: false, // keep it simple for idea posts
+					heading: false,
 					codeBlock: false,
 					blockquote: false,
 					horizontalRule: false
@@ -59,9 +62,9 @@
 						target: '_blank'
 					}
 				}),
-				Placeholder.configure({ placeholder }),
-				Markdown
+				Placeholder.configure({ placeholder })
 			],
+			// value is HTML — set it directly as content
 			content: value || '',
 			editorProps: {
 				attributes: {
@@ -69,55 +72,72 @@
 					style: `min-height: ${minHeight}`
 				}
 			},
+			onBlur: () => {
+				onblur?.();
+			},
 			onFocus: () => {
 				onfocus?.();
 			},
-			onUpdate: () => {
-				charCount = editor?.getText().length ?? 0;
-				oninput?.();
+			onUpdate: ({ editor: e }) => {
+				// Keep char count in sync
+				charCount = e.getText().length;
+				// Emit raw HTML
+				value = e.getJSON();
+
+				onchange?.(value);
 			},
 			onTransaction: () => {
 				// Reassign to trigger $derived re-computation
 				editor = editor;
-				// Sync markdown value out
-				const md = editor?.getMarkdown() ?? '';
-				value = md;
-				onchange?.(md);
 			}
 		});
+
+		// Sync initial char count
+		charCount = editor.getText().length;
 	});
 
 	onDestroy(() => editor?.destroy());
 
 	// ── Toolbar helpers ───────────────────────────────────────
-	function bold() {
-		editor?.chain().focus().toggleBold().run();
-	}
-	function italic() {
-		editor?.chain().focus().toggleItalic().run();
-	}
-	function underline() {
-		editor?.chain().focus().toggleUnderline().run();
-	}
-	function bulletList() {
-		editor?.chain().focus().toggleBulletList().run();
-	}
-	function orderedList() {
-		editor?.chain().focus().toggleOrderedList().run();
-	}
+	const bold = () => editor?.chain().focus().toggleBold().run();
+	const italic = () => editor?.chain().focus().toggleItalic().run();
+	const underline = () => editor?.chain().focus().toggleUnderline().run();
+	const bulletList = () => editor?.chain().focus().toggleBulletList().run();
+	const orderedList = () => editor?.chain().focus().toggleOrderedList().run();
 </script>
 
 <!-- ── Root ── -->
-<div
-	class="overflow-hidden border
-         border-border bg-card transition-all duration-150"
->
+<div class="overflow-hidden bg-card">
+	<!-- ── Editor mount point ── -->
+	<div bind:this={editorEl}></div>
+
+	<!-- ── Footer ── -->
+	<div
+		class="flex items-center justify-between
+		       bg-background px-4 py-2"
+	>
+		<p class="text-[11px] text-destructive">
+			{#if errorMessage}
+				{errorMessage}
+			{/if}
+		</p>
+
+		<span
+			class="text-[11px] tabular-nums transition-colors"
+			style:color={charCount > 1000
+				? 'var(--destructive)'
+				: charCount > 900
+					? 'var(--warning)'
+					: 'var(--foreground-muted)'}
+		>
+			{charCount} / 1000
+		</span>
+	</div>
 	<!-- ── Toolbar ── -->
 	{#if editor}
 		<div
-			class="flex flex-wrap items-center gap-0.5 border-b
-             border-border bg-background-secondary
-             px-3 py-1.5"
+			class="flex flex-wrap items-center gap-0.5 border-b border-border
+			       bg-background-secondary px-3 py-1.5"
 		>
 			<!-- Bold -->
 			<button
@@ -251,43 +271,15 @@
 				</svg>
 			</button>
 
-			<!-- Divider -->
-			<div class="mx-1 h-4 w-px shrink-0 bg-border"></div>
-
 			<!-- Shortcuts hint -->
 			<span
-				class="ml-auto hidden pr-1
-                   text-[11px] text-foreground-muted tabular-nums select-none sm:block"
+				class="ml-auto hidden pr-1 text-[11px] text-foreground-muted
+			             tabular-nums select-none sm:block"
 			>
-				⌘B &nbsp;⌘I &nbsp;⌘U &nbsp;⌘K
+				⌘B &nbsp;⌘I &nbsp;⌘U
 			</span>
 		</div>
 	{/if}
-
-	<!-- ── Editor mount point ── -->
-	<div
-		bind:this={editorEl}
-		class="border-l-3 border-l-transparent focus-within:border-l-accent"
-	></div>
-
-	<!-- ── Footer ── -->
-	<div
-		class="flex items-center justify-between border-t
-           border-border-muted
-           bg-background-secondary px-4 py-2"
-	>
-		<p class="text-[11px] text-red-400">{errorMessage}</p>
-		<span
-			class="text-[11px] tabular-nums transition-colors"
-			style:color={charCount > 1000
-				? 'var(--destructive)'
-				: charCount > 900
-					? 'var(--warning)'
-					: 'var(--foreground-muted)'}
-		>
-			{charCount} / 1000
-		</span>
-	</div>
 </div>
 
 <style>
@@ -320,7 +312,7 @@
 		opacity: 0.88;
 	}
 
-	/* ── TipTap editor content styles ── */
+	/* ── TipTap editor content ── */
 	:global(.editor-content) {
 		padding: 12px 16px;
 		font-size: 14px;
@@ -329,6 +321,7 @@
 		color: var(--foreground);
 		outline: none;
 		cursor: text;
+		background-color: var(--color-background);
 	}
 
 	/* Placeholder */
@@ -358,7 +351,7 @@
 		text-underline-offset: 3px;
 	}
 
-	/* Paragraph spacing */
+	/* Paragraph */
 	:global(.editor-content p) {
 		margin: 0 0 0.5rem;
 	}
@@ -379,34 +372,28 @@
 		text-decoration-color: var(--accent);
 	}
 
-	/* Bullet list */
+	/* Lists */
 	:global(.editor-content ul) {
 		list-style-type: disc;
 		padding-left: 1.4rem;
 		margin: 0.4rem 0;
 	}
-
-	/* Ordered list */
 	:global(.editor-content ol) {
 		list-style-type: decimal;
 		padding-left: 1.4rem;
 		margin: 0.4rem 0;
 	}
-
-	/* List items */
 	:global(.editor-content li) {
 		margin: 0.2rem 0;
 		line-height: 1.65;
 	}
-
-	/* List markers in yellow */
 	:global(.editor-content ul li::marker),
 	:global(.editor-content ol li::marker) {
 		color: var(--accent);
 		font-weight: 600;
 	}
 
-	/* TipTap selection */
+	/* Selection */
 	:global(.editor-content .ProseMirror-selectednode) {
 		outline: 2px solid var(--accent);
 		border-radius: 2px;

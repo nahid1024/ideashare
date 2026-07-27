@@ -25,7 +25,19 @@ export const topicSchema = z.object({
 
 export const postSchema = z.object({
 	title: z.string().nonempty('Title is required').max(120, 'Title cannot exceed 120 characters'),
-	description: z.string().nonempty('Description is required'),
+	description: z
+
+		.object({
+			type: z.literal('doc'),
+			content: z.array(z.any()).optional()
+		})
+		.refine(
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			(doc) => doc.content?.some((node) => node.content?.some((child: any) => child.text?.trim())),
+			{
+				message: 'Description is required'
+			}
+		),
 	solvedProblem: z.string().nullable(),
 	whoBenefits: z.string().nullable(),
 	isAnonymous: z.boolean().default(false),

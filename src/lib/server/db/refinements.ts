@@ -8,7 +8,9 @@ import { refinementVotes } from './refinementVotes';
 export const refinements = pgTable('refinements', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	postId: uuid('postId')
-		.references(() => posts.id)
+		.references(() => posts.id, {
+			onDelete: 'cascade'
+		})
 		.notNull(),
 	userId: text('userId')
 		.references(() => user.id)
