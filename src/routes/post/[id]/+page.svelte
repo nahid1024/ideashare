@@ -11,7 +11,6 @@
 	const { data } = $props();
 
 	const post = $derived(data.post);
-
 	// Reactive state for the idea details
 	let idea = $state({
 		title:
@@ -128,7 +127,6 @@
 	}
 </script>
 
-/* eslint-disable svelte/no-at-html-tags */
 <svelte:head>
 	<title>IdeaShare — {post.title}</title>
 </svelte:head>
@@ -177,7 +175,9 @@
 				</h1>
 			</div>
 			<div class="p-[20px_28px]">
-				<p class="mb-5 text-[14.5px] leading-[1.75] wrap-break-word text-foreground-secondary">
+				<p
+					class="editor-content mb-5 text-[14.5px] leading-[1.75] wrap-break-word text-foreground-secondary"
+				>
 					{@html DOMPurify.sanitize(renderTiptapJSON(post.description))}
 				</p>
 
