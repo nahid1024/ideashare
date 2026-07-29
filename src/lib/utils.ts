@@ -87,6 +87,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import type { JSONContent } from '@tiptap/core';
+import { generateText } from '@tiptap/core';
 
 export function renderTiptapJSON(content: JSONContent) {
 	return generateHTML(content, [
@@ -106,4 +107,26 @@ export function renderTiptapJSON(content: JSONContent) {
 			}
 		})
 	]);
+}
+
+export function getPreview(json: JSONContent, limit = 250) {
+	const text = generateText(json, [
+		StarterKit.configure({
+			heading: false,
+			codeBlock: false,
+			blockquote: false,
+			horizontalRule: false
+		}),
+		Underline,
+		Link.configure({
+			openOnClick: false,
+			HTMLAttributes: {
+				class: 'editor-link',
+				rel: 'noopener noreferrer',
+				target: '_blank'
+			}
+		})
+	]);
+
+	return text.length > limit ? text.slice(0, limit) + '...' : text;
 }

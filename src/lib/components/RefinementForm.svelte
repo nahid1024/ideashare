@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
 	import { type RefinementWithRelations } from '$lib/types/index';
-	import { sleep } from '$lib/utils';
 	import CircleNotch from 'phosphor-svelte/lib/CircleNotchIcon';
 
-	const refinementTypes = [
-		{ id: 'build', text: '✦ Builds on idea' },
-		{ id: 'obstacle', text: '⚠ Potential obstacle' },
-		{ id: 'fork', text: '↗ Fork idea' },
-		{ id: 'question', text: '? Question' }
-	];
+	// //const refinementTypes = [
+	// 	{ id: 'build', text: '✦ Builds on idea' },
+	// 	{ id: 'obstacle', text: '⚠ Potential obstacle' },
+	// 	{ id: 'fork', text: '↗ Fork idea' },
+	// 	{ id: 'question', text: '? Question' }
+	// ];
+
+	const refinementTypes = ['✦ Builds on idea', '⚠ Potential obstacle', '↗ Fork idea', '? Question'];
 
 	let {
 		isReply,
@@ -26,11 +27,10 @@
 		authorName: string | null;
 		parentId: string | null;
 	} = $props();
-	let selectedRefinementType = $state('build');
+	let selectedRefinementType = $state<string | null>();
 	let body = $state('');
 	let isHidden = $state(false);
 	let isEdited = $state(false);
-	let refinementType = $state('build');
 	let isLoading = $state({ isReply: false, state: false });
 
 	const submit = async () => {
@@ -47,18 +47,16 @@
 					body: body,
 					isHidden: isHidden,
 					isEdited: isEdited,
-					refinementType: refinementType
+					refinementType: selectedRefinementType
 				})
 			});
 			if (!res.ok) {
 				toast.error('Something went wrong');
 			}
 			const resData: RefinementWithRelations = await res.json();
-			await sleep(1000);
 			isLoading.state = false;
 			isLoading.isReply = false;
 			toast.success('Refinement posted');
-			await sleep(500);
 			body = '';
 			onCreated(resData);
 		} catch (error) {
@@ -75,7 +73,7 @@
 		</div>
 		<textarea
 			bind:value={body}
-			class="mb-[10px] min-h-[80px] w-full resize-y rounded-md border border-border bg-background-muted p-[12px_14px] font-[inherit] text-[13.5px] text-foreground transition-colors outline-none placeholder:text-foreground-muted focus:border-accent focus:bg-background"
+			class="mb-2.5 min-h-20 w-full resize-y rounded-md border border-border bg-background-muted p-[12px_14px] font-[inherit] text-[13.5px] text-foreground transition-colors outline-none placeholder:text-foreground-muted focus:border-accent focus:bg-background"
 			placeholder="Write your reply..."
 		></textarea>
 		<button
@@ -98,22 +96,22 @@
 	<!-- The main refinement section -->
 	<div class="rounded-2xl border border-border bg-background p-[16px_18px]">
 		<div class="mb-3 font-display text-base font-semibold text-foreground">Add your refinement</div>
-		<div class="mb-3 flex flex-wrap gap-[6px]">
-			{#each refinementTypes as t (t.id)}
+		<div class="mb-3 flex flex-wrap gap-1.5">
+			{#each refinementTypes as t (t)}
 				<button
-					onclick={() => (selectedRefinementType = t.id)}
-					class="cursor-pointer rounded-full border px-3 py-[5px] text-[12px] font-medium transition-all {selectedRefinementType ===
-					t.id
+					onclick={() => (selectedRefinementType = t)}
+					class="cursor-pointer rounded-full border px-3 py-1.25 text-[12px] font-medium transition-all {selectedRefinementType ===
+					t
 						? 'border-yellow-500 bg-accent text-black'
 						: 'border-border bg-transparent text-foreground-secondary hover:border-foreground'}"
 				>
-					{t.text}
+					{t}
 				</button>
 			{/each}
 		</div>
 		<textarea
 			bind:value={body}
-			class="mb-[10px] min-h-[80px] w-full resize-y rounded-md border border-border bg-background-muted p-[12px_14px] font-[inherit] text-[13.5px] text-foreground transition-colors outline-none placeholder:text-foreground-muted focus:border-accent focus:bg-background"
+			class="mb-2.5 min-h-20 w-full resize-y rounded-md border border-border bg-background-muted p-[12px_14px] font-[inherit] text-[13.5px] text-foreground transition-colors outline-none placeholder:text-foreground-muted focus:border-accent focus:bg-background"
 			placeholder="Share how this idea could be improved, a challenge you see, or a real-world example..."
 		></textarea>
 		<button

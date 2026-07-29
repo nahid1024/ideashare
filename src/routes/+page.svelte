@@ -88,7 +88,7 @@
 		</a>
 	</aside>
 
-	<main class="flex flex-col gap-[14px]">
+	<main class="flex flex-col gap-3.5">
 		<div class="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap sm:gap-0">
 			<div class="flex w-100 gap-1 rounded-full border border-border bg-background p-0.5 sm:w-auto">
 				<button
@@ -135,14 +135,14 @@
 			<div class="mb-3 flex h-9 w-9 items-center justify-center rounded-md bg-dark">
 				<LightBulb color="#f5c518" weight="fill" />
 			</div>
-			<div class="mb-[6px] font-display text-[15px] leading-[1.35] font-semibold">
+			<div class="mb-1.5 font-display text-[15px] leading-[1.35] font-semibold">
 				You had a thought today. Don't let it disappear.
 			</div>
-			<div class="mb-[14px] text-[12px] leading-normal opacity-70">
+			<div class="mb-3.5 text-[12px] leading-normal opacity-70">
 				Ideas shared here have inspired real projects.
 			</div>
 			<button
-				class="w-full cursor-pointer rounded-md border-none bg-dark py-[9px] font-body text-[13px] font-medium text-light transition-opacity hover:opacity-85"
+				class="w-full cursor-pointer rounded-md border-none bg-dark py-2.25 font-body text-[13px] font-medium text-light transition-opacity hover:opacity-85"
 			>
 				+ Share your idea
 			</button>
@@ -153,7 +153,7 @@
 				Trending topics
 			</div>
 			<div
-				class="flex items-center justify-between border-b border-border-muted py-[6px] text-[13px]"
+				class="flex items-center justify-between border-b border-border-muted py-1.5 text-[13px]"
 			>
 				<span class="hover:text-accent-hover cursor-pointer font-medium text-foreground"
 					>#education</span
@@ -161,7 +161,7 @@
 				<span class="text-[12px] text-foreground-muted">1.2k ideas</span>
 			</div>
 			<div
-				class="flex items-center justify-between border-b border-border-muted py-[6px] text-[13px]"
+				class="flex items-center justify-between border-b border-border-muted py-1.5 text-[13px]"
 			>
 				<span class="hover:text-accent-hover cursor-pointer font-medium text-foreground"
 					>#health</span
@@ -169,7 +169,7 @@
 				<span class="text-[12px] text-foreground-muted">874 ideas</span>
 			</div>
 			<div
-				class="flex items-center justify-between border-b border-border-muted py-[6px] text-[13px]"
+				class="flex items-center justify-between border-b border-border-muted py-1.5 text-[13px]"
 			>
 				<span class="hover:text-accent-hover cursor-pointer font-medium text-foreground"
 					>#cities</span
@@ -177,14 +177,14 @@
 				<span class="text-[12px] text-foreground-muted">631 ideas</span>
 			</div>
 			<div
-				class="flex items-center justify-between border-b border-border-muted py-[6px] text-[13px]"
+				class="flex items-center justify-between border-b border-border-muted py-1.5 text-[13px]"
 			>
 				<span class="hover:text-accent-hover cursor-pointer font-medium text-foreground"
 					>#technology</span
 				>
 				<span class="text-[12px] text-foreground-muted">590 ideas</span>
 			</div>
-			<div class="flex items-center justify-between py-[6px] text-[13px]">
+			<div class="flex items-center justify-between py-1.5 text-[13px]">
 				<span class="hover:text-accent-hover cursor-pointer font-medium text-foreground"
 					>#economy</span
 				>
@@ -196,7 +196,7 @@
 			<div class="mb-2 text-[11px] font-semibold tracking-[0.08em] text-accent uppercase">
 				This week's top idea
 			</div>
-			<div class="mb-[10px] font-display text-[13px] leading-[1.45] font-medium text-light">
+			<div class="mb-2.5 font-display text-[13px] leading-[1.45] font-medium text-light">
 				Universal exam system gains 800+ sparks in 3 days
 			</div>
 			<div class="text-[12px] text-foreground-muted">

@@ -3,9 +3,9 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import RefinementSection from '$lib/components/RefinementSection.svelte';
-	import { timeAgo } from '$lib/utils.js';
+	import { renderTiptapJSON, timeAgo } from '$lib/utils.js';
 	import { Avatar } from 'bits-ui';
-	import RichTextRender from '$lib/components/RichTextRender.svelte';
+	import DOMPurify from 'isomorphic-dompurify';
 
 	const { data } = $props();
 
@@ -126,6 +126,7 @@
 	}
 </script>
 
+<!-- eslint-disable svelte/no-at-html-tags -->
 <svelte:head>
 	<title>IdeaShare — {post.title}</title>
 </svelte:head>
@@ -177,7 +178,7 @@
 				<p
 					class="editor-content mb-5 text-[14.5px] leading-[1.75] wrap-break-word text-foreground-secondary"
 				>
-					<RichTextRender content={post.description} />
+					{@html DOMPurify.sanitize(renderTiptapJSON(post.description))}
 				</p>
 
 				<div class="mb-5 flex flex-col gap-3">
@@ -300,26 +301,6 @@
 					<line x1="10" y1="14" x2="21" y2="3" />
 				</svg>
 				Fork idea
-			</button>
-			<button
-				onclick={toggleJoinBuilder}
-				class="ml-auto flex cursor-pointer items-center gap-1.75 rounded-full border-none px-5 py-2 font-[inherit] text-[13px] font-semibold transition-all hover:opacity-85 {joinedAsBuilder
-					? 'bg-success text-white'
-					: 'bg-primary text-primary-foreground'}"
-			>
-				<svg
-					width="14"
-					height="14"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-				>
-					<path
-						d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"
-					/>
-				</svg>
-				{joinedAsBuilder ? 'Joined as builder' : 'I want to build this'}
 			</button>
 		</div>
 
@@ -448,14 +429,14 @@
 			</div>
 		</div>
 
-		<div class="rounded-2xl bg-[#0f0f0f] p-4">
+		<div class="rounded-2xl bg-dark p-4">
 			<div class="mb-3 text-[11px] font-semibold tracking-[0.07em] text-accent uppercase">
 				Similar ideas
 			</div>
 			{#each similarIdeas as sim (sim.title)}
 				<div class="group cursor-pointer border-b border-white/8 py-2 last:border-b-0">
 					<div
-						class="mb-1 text-[12.5px] leading-[1.4] font-medium text-[#f1f0eb] transition-colors group-hover:text-accent"
+						class="mb-1 text-[12.5px] leading-[1.4] font-medium text-light transition-colors group-hover:text-accent"
 					>
 						{sim.title}
 					</div>
