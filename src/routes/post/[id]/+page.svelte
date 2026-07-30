@@ -251,8 +251,9 @@
 
 			<div class="mx-1 h-7 w-px bg-border"></div>
 
-			<button
+			<a
 				class="flex cursor-pointer items-center gap-1.75 rounded-full border border-border bg-transparent px-4 py-2 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground"
+				href="#refinement-section"
 			>
 				<svg
 					width="14"
@@ -265,7 +266,7 @@
 					<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
 				</svg>
 				{data.refinements.length} refinements
-			</button>
+			</a>
 			<button
 				class="flex cursor-pointer items-center gap-1.75 rounded-full border border-border bg-transparent px-4 py-2 font-[inherit] text-[13px] font-medium text-foreground-secondary transition-all hover:border-foreground hover:text-foreground"
 			>
@@ -305,7 +306,7 @@
 		</div>
 
 		<!-- Refinements heading -->
-		<div>
+		<div id="refinement-section">
 			<div class="font-display text-base font-semibold text-foreground">Refinements</div>
 			<div class="mb-3.5 text-[12px] text-foreground-muted">
 				{data.refinements.length} people have added their thoughts — sorted by most helpful
