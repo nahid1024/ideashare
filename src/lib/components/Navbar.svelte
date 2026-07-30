@@ -1,5 +1,4 @@
 <script>
-	import { userData } from '$lib/remotes/session.remote';
 	import { resolve } from '$app/paths';
 	import AvatarDropdown from './AvatarDropdown.svelte';
 	import PlusIcon from 'phosphor-svelte/lib/PlusIcon';
@@ -7,7 +6,7 @@
 	import Moon from 'phosphor-svelte/lib/MoonIcon';
 	import Sun from 'phosphor-svelte/lib/SunDimIcon';
 	import { toggleMode, mode } from 'mode-watcher';
-	const data = await userData();
+	const { user } = $props();
 </script>
 
 <nav
@@ -41,8 +40,8 @@
 				<Sun size="20px" />
 			{/if}
 		</Toggle.Root>
-		{#if data}
-			<AvatarDropdown avatar={data.image} />
+		{#if user}
+			<AvatarDropdown avatar={user.image} />
 		{:else}
 			<a href={resolve('/auth/login')}>
 				<button

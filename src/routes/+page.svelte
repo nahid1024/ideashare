@@ -10,11 +10,10 @@
 	import HouseSimple from 'phosphor-svelte/lib/HouseSimpleIcon';
 	import IdeaCard from '$lib/components/IdeaCard.svelte';
 	import LightBulb from 'phosphor-svelte/lib/LightbulbIcon';
-
 	const { data } = $props();
 </script>
 
-<Navbar />
+<Navbar user={await data.user} />
 
 <div
 	class="layout mx-auto grid max-w-270 grid-cols-1 gap-6 px-3 py-7 max-[600px]:pb-20 min-[601px]:grid-cols-[160px_minmax(0,1fr)] min-[601px]:px-6 min-[861px]:grid-cols-[200px_minmax(0,1fr)_220px]"
@@ -124,10 +123,7 @@
 			</button>
 		</div>
 		<!-- Post list -->
-
-		{#each data.posts as post (post.id)}
-			<IdeaCard {post} />
-		{/each}
+		<IdeaCard posts={data.posts} />
 	</main>
 
 	<aside class="sidebar-right hidden flex-col gap-4 lg:flex">
