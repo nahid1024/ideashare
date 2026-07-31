@@ -71,7 +71,8 @@ export const getPostList = async (limit: number) => {
 				with: {
 					topic: true
 				}
-			}
+			},
+			author: true
 		}
 	});
 	if (!post) {

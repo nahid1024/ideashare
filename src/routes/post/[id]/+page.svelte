@@ -87,10 +87,6 @@
 		}
 	];
 
-	// Refinement types config
-
-	// Interactive Form State
-
 	// Spark toggle handler
 	function toggleSpark() {
 		if (idea.sparked) {
@@ -132,7 +128,7 @@
 </svelte:head>
 
 <!-- NAVBAR -->
-<Navbar />
+<Navbar user={data.user} />
 
 <!-- LAYOUT -->
 <div

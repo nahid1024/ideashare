@@ -120,7 +120,7 @@
 </svelte:head>
 
 <!-- NAVBAR -->
-<Navbar />
+<Navbar user={data.user} />
 <!-- PAGE -->
 
 <div
@@ -220,7 +220,10 @@
 						class="border-b border-border-muted {focusedBlock === 'problem' ? 'bg-accent/5' : ''}"
 					>
 						<Accordion.Header>
-							<Accordion.Trigger class="w-full cursor-pointer text-left">
+							<Accordion.Trigger
+								class="w-full cursor-pointer text-left transition-all [&[data-state=open]>div>div>svg]:rotate-180"
+								onclick={() => (focusedBlock = 'problem')}
+							>
 								<!-- Accordion Header Content -->
 								<div
 									id="block-problem"
@@ -231,6 +234,10 @@
 									>
 										<CaretDown class="transition-transform duration-200" size="18px" />
 										What problem does this solve?
+										<span
+											class="rounded-full bg-background-muted px-1.5 py-px text-[10px] font-medium tracking-normal text-foreground-disabled normal-case"
+											>optional</span
+										>
 									</div>
 								</div>
 							</Accordion.Trigger>
@@ -243,7 +250,6 @@
 								rows="2"
 								name="solvedProblem"
 								bind:value={solvedProblem}
-								onfocus={() => (focusedBlock = 'problem')}
 								class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
 								placeholder="e.g. University is too expensive and location-dependent for most people in the world."
 							></textarea>
@@ -265,7 +271,10 @@
 							: ''}"
 					>
 						<Accordion.Header>
-							<Accordion.Trigger class="w-full cursor-pointer text-left">
+							<Accordion.Trigger
+								class="w-full cursor-pointer text-left transition-all [&[data-state=open]>div>div>svg]:rotate-180"
+								onclick={() => (focusedBlock = 'whobenefit')}
+							>
 								<!-- Accordion Header Content -->
 
 								<div id="who-benefit" class="field-block relative p-[20px_24px] transition-colors">
@@ -274,19 +283,22 @@
 									>
 										<CaretDown class="transition-transform duration-200" size="18px" />
 										Who would benefit?
+										<span
+											class="rounded-full bg-background-muted px-1.5 py-px text-[10px] font-medium tracking-normal text-foreground-disabled normal-case"
+											>optional</span
+										>
 									</div>
 								</div>
 							</Accordion.Trigger>
 						</Accordion.Header>
 
-						<Accordion.Content class="px-6 pb-5">
+						<Accordion.Content class="px-6 pb-5 ">
 							<!-- Accordion Collapsible Body -->
 							<textarea
 								id="benefit-input"
 								rows="2"
 								name="whobenefit"
 								bind:value={whoBenefits}
-								onfocus={() => (focusedBlock = 'whobenefit')}
 								class="w-full resize-none border-none bg-transparent font-[inherit] text-sm leading-[1.7] text-foreground outline-none placeholder:text-foreground-disabled"
 								placeholder="e.g. Students in developing countries, working adults..."
 							></textarea>
@@ -410,7 +422,7 @@
 				>
 					Post anonymously
 					<span
-						class="px-[ 6px] rounded-full bg-background-muted py-px text-[10px] font-medium tracking-normal text-foreground-disabled normal-case"
+						class="rounded-full bg-background-muted px-1.5 py-px text-[10px] font-medium tracking-normal text-foreground-disabled normal-case"
 						>optional</span
 					>
 				</div>

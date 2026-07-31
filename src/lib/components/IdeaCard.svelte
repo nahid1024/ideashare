@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import type { PostList } from '$lib/types';
-	import { getPreview } from '$lib/utils';
+	import { getPreview, timeAgo } from '$lib/utils';
+	import { Avatar } from 'bits-ui';
 	import { Skeleton } from './ui/skeleton';
+	import Dot from 'phosphor-svelte/lib/DotIcon';
 
 	let { posts }: { posts: Promise<PostList[]> } = $props();
 </script>
@@ -47,7 +49,28 @@
 		<article
 			class="cursor-pointer rounded-lg border border-border bg-background p-[18px_20px] transition-all hover:border-accent hover:[box-shadow:var(--shadow-focus)]"
 		>
-			<a href={resolve(`/post/${post.id}`)} class="cursor-pointer">
+			<!-- Author info -->
+
+			<div class="mb-3 flex items-center">
+				<Avatar.Root class="h-7 w-7">
+					<div
+						class="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-transparent"
+					>
+						<Avatar.Image src={post.author.image} alt="@huntabyte" />
+						<Avatar.Fallback class="border border-border-muted bg-muted p-1 text-xs"
+							>HB</Avatar.Fallback
+						>
+					</div>
+				</Avatar.Root>
+				<span class="ml-2 text-xs text-foreground-secondary">{post.author.name}</span>
+				<div class="flex">
+					<Dot />
+					<span class="text-xs text-foreground-muted">{timeAgo(post.createdAt)}</span>
+				</div>
+			</div>
+
+			<!-- Post title -->
+			<a href={resolve(`/post/${post.id}`)} class="cursor-pointer" data-sveltekit-preload-data="on">
 				<div class="flex items-start gap-3.5">
 					<!-- Post title -->
 					<div class="flex-1 font-display text-[15px] leading-[1.4] font-semibold text-foreground">
