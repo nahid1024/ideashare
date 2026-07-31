@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { Avatar, DropdownMenu } from 'bits-ui';
-	import Cardholder from 'phosphor-svelte/lib/Cardholder';
-	import GearSix from 'phosphor-svelte/lib/GearSix';
+	import Cardholder from 'phosphor-svelte/lib/CardholderIcon';
+	import GearSix from 'phosphor-svelte/lib/GearSixIcon';
 	import UserCircle from 'phosphor-svelte/lib/UserCircleIcon';
 	import SignOutIcon from 'phosphor-svelte/lib/SignOutIcon';
 	import { enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
 
-	let { avatar } = $props();
+	let { avatar, userId } = $props();
 </script>
 
 <DropdownMenu.Root>
@@ -27,29 +28,20 @@
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Portal>
 		<DropdownMenu.Content
-			class="w-57.25 rounded-lg border border-border bg-background px-1 py-1.5 shadow-md outline-hidden focus-visible:outline-hidden"
+			class="z-100 w-45 rounded-lg border border-border bg-background px-1 py-1.5 shadow-md outline-hidden focus-visible:outline-hidden"
 			sideOffset={8}
+			preventScroll={false}
 		>
-			<DropdownMenu.Item
-				class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
-			>
-				<div class="flex items-center">
-					<UserCircle class="mr-2 size-5 text-foreground-muted" />
-					Profile
-				</div>
-				<div class="ml-auto flex items-center gap-px">
-					<kbd
-						class="inline-flex size-5 items-center justify-center rounded-xs border border-border bg-background-muted text-xs text-foreground-muted shadow-xs"
-					>
-						⌘
-					</kbd>
-					<kbd
-						class="inline-flex size-5 items-center justify-center rounded-xs border border-border bg-background-muted text-[10px] text-foreground-muted shadow-xs"
-					>
-						P
-					</kbd>
-				</div>
-			</DropdownMenu.Item>
+			<a href={resolve('/profile/[id]', { id: userId })}>
+				<DropdownMenu.Item
+					class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
+				>
+					<div class="flex items-center">
+						<UserCircle class="mr-2 size-5 text-foreground-muted" />
+						Profile
+					</div>
+				</DropdownMenu.Item>
+			</a>
 			<DropdownMenu.Item
 				class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
 			>
@@ -57,39 +49,17 @@
 					<Cardholder class="mr-2 size-5 text-foreground-muted" />
 					Billing
 				</div>
-				<div class="ml-auto flex items-center gap-px">
-					<kbd
-						class="inline-flex size-5 items-center justify-center rounded-xs border border-border bg-background-muted text-xs text-foreground-muted shadow-xs"
-					>
-						⌘
-					</kbd>
-					<kbd
-						class="inline-flex size-5 items-center justify-center rounded-xs border border-border bg-background-muted text-[10px] text-foreground-muted shadow-xs"
-					>
-						B
-					</kbd>
-				</div>
 			</DropdownMenu.Item>
-			<DropdownMenu.Item
-				class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
-			>
-				<div class="flex items-center">
-					<GearSix class="mr-2 size-5 text-foreground-muted" />
-					Settings
-				</div>
-				<div class="ml-auto flex items-center gap-px">
-					<kbd
-						class="inline-flex size-5 items-center justify-center rounded-xs border border-border bg-background-muted text-xs text-foreground-muted shadow-xs"
-					>
-						⌘
-					</kbd>
-					<kbd
-						class="inline-flex size-5 items-center justify-center rounded-xs border border-border bg-background-muted text-[10px] text-foreground-muted shadow-xs"
-					>
-						S
-					</kbd>
-				</div>
-			</DropdownMenu.Item>
+			<a href={resolve('/settings')}>
+				<DropdownMenu.Item
+					class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
+				>
+					<div class="flex items-center">
+						<GearSix class="mr-2 size-5 text-foreground-muted" />
+						Settings
+					</div>
+				</DropdownMenu.Item>
+			</a>
 			<DropdownMenu.Item
 				class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-destructive select-none focus-visible:outline-none data-highlighted:bg-muted"
 			>

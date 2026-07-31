@@ -2,10 +2,6 @@
 	import { resolve } from '$app/paths';
 	import AvatarDropdown from './AvatarDropdown.svelte';
 	import PlusIcon from 'phosphor-svelte/lib/PlusIcon';
-	import { Toggle } from 'bits-ui';
-	import Moon from 'phosphor-svelte/lib/MoonIcon';
-	import Sun from 'phosphor-svelte/lib/SunDimIcon';
-	import { toggleMode, mode } from 'mode-watcher';
 	const { user } = $props();
 </script>
 
@@ -30,18 +26,8 @@
 	</div>
 
 	<div class="ml-auto flex items-center gap-2.5">
-		<Toggle.Root
-			class="mr-1 cursor-pointer rounded-full p-3 hover:bg-muted hover:text-accent"
-			onclick={toggleMode}
-		>
-			{#if mode.current === 'light'}
-				<Moon size="20px" />
-			{:else}
-				<Sun size="20px" />
-			{/if}
-		</Toggle.Root>
 		{#if user}
-			<AvatarDropdown avatar={user.image} />
+			<AvatarDropdown avatar={user.image} userId={user.id} />
 		{:else}
 			<a href={resolve('/auth/login')}>
 				<button
