@@ -38,7 +38,7 @@
 		{/if}
 		<a href={resolve('/post/create')}>
 			<button
-				class="flex cursor-pointer items-center gap-1.5 rounded-full border-none bg-primary px-4 py-1.5 text-[13px] font-medium text-primary-foreground transition-opacity hover:opacity-85"
+				class="hidden cursor-pointer items-center gap-1.5 rounded-full border-none bg-primary px-4 py-1.5 text-[13px] font-medium text-primary-foreground transition-opacity hover:opacity-85 sm:flex"
 			>
 				<div
 					class="flex h-3.75 w-3.75 items-center justify-center rounded-full bg-accent text-[13px] leading-none text-foreground"

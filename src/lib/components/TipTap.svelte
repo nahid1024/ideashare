@@ -3,8 +3,6 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor, type JSONContent } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
-	import Underline from '@tiptap/extension-underline';
-	import Link from '@tiptap/extension-link';
 	import Placeholder from '@tiptap/extension-placeholder';
 
 	interface Props {
@@ -51,15 +49,14 @@
 					heading: false,
 					codeBlock: false,
 					blockquote: false,
-					horizontalRule: false
-				}),
-				Underline,
-				Link.configure({
-					openOnClick: false,
-					HTMLAttributes: {
-						class: 'editor-link',
-						rel: 'noopener noreferrer',
-						target: '_blank'
+					horizontalRule: false,
+					link: {
+						openOnClick: false,
+						HTMLAttributes: {
+							class: 'editor-link',
+							rel: 'noopener noreferrer',
+							target: '_blank'
+						}
 					}
 				}),
 				Placeholder.configure({ placeholder })

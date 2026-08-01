@@ -1,6 +1,5 @@
 <script>
 	import { resolve } from '$app/paths';
-	import Footer from '$lib/components/Footer.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Bookmark from 'phosphor-svelte/lib/BookmarkIcon';
 	import Trophy from 'phosphor-svelte/lib/TrophyIcon';
@@ -201,4 +200,3 @@
 		</div>
 	</aside>
 </div>
-<Footer />
