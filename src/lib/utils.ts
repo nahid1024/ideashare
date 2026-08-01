@@ -84,49 +84,32 @@ export function timeAgo(date: Date | string): string {
 
 import { generateHTML } from '@tiptap/html';
 import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import Link from '@tiptap/extension-link';
 import type { JSONContent } from '@tiptap/core';
 import { generateText } from '@tiptap/core';
 
-export function renderTiptapJSON(content: JSONContent) {
-	return generateHTML(content, [
-		StarterKit.configure({
-			heading: false,
-			codeBlock: false,
-			blockquote: false,
-			horizontalRule: false
-		}),
-		Underline,
-		Link.configure({
+const TipTapExtensions = [
+	StarterKit.configure({
+		heading: false,
+		codeBlock: false,
+		blockquote: false,
+		horizontalRule: false,
+		link: {
 			openOnClick: false,
 			HTMLAttributes: {
 				class: 'editor-link',
 				rel: 'noopener noreferrer',
 				target: '_blank'
 			}
-		})
-	]);
+		}
+	})
+];
+
+export function renderTiptapJSON(content: JSONContent) {
+	return generateHTML(content, TipTapExtensions);
 }
 
 export function getPreview(json: JSONContent, limit = 250) {
-	const text = generateText(json, [
-		StarterKit.configure({
-			heading: false,
-			codeBlock: false,
-			blockquote: false,
-			horizontalRule: false
-		}),
-		Underline,
-		Link.configure({
-			openOnClick: false,
-			HTMLAttributes: {
-				class: 'editor-link',
-				rel: 'noopener noreferrer',
-				target: '_blank'
-			}
-		})
-	]);
+	const text = generateText(json, TipTapExtensions);
 
 	return text.length > limit ? text.slice(0, limit) + '...' : text;
 }

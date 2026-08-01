@@ -20,7 +20,7 @@
 <Navbar user={data.user} />
 
 <!-- COVER -->
-<div class="cover relative h-[180px] overflow-hidden bg-[#111] max-[600px]:h-[130px]">
+<div class="cover relative h-[130px] overflow-hidden bg-[#111] sm:h-[180px]">
 	<button
 		class="absolute top-3.5 right-4 z-[2] flex cursor-pointer items-center gap-[5px] rounded-full border border-white/20 bg-black/40 px-3 py-1.5 text-[12px] text-white/70 backdrop-blur-sm"
 	>
@@ -40,30 +40,30 @@
 </div>
 
 <!-- PROFILE HEADER -->
-<div class="profile-header border-b border-border-strong bg-background px-8 max-[600px]:px-[14px]">
-	<div class="avatar-row relative -mt-11 flex items-end gap-4 pb-4 max-[600px]:-mt-[36px]">
+<div class="profile-header border-b border-border-strong bg-background px-[14px] sm:px-8">
+	<div class="avatar-row relative -mt-[36px] flex items-end gap-4 pb-4 sm:-mt-11">
 		<div
-			class="avatar relative z-[2] flex h-[88px] w-[88px] flex-shrink-0 items-center justify-center rounded-full border-4 border-white bg-[#111] font-display text-[30px] font-extrabold text-[#F5C518] shadow-[0_4px_16px_rgba(0,0,0,0.15)] max-[600px]:h-[72px] max-[600px]:w-[72px] max-[600px]:border-[3px] max-[600px]:text-[24px]"
+			class="avatar relative z-[2] flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-full border-[3px] border-white bg-[#111] font-display text-[24px] font-extrabold text-[#F5C518] shadow-[0_4px_16px_rgba(0,0,0,0.15)] sm:h-[88px] sm:w-[88px] sm:border-4 sm:text-[30px]"
 		>
 			RK
 			<div
-				class="avatar-badge absolute right-0.5 bottom-0.5 flex h-[22px] w-[22px] items-center justify-center rounded-full border-[3px] border-white bg-[#F5C518] text-[10px] max-[600px]:h-[18px] max-[600px]:w-[18px] max-[600px]:text-[9px]"
+				class="avatar-badge absolute right-0.5 bottom-0.5 flex h-[18px] w-[18px] items-center justify-center rounded-full border-[3px] border-white bg-[#F5C518] text-[9px] sm:h-[22px] sm:w-[22px] sm:text-[10px]"
 			>
 				💡
 			</div>
 		</div>
 
-		<div class="ml-auto flex items-center gap-2 pb-4">
+		<div class="ml-auto flex items-center gap-1.5 pb-4 sm:gap-2">
 			<button
 				onclick={() => (isFollowing = !isFollowing)}
-				class="cursor-pointer rounded-full border-[1.5px] px-5 py-2 text-[13px] font-semibold transition-all hover:border-[#888] {isFollowing
+				class="cursor-pointer rounded-full border-[1.5px] px-4 py-1.5 text-[12px] font-semibold transition-all hover:border-[#888] sm:px-5 sm:py-2 sm:text-[13px] {isFollowing
 					? 'border-transparent bg-[#111] text-white'
 					: 'border-[#DDD] bg-white text-[#111]'}"
 			>
 				{isFollowing ? 'Following' : 'Follow'}
 			</button>
 			<button
-				class="flex cursor-pointer items-center gap-1.5 rounded-full border border-border-strong bg-background px-4 py-2 text-[13px] font-medium text-foreground transition-colors"
+				class="flex cursor-pointer items-center gap-1.5 rounded-full border border-border-strong bg-background px-3 py-1.5 text-[12px] font-medium text-foreground transition-colors sm:px-4 sm:py-2 sm:text-[13px]"
 			>
 				<svg
 					class="h-3.5 w-3.5"
@@ -74,10 +74,10 @@
 				>
 					<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
 				</svg>
-				<span class="btn-msg-label max-[600px]:hidden">Message</span>
+				<span class="btn-msg-label hidden sm:inline">Message</span>
 			</button>
 			<button
-				class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-[1.5px] border-[#DDD] bg-background transition-colors hover:border-[#111]"
+				class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-[1.5px] border-[#DDD] bg-background transition-colors hover:border-[#111] sm:h-9 sm:w-9"
 			>
 				<Share />
 			</button>
@@ -86,24 +86,26 @@
 
 	<div class="pt-1 pb-[18px]">
 		<div
-			class="profile-name mb-1 flex items-center gap-2 font-display text-[22px] font-extrabold tracking-tight text-foreground max-[600px]:text-[18px]"
+			class="profile-name mb-1 flex items-center gap-2 font-display text-[18px] font-extrabold tracking-tight text-foreground sm:text-[22px]"
 		>
 			Rafiq Karim
 			<div
-				class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[#F5C518] text-[10px]"
+				class="flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-[#F5C518] text-[9px] sm:h-5 sm:w-5 sm:text-[10px]"
 			>
 				✓
 			</div>
 		</div>
-		<div class="mb-2 text-[13px] text-foreground-muted">@rafiqkarim · Joined April 2024</div>
+		<div class="mb-2 text-[12px] text-foreground-muted sm:text-[13px]">
+			@rafiqkarim · Joined April 2024
+		</div>
 		<div
-			class="profile-name mb-3 max-w-[520px] text-[13.5px] leading-relaxed text-foreground max-[600px]:text-[18px]"
+			class="profile-name mb-3 max-w-[520px] text-[13px] leading-relaxed text-foreground sm:text-[13.5px]"
 		>
 			Thinking about the future of education and skills. Believe that where you learn shouldn't
 			limit what you can become. Sharing ideas so they don't disappear.
 		</div>
-		<div class="flex flex-wrap items-center gap-4">
-			<div class="flex items-center gap-[5px] text-[12.5px] text-[#888]">
+		<div class="flex flex-wrap items-center gap-3 sm:gap-4">
+			<div class="flex items-center gap-[5px] text-[12px] text-[#888] sm:text-[12.5px]">
 				<svg
 					class="h-[13px] w-[13px]"
 					viewBox="0 0 24 24"
@@ -116,7 +118,7 @@
 				</svg>
 				Dhaka, Bangladesh
 			</div>
-			<div class="flex items-center gap-[5px] text-[12.5px] text-[#888]">
+			<div class="flex items-center gap-[5px] text-[12px] text-[#888] sm:text-[12.5px]">
 				<svg
 					class="h-[13px] w-[13px]"
 					viewBox="0 0 24 24"
@@ -129,7 +131,7 @@
 				</svg>
 				<a href="#" class="font-medium text-[#C49A00] no-underline">ideashare.io/rafiq</a>
 			</div>
-			<div class="flex items-center gap-[5px] text-[12.5px] text-[#888]">
+			<div class="flex items-center gap-[5px] text-[12px] text-[#888] sm:text-[12.5px]">
 				<svg
 					class="h-[13px] w-[13px]"
 					viewBox="0 0 24 24"
@@ -146,52 +148,54 @@
 		</div>
 	</div>
 
-	<!-- STATS -->
-	<div class="flex border-t border-border-muted">
+	<!-- STATS (Turned into a 3x2 grid on mobile so they don't squish) -->
+	<div class="grid grid-cols-3 border-t border-border-muted md:flex md:flex-row">
 		<div
-			class="flex-1 cursor-pointer border-r border-border-muted px-4 py-3 text-center transition-colors hover:bg-[#F5F5F2]"
+			class="flex-1 cursor-pointer border-r border-b border-border-muted px-2 py-3 text-center transition-colors hover:bg-[#F5F5F2] sm:px-4 md:border-b-0"
 		>
-			<div class="font-display text-[18px] font-bold text-[#C49A00]">1,204</div>
-			<div class="mt-0.5 text-[11px] text-[#888]">Total sparks</div>
+			<div class="font-display text-[15px] font-bold text-[#C49A00] sm:text-[18px]">1,204</div>
+			<div class="mt-0.5 text-[10px] text-[#888] sm:text-[11px]">Total sparks</div>
 		</div>
 		<div
-			class="flex-1 cursor-pointer border-r border-border-muted px-4 py-3 text-center transition-colors hover:bg-[#F5F5F2]"
+			class="flex-1 cursor-pointer border-r border-b border-border-muted px-2 py-3 text-center transition-colors hover:bg-[#F5F5F2] sm:px-4 md:border-b-0"
 		>
-			<div class="font-display text-[18px] font-bold text-foreground">14</div>
-			<div class="mt-0.5 text-[11px] text-foreground">Ideas posted</div>
+			<div class="font-display text-[15px] font-bold text-foreground sm:text-[18px]">14</div>
+			<div class="mt-0.5 text-[10px] text-foreground sm:text-[11px]">Ideas posted</div>
 		</div>
 		<div
-			class="flex-1 cursor-pointer border-r border-border-muted px-4 py-3 text-center transition-colors hover:bg-[#F5F5F2]"
+			class="flex-1 cursor-pointer border-b border-border-muted px-2 py-3 text-center transition-colors hover:bg-[#F5F5F2] sm:px-4 md:border-r md:border-b-0"
 		>
-			<div class="font-display text-[18px] font-bold text-foreground">3</div>
-			<div class="mt-0.5 text-[11px] text-[#888]">Being built</div>
+			<div class="font-display text-[15px] font-bold text-foreground sm:text-[18px]">3</div>
+			<div class="mt-0.5 text-[10px] text-[#888] sm:text-[11px]">Being built</div>
 		</div>
 		<div
-			class="flex-1 cursor-pointer border-r border-border-muted px-4 py-3 text-center transition-colors hover:bg-[#F5F5F2]"
+			class="flex-1 cursor-pointer border-r border-border-muted px-2 py-3 text-center transition-colors hover:bg-[#F5F5F2] sm:px-4"
 		>
-			<div class="font-display text-[18px] font-bold text-foreground">89</div>
-			<div class="mt-0.5 text-[11px] text-[#888]">Refinements</div>
+			<div class="font-display text-[15px] font-bold text-foreground sm:text-[18px]">89</div>
+			<div class="mt-0.5 text-[10px] text-[#888] sm:text-[11px]">Refinements</div>
 		</div>
 		<div
-			class="flex-1 cursor-pointer border-r border-border-muted px-4 py-3 text-center transition-colors hover:bg-[#F5F5F2]"
+			class="flex-1 cursor-pointer border-r border-border-muted px-2 py-3 text-center transition-colors hover:bg-[#F5F5F2] sm:px-4"
 		>
-			<div class="font-display text-[18px] font-bold text-foreground">312</div>
-			<div class="mt-0.5 text-[11px] text-[#888]">Followers</div>
+			<div class="font-display text-[15px] font-bold text-foreground sm:text-[18px]">312</div>
+			<div class="mt-0.5 text-[10px] text-[#888] sm:text-[11px]">Followers</div>
 		</div>
-		<div class="flex-1 cursor-pointer px-4 py-3 text-center transition-colors hover:bg-[#F5F5F2]">
-			<div class="font-display text-[18px] font-bold text-foreground">148</div>
-			<div class="mt-0.5 text-[11px] text-[#888]">Following</div>
+		<div
+			class="flex-1 cursor-pointer px-2 py-3 text-center transition-colors hover:bg-[#F5F5F2] sm:px-4"
+		>
+			<div class="font-display text-[15px] font-bold text-foreground sm:text-[18px]">148</div>
+			<div class="mt-0.5 text-[10px] text-[#888] sm:text-[11px]">Following</div>
 		</div>
 	</div>
 </div>
 
 <!-- TABS -->
 <div
-	class="profile-tabs tabs-scroll sticky top-[54px] z-90 flex overflow-x-auto border-b border-border-strong bg-background px-8 max-[600px]:top-[50px] max-[600px]:px-[14px]"
+	class="profile-tabs tabs-scroll sticky top-[50px] z-[90] flex overflow-x-auto border-b border-border-strong bg-background px-[14px] sm:top-[54px] sm:px-8"
 >
 	{#each tabs as tab (tab)}
 		<button
-			class="-mb-px flex cursor-pointer items-center gap-1.5 border-b-[2.5px] px-[18px] py-3.5 text-[13.5px] whitespace-nowrap transition-colors {activeTab ===
+			class="-mb-px flex cursor-pointer items-center gap-1.5 border-b-[2.5px] px-[16px] py-3.5 text-[13px] whitespace-nowrap transition-colors sm:px-[18px] sm:text-[13.5px] {activeTab ===
 			tab.id
 				? 'border-[#111111] font-semibold text-[#111]'
 				: 'border-transparent font-medium text-[#888] hover:text-[#111]'}"
@@ -199,7 +203,8 @@
 		>
 			{tab.id}
 			<span
-				class="rounded-full px-1.5 py-px text-[11px] font-medium {activeTab === tab.id
+				class="rounded-full px-1.5 py-px text-[10px] font-medium sm:text-[11px] {activeTab ===
+				tab.id
 					? 'bg-[#fff8dc] text-[#c49a00]'
 					: 'bg-[#F5F5F2] text-[#888]'}"
 			>
@@ -209,10 +214,9 @@
 	{/each}
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN CONTENT (Removed broken inline style, applied responsive grid classes) -->
 <div
-	class="layout mx-auto grid max-w-[960px] items-start gap-[22px] px-6 py-6 pb-[60px] max-[860px]:grid-cols-1 max-[860px]:px-4 max-[860px]:pb-20 max-[600px]:gap-3 max-[600px]:px-3"
-	style="grid-template-columns: minmax(0, 1fr) 240px"
+	class="layout mx-auto grid max-w-[960px] grid-cols-1 items-start gap-3 px-3 py-6 pb-20 sm:gap-[22px] sm:px-6 sm:pb-[60px] md:grid-cols-[minmax(0,1fr)_240px]"
 >
 	<!-- IDEAS COLUMN -->
 	<div class="flex flex-col gap-3">
@@ -238,7 +242,7 @@
 
 		<!-- Pinned card -->
 		<div
-			class="cursor-pointer rounded-2xl border-[1.5px] border-[#F5C518] bg-white px-[18px] py-4 shadow-[0_0_0_3px_#FFF8DC] transition-all hover:shadow-[0_0_0_4px_#FFE066]"
+			class="cursor-pointer rounded-2xl border-[1.5px] border-[#F5C518] bg-white px-4 py-4 shadow-[0_0_0_3px_#FFF8DC] transition-all hover:shadow-[0_0_0_4px_#FFE066] sm:px-[18px]"
 		>
 			<div class="mb-2 flex items-start gap-3">
 				<div class="flex-1 font-display text-[14.5px] leading-snug font-semibold text-[#111]">
@@ -279,7 +283,7 @@
 
 		<!-- Card 2 -->
 		<div
-			class="cursor-pointer rounded-2xl border border-[#DDD] bg-white px-[18px] py-4 transition-all hover:border-[#F5C518] hover:shadow-[0_0_0_3px_#FFF8DC]"
+			class="cursor-pointer rounded-2xl border border-[#DDD] bg-white px-4 py-4 transition-all hover:border-[#F5C518] hover:shadow-[0_0_0_3px_#FFF8DC] sm:px-[18px]"
 		>
 			<div class="mb-2 flex items-start gap-3">
 				<div class="flex-1 font-display text-[14.5px] leading-snug font-semibold text-[#111]">
@@ -314,7 +318,7 @@
 
 		<!-- Card 3 -->
 		<div
-			class="cursor-pointer rounded-2xl border border-[#DDD] bg-white px-[18px] py-4 transition-all hover:border-[#F5C518] hover:shadow-[0_0_0_3px_#FFF8DC]"
+			class="cursor-pointer rounded-2xl border border-[#DDD] bg-white px-4 py-4 transition-all hover:border-[#F5C518] hover:shadow-[0_0_0_3px_#FFF8DC] sm:px-[18px]"
 		>
 			<div class="mb-2 flex items-start gap-3">
 				<div class="flex-1 font-display text-[14.5px] leading-snug font-semibold text-[#111]">
@@ -353,7 +357,7 @@
 
 		<!-- Built / credit card -->
 		<div
-			class="cursor-pointer rounded-2xl bg-[#111] px-[18px] py-4 transition-opacity hover:opacity-[0.88]"
+			class="cursor-pointer rounded-2xl bg-[#111] px-4 py-4 transition-opacity hover:opacity-[0.88] sm:px-[18px]"
 		>
 			<div class="mb-2 text-[10px] font-bold tracking-[0.07em] text-[#F5C518] uppercase">
 				⚡ Originally proposed by Rafiq — now being built
@@ -369,7 +373,7 @@
 
 		<!-- Card 5 -->
 		<div
-			class="cursor-pointer rounded-2xl border border-[#DDD] bg-white px-[18px] py-4 transition-all hover:border-[#F5C518] hover:shadow-[0_0_0_3px_#FFF8DC]"
+			class="cursor-pointer rounded-2xl border border-[#DDD] bg-white px-4 py-4 transition-all hover:border-[#F5C518] hover:shadow-[0_0_0_3px_#FFF8DC] sm:px-[18px]"
 		>
 			<div class="mb-2 flex items-start gap-3">
 				<div class="flex-1 font-display text-[14.5px] leading-snug font-semibold text-[#111]">
@@ -407,7 +411,7 @@
 	</div>
 
 	<!-- RIGHT SIDEBAR -->
-	<aside class="sidebar flex flex-col gap-3.5 max-[860px]:hidden">
+	<aside class="sidebar hidden flex-col gap-3.5 md:flex">
 		<!-- Role -->
 		<div class="rounded-2xl border border-[#DDD] bg-white p-4">
 			<div class="mb-3.5 text-[11px] font-semibold tracking-widest text-[#888] uppercase">Role</div>
@@ -538,7 +542,7 @@
 
 <!-- BOTTOM NAV (mobile only) -->
 <div
-	class="bottom-nav fixed right-0 bottom-0 left-0 z-[200] hidden h-[58px] flex-row border-t border-[#DDD] bg-white max-[600px]:flex"
+	class="bottom-nav fixed right-0 bottom-0 left-0 z-[200] flex h-[58px] flex-row border-t border-[#DDD] bg-white sm:hidden"
 >
 	<button
 		class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] border-none bg-transparent text-[10px] text-[#888]"
