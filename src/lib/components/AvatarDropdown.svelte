@@ -32,7 +32,7 @@
 			sideOffset={8}
 			preventScroll={false}
 		>
-			<a href={resolve('/profile/[id]', { id: userId })}>
+			<a href={resolve('/profile/[username]', { username: userId })}>
 				<DropdownMenu.Item
 					class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
 				>
@@ -42,14 +42,16 @@
 					</div>
 				</DropdownMenu.Item>
 			</a>
-			<DropdownMenu.Item
-				class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
-			>
-				<div class="flex items-center">
-					<Cardholder class="mr-2 size-5 text-foreground-muted" />
-					Billing
-				</div>
-			</DropdownMenu.Item>
+			<a href={resolve('/billing')}>
+				<DropdownMenu.Item
+					class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
+				>
+					<div class="flex items-center">
+						<Cardholder class="mr-2 size-5 text-foreground-muted" />
+						Billing
+					</div>
+				</DropdownMenu.Item>
+			</a>
 			<a href={resolve('/settings')}>
 				<DropdownMenu.Item
 					class="flex h-10 cursor-pointer items-center rounded-md py-3 pr-1.5 pl-3 text-sm font-medium text-foreground-secondary select-none focus-visible:outline-none data-highlighted:bg-muted data-highlighted:text-foreground"

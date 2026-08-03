@@ -16,7 +16,7 @@ export const followerRelation = relations(followers, ({ one }) => ({
 	user: one(user, {
 		fields: [followers.userId],
 		references: [user.id],
-		relationName: 'follower'
+		relationName: 'followers'
 	}),
 	follower: one(user, {
 		fields: [followers.followerId],

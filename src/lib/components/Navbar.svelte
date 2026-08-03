@@ -27,7 +27,7 @@
 
 	<div class="ml-auto flex items-center gap-2.5">
 		{#if user}
-			<AvatarDropdown avatar={user.image} userId={user.id} />
+			<AvatarDropdown avatar={user.image} userId={user.username} />
 		{:else}
 			<a href={resolve('/auth/login')}>
 				<button

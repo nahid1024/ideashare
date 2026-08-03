@@ -10,10 +10,15 @@ export const user = pgTable(
 	'user',
 	{
 		id: text('id').primaryKey(),
+		username: text('username').unique().notNull(),
 		name: text('name').notNull(),
 		email: text('email').notNull().unique(),
 		emailVerified: boolean('email_verified').default(false).notNull(),
 		image: text('image'),
+		location: text('location'),
+		website: text('website'),
+		field: text('field'),
+		bio: text('bio'),
 		createdAt: timestamp('created_at', {
 			withTimezone: true,
 			mode: 'date'

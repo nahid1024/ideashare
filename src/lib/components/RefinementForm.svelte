@@ -94,7 +94,7 @@
 	</div>
 {:else}
 	<!-- The main refinement section -->
-	<div class="rounded-2xl border border-border bg-background p-[16px_18px]">
+	<div class="border border-border bg-background p-[16px_18px] sm:rounded-2xl">
 		<div class="mb-3 font-display text-base font-semibold text-foreground">Add your refinement</div>
 		<div class="mb-3 flex flex-wrap gap-1.5">
 			{#each refinementTypes as t (t)}

@@ -2,8 +2,7 @@ import { z } from 'zod';
 
 export const signupSchema = z
 	.object({
-		first_name: z.string().min(2, 'Name must be at least 2 characters'),
-		last_name: z.string().min(2, 'Name must be at least 2 characters'),
+		name: z.string().min(2, 'Name must be at least 2 characters'),
 		email: z.email('Invalid email address'),
 		password: z.string().min(8),
 		confirm_password: z.string()
@@ -53,4 +52,13 @@ export const refinementSchema = z.object({
 	isHidden: z.boolean().default(false),
 	isEdited: z.boolean().default(false),
 	refinementType: z.string().default('build')
+});
+
+export const profileSchema = z.object({
+	name: z.string(),
+	username: z.string(),
+	bio: z.string().nullable(),
+	location: z.string().nullable(),
+	website: z.string().nullable(),
+	field: z.string().nullable()
 });

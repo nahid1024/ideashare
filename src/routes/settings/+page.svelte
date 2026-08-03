@@ -1,6 +1,11 @@
 <script lang="ts">
 	import Navbar from '$lib/components/Navbar.svelte';
+	import { sleep } from '$lib/utils.js';
+	import { Avatar } from 'bits-ui';
 	import { setMode } from 'mode-watcher';
+	import { toast } from 'svelte-sonner';
+	import CircleNotch from 'phosphor-svelte/lib/CircleNotchIcon';
+	import { invalidateAll } from '$app/navigation';
 
 	const { data } = $props();
 	// ── Active tab ─────────────────────────────────────────────
@@ -16,24 +21,49 @@
 	];
 
 	// ── Profile ────────────────────────────────────────────────
-	let fullName = $state('Rafiq Karim');
-	let handle = $state('rafiqkarim');
-	let bio = $state(
-		"Thinking about the future of education and skills. Sharing ideas so they don't disappear."
-	);
-	let location = $state('Dhaka, Bangladesh');
-	let website = $state('ideashare.io/rafiq');
-	let workField = $state('Education');
-	let role = $state('sharer');
-	let profileSaved = $state(false);
 
-	function saveProfile() {
-		profileSaved = true;
-		setTimeout(() => (profileSaved = false), 2500);
+	// 2. Initialize your mutable form state
+	let form = $state({ ...data.userInfo });
+	// 4. Check for changes instantly
+	let hasProfileChanged = $derived(JSON.stringify(form) !== JSON.stringify(data.userInfo));
+	// let role = $state('sharer');
+	let isProfileSaving = $state(false);
+	let errorType = $state({ type: '' });
+
+	async function saveProfile() {
+		try {
+			isProfileSaving = true;
+			const res = await fetch('/api/user/profile/update', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					name: form.name,
+					username: form.username,
+					bio: form.bio,
+					location: form.location,
+					website: form.website,
+					field: form.field
+				})
+			});
+			if (!res.ok) {
+				const resError = await res.json();
+				errorType.type = resError.message;
+				isProfileSaving = false;
+				return;
+			}
+			await sleep(1000);
+			await invalidateAll();
+			isProfileSaving = false;
+			toast.success('Saved changes!');
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	// ── Account ────────────────────────────────────────────────
-	let email = $state('rafiq@example.com');
+	let email = $state(data.userInfo.email);
 	let newEmail = $state('');
 	let currentPwd = $state('');
 	let newPwd = $state('');
@@ -190,13 +220,15 @@
 				<section class="rounded-xl border border-border bg-card p-4 sm:p-5">
 					<h2 class="mb-4 font-display text-base font-semibold text-foreground">Profile picture</h2>
 					<div class="flex items-center gap-4">
-						<div
-							class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full
-						            bg-foreground font-display text-lg font-bold text-accent sm:h-16
-						            sm:w-16 sm:text-xl"
+						<Avatar.Root
+							class="flex h-16 w-16 items-center justify-center rounded-full border border-border-brand bg-foreground"
 						>
-							RK
-						</div>
+							<Avatar.Image class="flex rounded-full" src={data.userInfo.image} />
+							<Avatar.Fallback class="flex font-display text-lg font-bold text-accent"
+								>NK</Avatar.Fallback
+							>
+						</Avatar.Root>
+
 						<div>
 							<button
 								type="button"
@@ -218,48 +250,64 @@
 					<!-- Name + handle: stack on mobile, side by side on sm+ -->
 					<div class="mb-3 grid grid-cols-1 gap-3 sm:mb-4 sm:grid-cols-2 sm:gap-4">
 						<div>
-							<label class="mb-1.5 block text-xs font-semibold text-foreground">Full name</label>
-							<input type="text" bind:value={fullName} class="field-input h-10 w-full" />
+							<label class="mb-1.5 block text-xs font-semibold text-foreground" for="name"
+								>Full name</label
+							>
+							<input type="text" bind:value={form.name} class="field-input h-10 w-full" id="name" />
 						</div>
 						<div>
-							<label class="mb-1.5 block text-xs font-semibold text-foreground">Handle</label>
+							<label class="mb-1.5 block text-xs font-semibold text-foreground" for="handle"
+								>Handle</label
+							>
 							<div class="relative">
-								<span
-									class="absolute top-1/2 left-3 -translate-y-1/2
-								             text-sm text-foreground-muted select-none">@</span
-								>
-								<input type="text" bind:value={handle} class="field-input h-10 w-full pl-7" />
+								<input
+									id="handle"
+									type="text"
+									bind:value={form.username}
+									class="field-input h-10 w-full"
+								/>
 							</div>
+							{#if errorType.type === 'username'}
+								<span class="text-xs text-destructive">Username already exists!</span>
+							{/if}
 						</div>
 					</div>
 
 					<div class="mb-3 sm:mb-4">
-						<label class="mb-1.5 block text-xs font-semibold text-foreground">Bio</label>
+						<label class="mb-1.5 block text-xs font-semibold text-foreground" for="bio">Bio</label>
 						<textarea
-							bind:value={bio}
+							bind:value={form.bio}
 							rows="3"
+							id="bio"
 							placeholder="Tell the community what you're about..."
 							class="field-input w-full resize-none py-2.5 font-body"
-						>
-						</textarea>
-						<p class="mt-1 text-right text-xs text-foreground-muted">{bio.length} / 200</p>
+						></textarea>
+						<p class="mt-1 text-right text-xs text-foreground-muted">
+							{form.bio?.length ?? null} / 200
+						</p>
 					</div>
 
 					<div class="mb-3 grid grid-cols-1 gap-3 sm:mb-4 sm:grid-cols-2 sm:gap-4">
 						<div>
-							<label class="mb-1.5 block text-xs font-semibold text-foreground">Location</label>
+							<label class="mb-1.5 block text-xs font-semibold text-foreground" for="location"
+								>Location</label
+							>
 							<input
 								type="text"
-								bind:value={location}
+								bind:value={form.location}
+								id="location"
 								placeholder="City, Country"
 								class="field-input h-10 w-full"
 							/>
 						</div>
 						<div>
-							<label class="mb-1.5 block text-xs font-semibold text-foreground">Website</label>
+							<label class="mb-1.5 block text-xs font-semibold text-foreground" for="website"
+								>Website</label
+							>
 							<input
 								type="text"
-								bind:value={website}
+								id="website"
+								bind:value={form.website}
 								placeholder="yoursite.com"
 								class="field-input h-10 w-full"
 							/>
@@ -267,12 +315,13 @@
 					</div>
 
 					<div class="mb-5">
-						<label class="mb-1.5 block text-xs font-semibold text-foreground"
+						<label class="mb-1.5 block text-xs font-semibold text-foreground" for="field"
 							>Field / industry</label
 						>
 						<input
 							type="text"
-							bind:value={workField}
+							id="field"
+							bind:value={form.field}
 							placeholder="e.g. Education, Health, Technology"
 							class="field-input h-10 w-full"
 						/>
@@ -281,31 +330,23 @@
 					<div class="flex flex-wrap items-center gap-2.5">
 						<button
 							type="button"
+							disabled={!hasProfileChanged}
 							onclick={saveProfile}
-							class="flex cursor-pointer items-center gap-2 rounded-full border-none
-							       bg-foreground px-5 py-2 text-sm
-							       font-semibold text-background transition-opacity hover:opacity-85"
+							class="flex cursor-pointer items-center gap-2 rounded-full
+							       border-none bg-foreground px-5 py-2
+							       text-sm font-semibold text-background transition-opacity hover:opacity-85 disabled:bg-border-strong disabled:text-foreground-disabled"
 						>
-							{#if profileSaved}
-								<i class="ti ti-check text-base text-accent" aria-hidden="true"></i>
-								Saved!
+							{#if isProfileSaving}
+								<CircleNotch class="animate-spin" />
 							{:else}
 								Save changes
 							{/if}
-						</button>
-						<button
-							type="button"
-							class="cursor-pointer rounded-full border border-border bg-transparent px-4 py-2
-							       text-sm font-medium text-foreground-muted
-							       transition-all hover:border-border-strong hover:text-foreground"
-						>
-							Cancel
 						</button>
 					</div>
 				</section>
 
 				<!-- Role -->
-				<section class="rounded-xl border border-border bg-card p-4 sm:p-5">
+				<!-- <section class="rounded-xl border border-border bg-card p-4 sm:p-5">
 					<h2 class="mb-1 font-display text-base font-semibold text-foreground">Your role</h2>
 					<p class="mb-4 text-sm text-foreground-muted">How you primarily use IdeaShare.</p>
 					<div class="grid grid-cols-2 gap-2 sm:gap-2.5">
@@ -334,7 +375,7 @@
 							</button>
 						{/each}
 					</div>
-				</section>
+				</section> -->
 
 				<!-- ════════════════════════ ACCOUNT ════════════════════════ -->
 			{:else if activeTab === 'account'}
@@ -368,13 +409,14 @@
 					<h2 class="mb-4 font-display text-base font-semibold text-foreground">Change password</h2>
 					<div class="mb-4 flex flex-col gap-3">
 						<div>
-							<label class="mb-1.5 block text-xs font-semibold text-foreground"
+							<label class="mb-1.5 block text-xs font-semibold text-foreground" for="curr-password"
 								>Current password</label
 							>
 							<div class="relative">
 								<input
 									type={showCurrent ? 'text' : 'password'}
 									bind:value={currentPwd}
+									id="curr-password"
 									placeholder="••••••••"
 									class="field-input h-10 w-full pr-10"
 								/>
@@ -392,11 +434,14 @@
 							</div>
 						</div>
 						<div>
-							<label class="mb-1.5 block text-xs font-semibold text-foreground">New password</label>
+							<label class="mb-1.5 block text-xs font-semibold text-foreground" for="new-password"
+								>New password</label
+							>
 							<div class="relative">
 								<input
 									type={showNew ? 'text' : 'password'}
 									bind:value={newPwd}
+									id="new-password"
 									placeholder="Min. 8 characters"
 									class="field-input h-10 w-full pr-10"
 								/>
@@ -414,11 +459,12 @@
 							</div>
 						</div>
 						<div>
-							<label class="mb-1.5 block text-xs font-semibold text-foreground"
+							<label class="mb-1.5 block text-xs font-semibold text-foreground" for="conf-password"
 								>Confirm new password</label
 							>
 							<input
 								type="password"
+								id="conf-password"
 								bind:value={confirmPwd}
 								placeholder="Re-enter new password"
 								class="field-input h-10 w-full
@@ -493,6 +539,7 @@
 									<div class="mt-0.5 text-xs leading-snug text-foreground-muted">{item.desc}</div>
 								</div>
 								<button
+									aria-label="notification"
 									type="button"
 									role="switch"
 									aria-checked={notifs[item.key as keyof typeof notifs]}
@@ -503,7 +550,7 @@
 								>
 									<span
 										class="toggle-thumb {notifs[item.key as keyof typeof notifs]
-											? 'translate-x-[18px]'
+											? 'translate-x-4.5'
 											: 'translate-x-0'}"
 									></span>
 								</button>
@@ -530,6 +577,7 @@
 								<button
 									type="button"
 									role="switch"
+									aria-label="email-notifs"
 									aria-checked={emailNotifs[item.key as keyof typeof emailNotifs]}
 									onclick={() =>
 										(emailNotifs[item.key as keyof typeof emailNotifs] =
@@ -570,6 +618,7 @@
 								</div>
 								<button
 									type="button"
+									aria-label="privacy"
 									role="switch"
 									aria-checked={privacy[item.key as keyof typeof privacy]}
 									onclick={() =>
@@ -600,6 +649,7 @@
 						</div>
 						<button
 							type="button"
+							aria-label="anonymous"
 							role="switch"
 							aria-checked={privacy.anonymousDefault}
 							onclick={() => (privacy.anonymousDefault = !privacy.anonymousDefault)}
@@ -675,16 +725,16 @@
 				<section class="rounded-xl border border-border bg-card p-4 sm:p-5">
 					<h2 class="mb-4 font-display text-base font-semibold text-foreground">Language</h2>
 					<div>
-						<label class="mb-1.5 block text-xs font-semibold text-foreground"
+						<label class="mb-1.5 block text-xs font-semibold text-foreground" for="language"
 							>Display language</label
 						>
-						<select bind:value={language} class="field-input h-10 w-full cursor-pointer">
+						<select
+							bind:value={language}
+							class="field-input h-10 w-full cursor-pointer"
+							id="language"
+						>
 							<option value="en">English</option>
 							<option value="bn">Bengali (বাংলা)</option>
-							<option value="de">Deutsch</option>
-							<option value="fr">Français</option>
-							<option value="es">Español</option>
-							<option value="pt">Português</option>
 						</select>
 					</div>
 				</section>
