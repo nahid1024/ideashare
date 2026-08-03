@@ -43,6 +43,7 @@ export async function getUserInfo(username: string) {
 }
 
 export async function updateProfileInfo({
+	id,
 	name,
 	location,
 	bio,
@@ -52,8 +53,8 @@ export async function updateProfileInfo({
 }: Profile) {
 	const update = db
 		.update(user)
-		.set({ name, location, bio, website, field })
-		.where(eq(user.username, username))
+		.set({ name, location, bio, website, field, username })
+		.where(eq(user.id, id))
 		.returning({ username: user.username });
 
 	if (!update) {
