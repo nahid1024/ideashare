@@ -132,7 +132,7 @@
 
 <!-- LAYOUT -->
 <div
-	class="detail-layout mx-auto grid max-w-250 grid-cols-1 items-start gap-6 px-3 pt-3.5 pb-20 min-[761px]:grid-cols-[minmax(0,1fr)_240px] min-[761px]:px-6 min-[761px]:pt-7 min-[761px]:pb-7"
+	class="detail-layout mx-auto grid max-w-250 grid-cols-1 items-start gap-6 pt-3.5 pb-20 min-[761px]:grid-cols-[minmax(0,1fr)_240px] min-[761px]:px-6 min-[761px]:pt-7 min-[761px]:pb-7 sm:px-3"
 >
 	<!-- MAIN -->
 	<div class="flex flex-col gap-4">
@@ -155,8 +155,8 @@
 		</a>
 
 		<!-- Idea header -->
-		<div class="overflow-hidden rounded-2xl border border-border bg-background">
-			<div class="relative bg-accent p-[28px_28px_24px]">
+		<div class="overflow-hidden rounded-t-2xl border border-border bg-background sm:rounded-2xl">
+			<div class="relative bg-accent px-6 py-7 sm:p-[28px_28px_24px]">
 				<div class="mb-3.5 flex items-center gap-2">
 					{#each post.postTopics as tag (tag)}
 						<span class="rounded-full bg-black/10 px-2.5 py-0.75 text-[11px] font-medium text-black"
@@ -165,12 +165,13 @@
 					{/each}
 				</div>
 				<h1
-					class="max-w-140 font-display text-[24px] leading-[1.3] font-bold tracking-[-0.4px] text-black"
+					class="max-w-140 font-display text-[24px] leading-[1.3] font-bold tracking-[-0.4px] wrap-break-word text-black"
 				>
 					{post.title}
 				</h1>
 			</div>
-			<div class="p-[20px_28px]">
+			<!-- Idea details -->
+			<div class="px-1 py-7 sm:p-[20px_28px]">
 				<p
 					class="editor-content mb-5 text-[14.5px] leading-[1.75] wrap-break-word text-foreground-secondary"
 				>
@@ -230,7 +231,7 @@
 
 		<!-- Action bar -->
 		<div
-			class="flex flex-wrap items-center gap-2.5 rounded-2xl border border-border bg-background p-[14px_20px]"
+			class="flex flex-wrap items-center gap-2.5 border border-border bg-background p-[14px_20px] sm:rounded-2xl"
 		>
 			<button
 				onclick={toggleSpark}
@@ -302,7 +303,7 @@
 		</div>
 
 		<!-- Refinements heading -->
-		<div id="refinement-section">
+		<div id="refinement-section" class="ml-2">
 			<div class="font-display text-base font-semibold text-foreground">Refinements</div>
 			<div class="mb-3.5 text-[12px] text-foreground-muted">
 				{data.refinements.length} people have added their thoughts — sorted by most helpful

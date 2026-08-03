@@ -8,22 +8,21 @@
 
 	let { form }: { form: ActionData } = $props();
 
-	let first_name = $state('');
-	let last_name = $state('');
+	let name = $state('');
+
 	let email = $state('');
 	let password = $state('');
 	let confirm_password = $state('');
 	let loading = $state(false);
 
 	let touched = $state({
-		first_name: false,
-		last_name: false,
+		name: false,
 		email: false,
 		confirm_password: false
 	});
 
 	let formValidation = $derived(
-		signupSchema.safeParse({ first_name, last_name, email, password, confirm_password })
+		signupSchema.safeParse({ name, email, password, confirm_password })
 	);
 	let isFormInvalid = $derived(!formValidation.success);
 	let errors = $derived(
@@ -49,15 +48,17 @@
 >
 	<!-- LEFT PANEL -->
 	<div
-		class="left relative flex w-[52%] flex-col overflow-hidden bg-dark p-9 px-10 before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle,rgba(245,197,24,0.12)_1px,transparent_1px)] before:bg-size-[28px_28px] before:content-[''] after:pointer-events-none after:absolute after:-top-25 after:-left-25 after:h-125 after:w-125 after:animate-pulse-slow after:rounded-full after:bg-[radial-gradient(circle,rgba(245,197,24,0.18)_0%,transparent_70%)] after:content-[''] max-[860px]:w-[44%] max-[860px]:p-7 max-[860px]:px-6 max-[640px]:hidden"
+		class="left after:animate-pulse-slow relative flex w-[52%] flex-col overflow-hidden bg-dark p-9 px-10 before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle,rgba(245,197,24,0.12)_1px,transparent_1px)] before:bg-size-[28px_28px] before:content-[''] after:pointer-events-none after:absolute after:-top-25 after:-left-25 after:h-125 after:w-125 after:rounded-full after:bg-[radial-gradient(circle,rgba(245,197,24,0.18)_0%,transparent_70%)] after:content-[''] max-[860px]:w-[44%] max-[860px]:p-7 max-[860px]:px-6 max-[640px]:hidden"
 	>
 		<!-- Logo -->
-		<div class="relative z-2 mb-12 flex items-center gap-2.25">
-			<img src="/logo.svg" alt="logo" class="h-6 w-6" />
-			<span class="font-display text-lg font-bold tracking-[-0.3px] text-light"
-				>Idea<span class="text-accent">Share</span></span
-			>
-		</div>
+		<a href={resolve('/')}>
+			<div class="relative z-2 mb-12 flex items-center gap-2.25">
+				<img src="/logo.svg" alt="logo" class="h-6 w-6" />
+				<span class="font-display text-lg font-bold tracking-[-0.3px] text-light"
+					>Idea<span class="text-accent">Share</span></span
+				>
+			</div>
+		</a>
 
 		<!-- Headline -->
 		<div class="left-headline relative z-2 mb-10">
@@ -219,7 +220,7 @@
 		class="right relative flex w-[48%] flex-col justify-center overflow-y-auto bg-background px-13 py-12 max-[860px]:w-[56%] max-[860px]:p-9 max-[640px]:min-h-screen max-[640px]:w-full max-[640px]:justify-start max-[640px]:p-[28px_20px_40px]"
 		id="right-panel"
 	>
-		<div class="screen visible hidden [&.visible]:block [&.visible]:animate-fade-in" id="screen1">
+		<div class="screen [&.visible]:animate-fade-in visible hidden [&.visible]:block" id="screen1">
 			<h1
 				class="screen-title mb-1.5 font-display text-[28px] leading-[1.2] font-extrabold tracking-[-0.5px] text-foreground max-[640px]:text-[22px]"
 			>
@@ -294,45 +295,26 @@
 				>
 					or sign up with email
 				</div>
-				<div class="field-row grid grid-cols-2 gap-3 max-[640px]:grid-cols-1 max-[640px]:gap-0">
-					<div class="field mb-4">
-						<label
-							for="first_name"
-							class="field-label mb-1.5 block text-xs font-semibold text-foreground"
-							>First name</label
-						>
-						<input
-							type="text"
-							bind:value={first_name}
-							class="h-11.5 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden max-[640px]:h-11"
-							placeholder="Rafiq"
-							id="first_name"
-							name="name"
-							onblur={() => (touched.first_name = true)}
-						/>
-						{#if touched.first_name && errors.first_name}
-							<div class="pwd-hint mt-1 text-[11px] text-red-400">{errors.first_name[0]}</div>
-						{/if}
-					</div>
-					<div class="field mb-4">
-						<label
-							for="lastName"
-							class="field-label mb-1.5 block text-xs font-semibold text-foreground"
-							>Last name</label
-						>
-						<input
-							type="text"
-							bind:value={last_name}
-							class="field-input h-11.5 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden max-[640px]:h-11"
-							placeholder="Karim"
-							id="lastName"
-							onblur={() => (touched.last_name = true)}
-						/>
-						{#if touched.last_name && errors.last_name}
-							<div class="pwd-hint mt-1 text-[11px] text-red-400">{errors.last_name[0]}</div>
-						{/if}
-					</div>
+
+				<div class="field mb-4">
+					<label
+						for="first_name"
+						class="field-label mb-1.5 block text-xs font-semibold text-foreground">Your name</label
+					>
+					<input
+						type="text"
+						bind:value={name}
+						class="h-11.5 w-full rounded-md border-[1.5px] border-border bg-background-muted px-3.5 font-body text-sm text-foreground transition-all duration-150 placeholder:text-foreground-disabled focus:border-accent focus:bg-background focus:ring-3 focus:ring-yellow-100 focus:outline-hidden max-[640px]:h-11"
+						placeholder="Rafiq"
+						id="name"
+						name="name"
+						onblur={() => (touched.name = true)}
+					/>
+					{#if touched.name && errors.name}
+						<div class="pwd-hint mt-1 text-[11px] text-red-400">{errors.name[0]}</div>
+					{/if}
 				</div>
+
 				<div class="field mb-4">
 					<label for="email" class="field-label mb-1.5 block text-xs font-semibold text-foreground"
 						>Email address</label

@@ -3,7 +3,7 @@ import type { Actions } from './$types';
 import type { PageServerLoad } from './$types';
 import { auth } from '$lib/server/auth';
 import { APIError } from 'better-auth/api';
-import { sleep } from '$lib/utils';
+import { createUniqueUsername } from '$lib/server/helpers';
 
 export const load: PageServerLoad = (event) => {
 	if (event.locals.user) {
@@ -18,14 +18,14 @@ export const actions: Actions = {
 		const email = formData.get('email')?.toString() ?? '';
 		const password = formData.get('password')?.toString() ?? '';
 		const name = formData.get('name')?.toString() ?? '';
-
-		await sleep(1000);
+		const username = await createUniqueUsername(email);
 		try {
 			await auth.api.signUpEmail({
 				body: {
 					email,
 					password,
 					name,
+					username,
 					callbackURL: '/auth/verification-success'
 				}
 			});
