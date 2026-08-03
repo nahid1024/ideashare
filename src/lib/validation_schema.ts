@@ -55,6 +55,7 @@ export const refinementSchema = z.object({
 });
 
 export const profileSchema = z.object({
+	id: z.string(),
 	name: z.string(),
 	username: z.string(),
 	bio: z.string().nullable(),

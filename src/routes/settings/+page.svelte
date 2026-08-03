@@ -39,6 +39,7 @@
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
+					id: form.id,
 					name: form.name,
 					username: form.username,
 					bio: form.bio,
