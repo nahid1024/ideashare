@@ -23,6 +23,7 @@
 	// ── Profile ────────────────────────────────────────────────
 
 	// 2. Initialize your mutable form state
+	// svelte-ignore state_referenced_locally
 	let form = $state({ ...data.userInfo });
 	// 4. Check for changes instantly
 	let hasProfileChanged = $derived(JSON.stringify(form) !== JSON.stringify(data.userInfo));
@@ -64,7 +65,7 @@
 	}
 
 	// ── Account ────────────────────────────────────────────────
-	let email = $state(data.userInfo.email);
+	let email = $state(form.email);
 	let newEmail = $state('');
 	let currentPwd = $state('');
 	let newPwd = $state('');
@@ -133,6 +134,10 @@
 	let showDelete = $state(false);
 </script>
 
+<svelte:head>
+	<title>Settings - Ideashare</title>
+</svelte:head>
+
 <Navbar user={data.user} />
 
 <link
@@ -179,7 +184,7 @@
 	<!-- ── Layout ── -->
 	<div class="mx-auto max-w-4xl px-4 py-4 sm:px-6 sm:py-6 lg:flex lg:items-start lg:gap-6">
 		<!-- ── Desktop sidebar ── -->
-		<aside class="sticky top-6 hidden w-48 flex-shrink-0 lg:block">
+		<aside class="sticky top-6 hidden w-48 shrink-0 lg:block">
 			<nav class="overflow-hidden rounded-xl border border-border bg-card">
 				{#each tabs.slice(0, 5) as tab (tab)}
 					<button
@@ -469,7 +474,7 @@
 								bind:value={confirmPwd}
 								placeholder="Re-enter new password"
 								class="field-input h-10 w-full
-								       {pwdError ? '!border-destructive focus:!ring-destructive/20' : ''}"
+								       {pwdError ? 'border-destructive! focus:ring-destructive/20!' : ''}"
 							/>
 							{#if pwdError}
 								<p class="mt-1 text-xs text-destructive">{pwdError}</p>
@@ -589,7 +594,7 @@
 								>
 									<span
 										class="toggle-thumb {emailNotifs[item.key as keyof typeof emailNotifs]
-											? 'translate-x-[18px]'
+											? 'translate-x-4.5'
 											: 'translate-x-0'}"
 									></span>
 								</button>
@@ -629,7 +634,7 @@
 								>
 									<span
 										class="toggle-thumb {privacy[item.key as keyof typeof privacy]
-											? 'translate-x-[18px]'
+											? 'translate-x-4.5'
 											: 'translate-x-0'}"
 									></span>
 								</button>
@@ -658,7 +663,7 @@
 						>
 							<span
 								class="toggle-thumb {privacy.anonymousDefault
-									? 'translate-x-[18px]'
+									? 'translate-x-4.5'
 									: 'translate-x-0'}"
 							></span>
 						</button>
@@ -688,7 +693,7 @@
 										? 'bg-[#111]'
 										: t.id === 'light'
 											? 'bg-white'
-											: 'bg-gradient-to-r from-white to-[#111]'}"
+											: 'bg-linear-to-r from-white to-[#111]'}"
 								>
 									<div
 										class="h-3 border-b
@@ -781,7 +786,7 @@
 				<section class="rounded-xl border-2 border-destructive/50 bg-card p-4 sm:p-5">
 					<div class="mb-4 flex items-start gap-3">
 						<div
-							class="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center
+							class="mt-0.5 flex h-8 w-8 shrink-0 items-center
 						            justify-center rounded-lg bg-destructive/10"
 						>
 							<i class="ti ti-alert-triangle text-base text-destructive" aria-hidden="true"></i>

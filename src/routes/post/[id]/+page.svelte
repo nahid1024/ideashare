@@ -124,7 +124,7 @@
 
 <!-- eslint-disable svelte/no-at-html-tags -->
 <svelte:head>
-	<title>IdeaShare — {post.title}</title>
+	<title>{post.title} - Ideashare</title>
 </svelte:head>
 
 <!-- NAVBAR -->

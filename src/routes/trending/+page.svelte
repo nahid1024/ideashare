@@ -13,7 +13,7 @@
 </script>
 
 <svelte:head>
-	<title>Home - Ideashare</title>
+	<title>Trending - Ideashare</title>
 </svelte:head>
 
 <Navbar user={await data.user} />
@@ -31,7 +31,7 @@
 		</div>
 
 		<a
-			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-primary bg-primary px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-inverted no-underline transition-colors duration-100 sm:rounded-md sm:border-none sm:bg-accent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:font-medium sm:text-black"
+			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
 			href={resolve('/')}
 		>
 			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
@@ -41,7 +41,7 @@
 		</a>
 
 		<a
-			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-secondary no-underline transition-colors duration-100 hover:text-foreground sm:rounded-md sm:border-none sm:bg-transparent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:hover:bg-background"
+			class="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-primary bg-primary px-3.5 py-1.5 text-xs whitespace-nowrap text-foreground-inverted no-underline transition-colors duration-100 sm:rounded-md sm:border-none sm:bg-accent sm:px-2.5 sm:py-2 sm:text-[13.5px] sm:font-medium sm:text-black"
 			href={resolve('/trending')}
 		>
 			<div class="hidden h-4.5 w-4.5 shrink-0 items-center justify-center sm:flex">
@@ -92,38 +92,11 @@
 
 	<main class="flex flex-col gap-3.5">
 		<div class="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap sm:gap-0">
-			<div class="flex w-100 gap-1 rounded-full border border-border bg-background p-0.5 sm:w-auto">
-				<button
-					class="flex-1 cursor-pointer rounded-full border-none bg-primary px-2 py-1.25 text-center font-body text-xs font-medium text-foreground-inverted transition-colors duration-150 sm:flex-initial sm:px-3.5 sm:py-1.5 sm:text-[13px]"
-					>For you</button
-				>
-				<button
-					class="flex-1 cursor-pointer rounded-full border-none bg-transparent px-2 py-1.25 text-center font-body text-xs font-medium text-foreground-muted transition-colors duration-150 hover:text-foreground sm:flex-initial sm:px-3.5 sm:py-1.5 sm:text-[13px]"
-					>Latest</button
-				>
-				<button
-					class="flex-1 cursor-pointer rounded-full border-none bg-transparent px-2 py-1.25 text-center font-body text-xs font-medium text-foreground-muted transition-colors duration-150 hover:text-foreground sm:flex-initial sm:px-3.5 sm:py-1.5 sm:text-[13px]"
-					>Most sparked</button
-				>
-			</div>
-
-			<button
-				class="flex cursor-pointer items-center gap-1.5 rounded-full border border-border bg-background px-3.5 py-1.5 font-body text-[13px] text-foreground-secondary"
+			<div
+				class="flex flex-wrap items-center justify-between gap-2 font-display text-xl font-bold sm:flex-nowrap sm:gap-0"
 			>
-				<svg
-					width="14"
-					height="14"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-				>
-					<line x1="4" y1="6" x2="20" y2="6" />
-					<line x1="8" y1="12" x2="16" y2="12" />
-					<line x1="11" y1="18" x2="13" y2="18" />
-				</svg>
-				Filter
-			</button>
+				Trending ideas right now
+			</div>
 		</div>
 		<!-- Post list -->
 		<IdeaCard posts={data.posts} />

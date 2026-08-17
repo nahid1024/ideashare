@@ -16,6 +16,10 @@
 	];
 </script>
 
+<svelte:head>
+	<title>Profile - Ideashare</title>
+</svelte:head>
+
 <!-- NAVBAR -->
 <Navbar user={data.user} />
 
