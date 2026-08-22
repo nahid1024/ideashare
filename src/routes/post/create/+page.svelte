@@ -116,7 +116,7 @@
 </script>
 
 <svelte:head>
-	<title>IdeaShare — Post an Idea</title>
+	<title>Post an Idea - Ideashare</title>
 </svelte:head>
 
 <!-- NAVBAR -->
