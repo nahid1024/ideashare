@@ -5,7 +5,7 @@
 	import { setMode } from 'mode-watcher';
 	import { toast } from 'svelte-sonner';
 	import CircleNotch from 'phosphor-svelte/lib/CircleNotchIcon';
-	import { invalidateAll } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
 
 	const { data } = $props();
 	// ── Active tab ─────────────────────────────────────────────
@@ -56,7 +56,7 @@
 				return;
 			}
 			await sleep(1000);
-			await invalidateAll();
+			await invalidate((url) => url.pathname === '/settings');
 			isProfileSaving = false;
 			toast.success('Saved changes!');
 		} catch (error) {
